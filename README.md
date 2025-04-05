@@ -25,6 +25,8 @@ In the **server** directory, run:
 node server.js
 ```
 
+And click on the link that pops up (should be http://localhost:3000).
+
 ## Input Data
 ### Directory Structure
 
