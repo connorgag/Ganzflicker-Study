@@ -389,35 +389,47 @@
 
         // Start the experiment
         function startExperiment() {
-            // Build the experiment timeline
             const timeline = [
                 participantIdTrial,
-                welcomeTrial
+                welcomeTrial,
+                { // This is the modified preload section
+                    type: jsPsychPreload,
+                    images: [], // Images will be dynamically added below
+                    auto_preload: true,
+                    message: "Loading study images...",
+                    show_progress_bar: true,
+                    on_load: function() {
+                        console.log("All images have been preloaded!");
+                        // jsPsych.finishTrial(); // If you want to immediately move on from the preload screen
+                    },
+                    on_error: function(file) {
+                        console.error(`Error preloading ${file}`);
+                    },
+                    timeline: function() { // Dynamically generate the images to preload
+                        const imagesToPreload = [];
+                        if (highImageryDescription && lowImageryDescription) {
+                            metadata.available_models.forEach(model => {
+                                imagesToPreload.push(getImagePath("participant", model));
+                                imagesToPreload.push(getImagePath("high", model));
+                                imagesToPreload.push(getImagePath("low", model));
+                            });
+                        } else {
+                            console.warn("Skipping image preload because study data is not yet initialized");
+                        }
+                        return [{
+                            timeline: [], // No actual trials here, just the preload logic
+                            preload_images: imagesToPreload
+                        }];
+                    }()
+                }
             ];
 
-            // Create a preload trial AFTER welcome trial (which initializes the data)
-            const preloadTrial = {
-                type: jsPsychHtmlButtonResponse,
-                stimulus: "Preparing study materials...",
-                choices: ["Continue"],
-                on_finish: function() {
-                    // Create and run the preload
-                    const preloadImages = createPreloadTrial();
-                    jsPsych.addNodeToEndOfTimeline(preloadImages);
-                }
-            };
-
-            timeline.push(preloadTrial);
-
-            // Add model image trials
             metadata.available_models.forEach((model, index) => {
                 timeline.push(createModelImageTrial(model, index));
             });
 
-            // Add final selection and completion trials
             timeline.push(finalSelectionTrial, completionTrial);
 
-            // Start the experiment
             jsPsych.run(timeline);
         }
 

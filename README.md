@@ -1,5 +1,9 @@
 # Ganzflicker-Study
 
+## How to run this
+
+In the server director, run ```node server.js``` and then click on the link that pops up.
+
 ## Input Data
 ### Directory Structure
 
@@ -89,3 +93,4 @@ For each available model:
 
 Display each image chosen by the participant. If there are n models available, there should be n images on the screen. The user then clicks one of these images as their final choice.
 ```
+

@@ -8,23 +8,23 @@
         "random_high_imagery_description": "A field of stars that seem to pulse and shift in a rhythmic pattern with hands from the sky.",
         "user_choices": {
           "claude": {
-            "choice": "low_imagery_description",
-            "reaction_time": 0.55,
+            "choice": "own_description",
+            "reaction_time": 1.88,
             "image_choice_location": "right"
           },
           "dalle": {
             "choice": "own_description",
-            "reaction_time": 0.35,
-            "image_choice_location": "left"
+            "reaction_time": 0.71,
+            "image_choice_location": "right"
           },
           "gpt": {
-            "choice": "high_imagery_description",
-            "reaction_time": 0.33,
+            "choice": "own_description",
+            "reaction_time": 0.85,
             "image_choice_location": "middle"
           },
           "final_choice": {
             "model": "dalle",
-            "reaction_time": 0.53,
+            "reaction_time": 0.95,
             "description": "own_description"
           }
         }
@@ -35,26 +35,56 @@
       "results": {
         "subject_id": "001",
         "random_low_imagery_description": "A glowing orb surrounded by geometric shapes.",
+        "random_high_imagery_description": "A swirling vortex of vibrant colors blending into each other with people dancing around it.",
+        "user_choices": {
+          "claude": {
+            "choice": "own_description",
+            "reaction_time": 5.7,
+            "image_choice_location": "left"
+          },
+          "dalle": {
+            "choice": "high_imagery_description",
+            "reaction_time": 2.47,
+            "image_choice_location": "right"
+          },
+          "gpt": {
+            "choice": "high_imagery_description",
+            "reaction_time": 1.5,
+            "image_choice_location": "middle"
+          },
+          "final_choice": {
+            "model": "claude",
+            "reaction_time": 5.21,
+            "description": "own_description"
+          }
+        }
+      }
+    },
+    {
+      "subject_id": "5",
+      "results": {
+        "subject_id": "5",
+        "random_low_imagery_description": "A glowing orb surrounded by geometric shapes.",
         "random_high_imagery_description": "A field of stars that seem to pulse and shift in a rhythmic pattern with hands from the sky.",
         "user_choices": {
           "claude": {
-            "choice": "high_imagery_description",
-            "reaction_time": 0.77,
-            "image_choice_location": "middle"
+            "choice": "own_description",
+            "reaction_time": 1.19,
+            "image_choice_location": "right"
           },
           "dalle": {
             "choice": "own_description",
-            "reaction_time": 0.75,
-            "image_choice_location": "left"
+            "reaction_time": 0.78,
+            "image_choice_location": "right"
           },
           "gpt": {
             "choice": "own_description",
-            "reaction_time": 0.57,
+            "reaction_time": 0.75,
             "image_choice_location": "middle"
           },
           "final_choice": {
             "model": "dalle",
-            "reaction_time": 0.65,
+            "reaction_time": 1.17,
             "description": "own_description"
           }
         }
