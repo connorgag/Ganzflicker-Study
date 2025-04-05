@@ -1,0 +1,99 @@
+.jspsych-content {
+    max-width: 1200px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.image-option {
+    text-align: center;
+    width: 30%;
+    cursor: pointer;
+    padding: 10px;
+    border: 3px solid transparent;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.image-option:hover {
+    border-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.image-option img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.image-caption {
+    font-size: 14px;
+    color: #555;
+}
+
+.instruction-text {
+    font-size: 18px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.final-selection-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.final-option {
+    text-align: center;
+    width: 30%;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 10px;
+    border: 3px solid transparent;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.final-option:hover {
+    border-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.final-option img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.model-label {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.loading-spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

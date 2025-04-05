@@ -1,0 +1,64 @@
+{
+  "current_participant_data": [
+    {
+      "subject_id": "002",
+      "results": {
+        "subject_id": "002",
+        "random_low_imagery_description": "A glowing orb surrounded by geometric shapes.",
+        "random_high_imagery_description": "A field of stars that seem to pulse and shift in a rhythmic pattern with hands from the sky.",
+        "user_choices": {
+          "claude": {
+            "choice": "low_imagery_description",
+            "reaction_time": 0.55,
+            "image_choice_location": "right"
+          },
+          "dalle": {
+            "choice": "own_description",
+            "reaction_time": 0.35,
+            "image_choice_location": "left"
+          },
+          "gpt": {
+            "choice": "high_imagery_description",
+            "reaction_time": 0.33,
+            "image_choice_location": "middle"
+          },
+          "final_choice": {
+            "model": "dalle",
+            "reaction_time": 0.53,
+            "description": "own_description"
+          }
+        }
+      }
+    },
+    {
+      "subject_id": "001",
+      "results": {
+        "subject_id": "001",
+        "random_low_imagery_description": "A glowing orb surrounded by geometric shapes.",
+        "random_high_imagery_description": "A field of stars that seem to pulse and shift in a rhythmic pattern with hands from the sky.",
+        "user_choices": {
+          "claude": {
+            "choice": "high_imagery_description",
+            "reaction_time": 0.77,
+            "image_choice_location": "middle"
+          },
+          "dalle": {
+            "choice": "own_description",
+            "reaction_time": 0.75,
+            "image_choice_location": "left"
+          },
+          "gpt": {
+            "choice": "own_description",
+            "reaction_time": 0.57,
+            "image_choice_location": "middle"
+          },
+          "final_choice": {
+            "model": "dalle",
+            "reaction_time": 0.65,
+            "description": "own_description"
+          }
+        }
+      }
+    }
+  ]
+}

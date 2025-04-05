@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ganzflicker Study</title>
+    <script src="https://unpkg.com/jspsych@7.3.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-button-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+    <link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="jspsych-target"></div>
+
+    <script>
+        let metadata;
+        let participantId;
+
+        // Function to load JSON data from a file
+        async function loadJSON(file) {
+            const response = await fetch(file);
+            return await response.json();
+        }
+
+        async function initializeMetadata() {
+            try {
+                const pastImagesData = await loadJSON('past_generated_images.json');
+
+                metadata = {
+                    "past_hallucination_mappings": pastImagesData.past_hallucination_mappings,
+                    "available_models": pastImagesData.available_models
+                };
+
+                // Now we have metadata loaded, we can start the experiment
+                startExperiment();
+            } catch (error) {
+                console.error("Error loading metadata:", error);
+                document.querySelector('#jspsych-target').innerHTML = '<p style="color: red;">Error loading study data. Please refresh the page or contact the researcher.</p>';
+            }
+        }
+
+        // Initialize jsPsych
+        const jsPsych = initJsPsych({
+            on_finish: function(data) {
+                // The data saving is now handled in the completionTrial's on_load function
+                console.log('Study completed!');
+                // console.log('Final data:', JSON.stringify(jsPsych.data.get().values()));
+            }
+        });
+
+        // Study parameters
+        let currentParticipant = {
+            results: {},
+            description: "" // Added placeholder for participant description
+        };
+        let highImageryDescription;
+        let lowImageryDescription;
+        let selectedImages = {};
+        let finalSelectedModel = null;
+
+        // Function to get random items from an array
+        function getRandomItems(array, count) {
+            const shuffled = [...array].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        // Function to shuffle an array
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Function to initialize study data for a new participant
+        function initializeStudyData() {
+            // Select one random high imagery description
+            const highImageryDescriptions = metadata.past_hallucination_mappings.filter(d => d.imagery_ability === "high");
+            highImageryDescription = getRandomItems(highImageryDescriptions, 1)[0];
+
+            // Select one random low imagery description
+            const lowImageryDescriptions = metadata.past_hallucination_mappings.filter(d => d.imagery_ability === "low");
+            lowImageryDescription = getRandomItems(lowImageryDescriptions, 1)[0];
+
+            // Initialize results structure for the current participant
+            currentParticipant.results = {
+                subject_id: participantId, // Ensure ID is recorded here as well
+                random_low_imagery_description: lowImageryDescription.description,
+                random_high_imagery_description: highImageryDescription.description,
+                user_choices: {}
+            };
+
+            console.log("Study initialized for participant:", participantId);
+            console.log("High imagery description:", highImageryDescription.description);
+            console.log("Low imagery description:", lowImageryDescription.description);
+        }
+
+        // Function to create image paths based on the study structure
+        function getImagePath(descriptionType, model) {
+            if (!highImageryDescription || !lowImageryDescription) {
+                console.error("Image descriptions not yet initialized!");
+                return "placeholder.jpeg"; // Return placeholder to avoid errors
+            }
+
+            if (descriptionType === "participant") {
+                return `participant_data/participant_${participantId}/participant_${participantId}_${model}.jpeg`;
+            } else if (descriptionType === "high") {
+                return `past_images/description_${highImageryDescription.description_id}/description_${highImageryDescription.description_id}_${model}.jpeg`;
+            } else if (descriptionType === "low") {
+                return `past_images/description_${lowImageryDescription.description_id}/description_${lowImageryDescription.description_id}_${model}.jpeg`;
+            }
+
+            return "placeholder.jpeg"; // Return placeholder as fallback
+        }
+
+        // Create participant ID input screen
+        const participantIdTrial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+                <h1>Please enter your Participant ID:</h1>
+                <input type="text" id="participant-id-input">
+                <button id="start-button">Start Study</button>
+            `,
+            choices: 'NO_KEYS',
+            on_load: function() {
+                document.querySelector('#start-button').addEventListener('click', function() {
+                    const inputElement = document.querySelector('#participant-id-input');
+                    if (inputElement && inputElement.value.trim() !== '') {
+                        participantId = inputElement.value.trim();
+                        jsPsych.finishTrial();
+                    } else {
+                        alert('Please enter a valid Participant ID.');
+                    }
+                });
+            }
+        };
+
+        // Create welcome screen
+        const welcomeTrial = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: function() {
+                return `
+                    <h1>Welcome to the Ganzflicker Study</h1>
+                    <p class="instruction-text">
+                        Your Participant ID is: <b>${participantId}</b>
+                        <br><br>
+                        In this study, you will be shown sets of images generated by different AI models based on various descriptions.
+                        <br><br>
+                        For each set, please select the image that best represents what you perceived during the ganzflicker experience.
+                        <br><br>
+                        At the end, you will make a final selection from your previous choices.
+                    </p>
+                `;
+            },
+            choices: ["Begin Study"],
+            on_finish: function() {
+                // Initialize the study data after participant ID is entered and welcome screen is confirmed
+                initializeStudyData();
+            }
+        };
+
+        // Create image trial for each model
+        function createModelImageTrial(model, modelIndex) {
+            return {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: function() {
+                    const imageOptions = [
+                        {type: "high", path: getImagePath("high", model), desc: highImageryDescription.description},
+                        {type: "low", path: getImagePath("low", model), desc: lowImageryDescription.description},
+                        {type: "participant", path: getImagePath("participant", model), desc: currentParticipant.description}
+                    ];
+
+                    // Shuffle the options
+                    const shuffledOptions = shuffleArray(imageOptions);
+
+                    // Store the positions for data recording
+                    jsPsych.data.addProperties({
+                        [`${model}_image_positions`]: shuffledOptions.map(o => o.type)
+                    });
+
+                    return `
+                        <h2>Images Generated by ${model.toUpperCase()}</h2>
+                        <p class="instruction-text">Click on the image that best represents what you perceived during the ganzflicker experience.</p>
+                        <div class="image-container">
+                            ${shuffledOptions.map((option, index) => `
+                                <div class="image-option" data-type="${option.type}" data-position="${index}" data-index="${modelIndex}">
+                                    <img src="${option.path}" alt="Image option ${index + 1}">
+                                    <div class="image-caption">Option ${index + 1}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                },
+                choices: [],
+                trial_duration: null,
+                on_load: function() {
+                    const startTime = performance.now();
+
+                    // Add click event to images that advances to the next trial
+                    document.querySelectorAll('.image-option').forEach(element => {
+                        element.addEventListener('click', function() {
+                            const selectedType = this.getAttribute('data-type');
+                            const position = parseInt(this.getAttribute('data-position'));
+
+                            let choiceCategory;
+                            if (selectedType === "high") {
+                                choiceCategory = "high_imagery_description";
+                            } else if (selectedType === "low") {
+                                choiceCategory = "low_imagery_description";
+                            } else {
+                                choiceCategory = "own_description";
+                            }
+
+                            // Calculate reaction time
+                            const reactionTime = (performance.now() - startTime) / 1000;
+
+                            // Store the selection
+                            selectedImages[model] = {
+                                path: this.querySelector('img').src,
+                                type: selectedType,
+                                choice: choiceCategory,
+                                image_choice_location: position,
+                                reaction_time: reactionTime.toFixed(2) // Convert to seconds
+                            };
+
+                            // Record the user's choice in currentParticipant.results
+                            currentParticipant.results.user_choices[model] = {
+                                choice: choiceCategory,
+                                reaction_time: parseFloat(reactionTime.toFixed(2)),
+                                image_choice_location: position === 0 ? "left" :
+                                                   (position === 1 ? "middle" : "right")
+                            };
+
+                            // End the trial to move to the next
+                            jsPsych.finishTrial({
+                                selected_image: selectedImages[model],
+                                rt: reactionTime
+                            });
+                        });
+                    });
+                }
+            };
+        }
+
+        // Create final selection trial
+        const finalSelectionTrial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: function() {
+                return `
+                    <h2>Final Selection</h2>
+                    <p class="instruction-text">
+                        Now, please select the image that best represents what you perceived during the ganzflicker experience.
+                    </p>
+                    <div class="final-selection-container">
+                        ${metadata.available_models.map(model => `
+                            <div class="final-option" data-model="${model}">
+                                <div class="model-label">${model.toUpperCase()}</div>
+                                <img src="${selectedImages[model].path}" alt="${model} selected image">
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            },
+            choices: [],
+            trial_duration: null,
+            on_load: function() {
+                const startTime = performance.now();
+
+                // Add click event to final options that completes this trial
+                document.querySelectorAll('.final-option').forEach(element => {
+                    element.addEventListener('click', function() {
+                        const selectedModel = this.getAttribute('data-model');
+
+                        // Calculate reaction time
+                        const reactionTime = (performance.now() - startTime) / 1000;
+
+                        // Store the final selection
+                        finalSelectedModel = {
+                            model: selectedModel,
+                            reaction_time: reactionTime.toFixed(2),
+                            description: selectedImages[selectedModel].choice
+                        };
+
+                        // Record the final choice in currentParticipant.results
+                        currentParticipant.results.user_choices.final_choice = {
+                            model: selectedModel,
+                            reaction_time: parseFloat(reactionTime.toFixed(2)),
+                            description: selectedImages[selectedModel].choice
+                        };
+
+                        // End the trial to move to completion
+                        jsPsych.finishTrial({
+                            final_selected_model: finalSelectedModel,
+                            rt: reactionTime
+                        });
+                    });
+                });
+            }
+        };
+
+        // Create completion screen
+        const completionTrial = {
+            type: jsPsychHtmlButtonResponse, // Keep it as button response for now
+            stimulus: `
+                <h2>Study Completed</h2>
+                <p class="instruction-text">
+                    Thank you for participating in this study!
+                </p>
+            `,
+            choices: [], // Remove the "Close" button initially
+            on_load: function() {
+                const participantData = {
+                    subject_id: participantId,
+                    results: currentParticipant.results
+                };
+
+                // Send data to the local server
+                fetch('http://localhost:3000/save-participant-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(participantData),
+                })
+                .then(response => response.text())
+                .then(message => {
+                    console.log(message); // Log server response
+                    document.querySelector('#jspsych-target').innerHTML = `
+                        <h2>Study Completed</h2>
+                        <p class="instruction-text">
+                            Thank you for participating in this study! Your data has been successfully saved. You may now close this window.
+                        </p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error saving data:', error);
+                    document.querySelector('#jspsych-target').innerHTML = `
+                        <h2 style="color: red;">Error</h2>
+                        <p class="instruction-text" style="color: red;">
+                            There was an error saving your data. Please try again or contact the researcher.
+                        </p>
+                    `;
+                });
+
+                console.log('Attempting to save data on completion screen load.');
+            }
+        };
+
+        // Preload trial (dynamically generated after metadata is loaded)
+        function createPreloadTrial() {
+            // Create a list of all images to preload
+            const imagesToPreload = [];
+
+            // Only attempt to preload images after study data is initialized
+            if (highImageryDescription && lowImageryDescription) {
+                // Add participant images
+                metadata.available_models.forEach(model => {
+                    imagesToPreload.push(getImagePath("participant", model));
+                });
+
+                // Add high and low imagery images
+                metadata.available_models.forEach(model => {
+                    imagesToPreload.push(getImagePath("high", model));
+                    imagesToPreload.push(getImagePath("low", model));
+                });
+            } else {
+                console.warn("Skipping image preload because study data is not yet initialized");
+            }
+
+            return {
+                type: jsPsychPreload,
+                images: imagesToPreload,
+                auto_preload: true,
+                message: "Loading study images...",
+                show_progress_bar: true,
+                on_success: function() {
+                    console.log("All images have been preloaded!");
+                },
+                on_error: function(file) {
+                    console.error(`Error preloading ${file}`);
+                }
+            };
+        }
+
+        // Start the experiment
+        function startExperiment() {
+            // Build the experiment timeline
+            const timeline = [
+                participantIdTrial,
+                welcomeTrial
+            ];
+
+            // Create a preload trial AFTER welcome trial (which initializes the data)
+            const preloadTrial = {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: "Preparing study materials...",
+                choices: ["Continue"],
+                on_finish: function() {
+                    // Create and run the preload
+                    const preloadImages = createPreloadTrial();
+                    jsPsych.addNodeToEndOfTimeline(preloadImages);
+                }
+            };
+
+            timeline.push(preloadTrial);
+
+            // Add model image trials
+            metadata.available_models.forEach((model, index) => {
+                timeline.push(createModelImageTrial(model, index));
+            });
+
+            // Add final selection and completion trials
+            timeline.push(finalSelectionTrial, completionTrial);
+
+            // Start the experiment
+            jsPsych.run(timeline);
+        }
+
+        // Load metadata and then start the experiment
+        initializeMetadata();
+    </script>
+</body>
+</html>

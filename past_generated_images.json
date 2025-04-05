@@ -1,0 +1,20 @@
+{
+    "past_hallucination_mappings": [
+        {
+            "description_id": "1",
+            "description": "A swirling vortex of vibrant colors blending into each other with people dancing around it.",
+            "imagery_ability": "high"
+        },
+        {
+            "description_id": "2",
+            "description": "A glowing orb surrounded by geometric shapes.",
+            "imagery_ability": "low"
+        },
+        {
+            "description_id": "3",
+            "description": "A field of stars that seem to pulse and shift in a rhythmic pattern with hands from the sky.",
+            "imagery_ability": "high"
+        }
+    ],
+    "available_models": ["claude", "dalle", "gpt"]
+}
