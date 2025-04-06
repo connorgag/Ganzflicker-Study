@@ -57,6 +57,19 @@ app.post('/save-participant-data', async (req, res) => {
     res.status(200).send('Participant data saved successfully.');
 });
 
+// Example Express route handler
+app.get('/api/list-folder', async (req, res) => {
+    const folderPath = req.query.path;
+    
+    try {
+      const files = await fs.readdir(folderPath);
+      res.json(files);
+    } catch (error) {
+      console.error('Error listing folder:', error);
+      res.status(500).json({ error: 'Failed to list folder contents' });
+    }
+  });
+
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 });

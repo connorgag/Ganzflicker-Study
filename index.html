@@ -25,17 +25,111 @@
             return await response.json();
         }
 
+        // Function to load CSV data and parse it
+        async function loadCSV(file) {
+            const response = await fetch(file);
+            const csvText = await response.text();
+            return parseCSV(csvText);
+        }
+        function parseCSV(csvText) {
+            const rows = [];
+            let inQuotes = false;
+            let currentField = '';
+            let currentRow = [];
+            let i = 0;
+
+            const pushField = () => {
+                currentRow.push(currentField);
+                currentField = '';
+            };
+
+            while (i < csvText.length) {
+                const char = csvText[i];
+                const nextChar = csvText[i + 1];
+
+                if (char === '"') {
+                if (inQuotes && nextChar === '"') {
+                    // Escaped quote
+                    currentField += '"';
+                    i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+                } else if (char === ',' && !inQuotes) {
+                pushField();
+                } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                if (char === '\r' && nextChar === '\n') i++; // Handle \r\n
+                pushField();
+                if (currentRow.length > 1 || rows.length === 0) {
+                    rows.push(currentRow);
+                }
+                currentRow = [];
+                } else {
+                currentField += char;
+                }
+                i++;
+            }
+
+            // Push last field and row if needed
+            if (currentField.length > 0 || currentRow.length > 0) {
+                pushField();
+                rows.push(currentRow);
+            }
+
+            const headers = rows[0];
+            const data = rows.slice(1).map(row => {
+                const obj = {};
+                headers.forEach((header, idx) => {
+                obj[header] = row[idx] ?? ''; // Handle missing fields
+                });
+                return obj;
+            });
+
+            return data;
+            }
+
+        // Function to get available ids from a folder using the pre-generated JSON
+        async function getAvailableIds(folderPrefix) {
+            try {
+                // Load the pre-generated available_ids.json file
+                const availableIds = await loadJSON('available_ids.json');
+
+                if (folderPrefix === 'aphantasia') {
+                    return availableIds.aphantasia_ids;
+                } else if (folderPrefix === 'phantasia') {
+                    return availableIds.phantasia_ids;
+                } else {
+                    console.error(`Unknown folder prefix: ${folderPrefix}`);
+                    return [];
+                }
+            } catch (error) {
+                console.error(`Error getting IDs for ${folderPrefix}:`, error);
+                return [];
+            }
+        }
+
         async function initializeMetadata() {
             try {
-                const pastImagesData = await loadJSON('past_generated_images.json');
+                const configData = await loadJSON('config.json');
+                availableModels = configData.available_models || [];
+                const hallucinationsData = await loadCSV('hallucinations.csv');
+                const aphantasiaImages = configData.image_paths?.aphantasia_images || {};
+                const phantasiaImages = configData.image_paths?.phantasia_images || {};
+                const aphantasiaIds = configData.aphantasia_ids || Object.keys(aphantasiaImages).map(Number);
+                const phantasiaIds = configData.phantasia_ids || Object.keys(phantasiaImages).map(Number);
 
                 metadata = {
-                    "past_hallucination_mappings": pastImagesData.past_hallucination_mappings,
-                    "available_models": pastImagesData.available_models
+                    "available_models": availableModels,
+                    "hallucinations_data": hallucinationsData,
+                    "aphantasia_images": aphantasiaImages,
+                    "phantasia_images": phantasiaImages,
+                    "aphantasia_ids": aphantasiaIds,
+                    "phantasia_ids": phantasiaIds
                 };
 
-                // Now we have metadata loaded, we can start the experiment
-                startExperiment();
+                console.log("Metadata initialized:", metadata);
+                await startExperiment();
+
             } catch (error) {
                 console.error("Error loading metadata:", error);
                 document.querySelector('#jspsych-target').innerHTML = '<p style="color: red;">Error loading study data. Please refresh the page or contact the researcher.</p>';
@@ -56,15 +150,14 @@
             results: {},
             description: "" // Added placeholder for participant description
         };
-        let highImageryDescription;
-        let lowImageryDescription;
+        let aphantasiaParticipant;
+        let phantasiaParticipant;
         let selectedImages = {};
         let finalSelectedModel = null;
 
-        // Function to get random items from an array
-        function getRandomItems(array, count) {
-            const shuffled = [...array].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
+        // Function to get random item from an array
+        function getRandomItem(array) {
+            return array[Math.floor(Math.random() * array.length)];
         }
 
         // Function to shuffle an array
@@ -77,46 +170,98 @@
             return newArray;
         }
 
+        // Function to find participant data by ID
+        function findParticipantById(id) {
+            return metadata.hallucinations_data.find(p => p.id === id.toString());
+        }
+
         // Function to initialize study data for a new participant
         function initializeStudyData() {
-            // Select one random high imagery description
-            const highImageryDescriptions = metadata.past_hallucination_mappings.filter(d => d.imagery_ability === "high");
-            highImageryDescription = getRandomItems(highImageryDescriptions, 1)[0];
+            // Select one random aphantasia ID
+            const aphantasiaId = getRandomItem(metadata.aphantasia_ids);
+            aphantasiaParticipant = findParticipantById(aphantasiaId);
 
-            // Select one random low imagery description
-            const lowImageryDescriptions = metadata.past_hallucination_mappings.filter(d => d.imagery_ability === "low");
-            lowImageryDescription = getRandomItems(lowImageryDescriptions, 1)[0];
+            // If not found, create a fallback
+            if (!aphantasiaParticipant) {
+                aphantasiaParticipant = {
+                    id: aphantasiaId,
+                    "Please describe as much as you can remember about what you saw in the Ganzflicker:":
+                    "Participant data not found. This is a fallback description for aphantasia participant."
+                };
+            }
+
+            // Select one random phantasia ID
+            const phantasiaId = getRandomItem(metadata.phantasia_ids);
+            phantasiaParticipant = findParticipantById(phantasiaId);
+
+            // If not found, create a fallback
+            if (!phantasiaParticipant) {
+                phantasiaParticipant = {
+                    id: phantasiaId,
+                    "Please describe as much as you can remember about what you saw in the Ganzflicker:":
+                    "Participant data not found. This is a fallback description for phantasia participant."
+                };
+            }
 
             // Initialize results structure for the current participant
             currentParticipant.results = {
-                subject_id: participantId, // Ensure ID is recorded here as well
-                random_low_imagery_description: lowImageryDescription.description,
-                random_high_imagery_description: highImageryDescription.description,
+                subject_id: participantId,
+                aphantasia_id: aphantasiaId,
+                phantasia_id: phantasiaId,
+                aphantasia_description: aphantasiaParticipant["Please describe as much as you can remember about what you saw in the Ganzflicker:"],
+                phantasia_description: phantasiaParticipant["Please describe as much as you can remember about what you saw in the Ganzflicker:"],
                 user_choices: {}
             };
 
             console.log("Study initialized for participant:", participantId);
-            console.log("High imagery description:", highImageryDescription.description);
-            console.log("Low imagery description:", lowImageryDescription.description);
+            console.log("Aphantasia ID:", aphantasiaId, "Description:", currentParticipant.results.aphantasia_description);
+            console.log("Phantasia ID:", phantasiaId, "Description:", currentParticipant.results.phantasia_description);
         }
 
-        // Function to create image paths based on the study structure
+        // Function to get image path
         function getImagePath(descriptionType, model) {
-            if (!highImageryDescription || !lowImageryDescription) {
-                console.error("Image descriptions not yet initialized!");
-                return "placeholder.jpeg"; // Return placeholder to avoid errors
+            if (!aphantasiaParticipant || !phantasiaParticipant || !metadata) {
+                console.error("Data not yet initialized!");
+                return "placeholder.jpeg";
             }
 
             if (descriptionType === "participant") {
                 return `participant_data/participant_${participantId}/participant_${participantId}_${model}.jpeg`;
-            } else if (descriptionType === "high") {
-                return `past_images/description_${highImageryDescription.description_id}/description_${highImageryDescription.description_id}_${model}.jpeg`;
-            } else if (descriptionType === "low") {
-                return `past_images/description_${lowImageryDescription.description_id}/description_${lowImageryDescription.description_id}_${model}.jpeg`;
+            } else if (descriptionType === "aphantasia" && metadata.aphantasia_images[aphantasiaParticipant.id] && metadata.aphantasia_images[aphantasiaParticipant.id][model]) {
+                return metadata.aphantasia_images[aphantasiaParticipant.id][model];
+            } else if (descriptionType === "phantasia" && metadata.phantasia_images[phantasiaParticipant.id] && metadata.phantasia_images[phantasiaParticipant.id][model]) {
+                return metadata.phantasia_images[phantasiaParticipant.id][model];
             }
 
-            return "placeholder.jpeg"; // Return placeholder as fallback
+            console.warn(`Could not find image path for ${descriptionType}, ID: ${aphantasiaParticipant?.id || phantasiaParticipant?.id}, Model: ${model}`);
+            return "placeholder.jpeg"; // Fallback
         }
+
+        // Updated preload section to directly use the determined image paths
+        const preloadTrial = {
+            type: jsPsychPreload,
+            images: function() {
+                const imagesToPreload = [];
+                if (aphantasiaParticipant && phantasiaParticipant && metadata && metadata.available_models) {
+                    metadata.available_models.forEach(model => {
+                        imagesToPreload.push(getImagePath("participant", model));
+                        imagesToPreload.push(getImagePath("aphantasia", model));
+                        imagesToPreload.push(getImagePath("phantasia", model));
+                    });
+                }
+                return imagesToPreload;
+            },
+            auto_preload: true,
+            message: "Loading study images...",
+            show_progress_bar: true,
+            on_load: function() {
+                console.log("Images preloaded successfully!");
+            },
+            on_error: function(file) {
+                console.error(`Error preloading image: ${file}`);
+            }
+        };
+
 
         // Create participant ID input screen
         const participantIdTrial = {
@@ -170,10 +315,22 @@
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus: function() {
                     const imageOptions = [
-                        {type: "high", path: getImagePath("high", model), desc: highImageryDescription.description},
-                        {type: "low", path: getImagePath("low", model), desc: lowImageryDescription.description},
-                        {type: "participant", path: getImagePath("participant", model), desc: currentParticipant.description}
-                    ];
+                {
+                    type: "aphantasia",
+                    path: getImagePath("aphantasia", model),
+                    desc: currentParticipant.results.aphantasia_description
+                },
+                {
+                    type: "phantasia",
+                    path: getImagePath("phantasia", model),
+                    desc: currentParticipant.results.phantasia_description
+                },
+                {
+                    type: "participant",
+                    path: getImagePath("participant", model),
+                    desc: currentParticipant.description
+                }
+                ];
 
                     // Shuffle the options
                     const shuffledOptions = shuffleArray(imageOptions);
@@ -208,10 +365,10 @@
                             const position = parseInt(this.getAttribute('data-position'));
 
                             let choiceCategory;
-                            if (selectedType === "high") {
-                                choiceCategory = "high_imagery_description";
-                            } else if (selectedType === "low") {
-                                choiceCategory = "low_imagery_description";
+                            if (selectedType === "aphantasia") {
+                                choiceCategory = "aphantasia_description";
+                            } else if (selectedType === "phantasia") {
+                                choiceCategory = "phantasia_description";
                             } else {
                                 choiceCategory = "own_description";
                             }
@@ -275,33 +432,32 @@
                 document.querySelectorAll('.final-option').forEach(element => {
                     element.addEventListener('click', function() {
                         const selectedModel = this.getAttribute('data-model');
+                    // Calculate reaction time
+                    const reactionTime = (performance.now() - startTime) / 1000;
 
-                        // Calculate reaction time
-                        const reactionTime = (performance.now() - startTime) / 1000;
+                    // Store the final selection
+                    finalSelectedModel = {
+                        model: selectedModel,
+                        reaction_time: reactionTime.toFixed(2),
+                        description: selectedImages[selectedModel].choice
+                    };
 
-                        // Store the final selection
-                        finalSelectedModel = {
-                            model: selectedModel,
-                            reaction_time: reactionTime.toFixed(2),
-                            description: selectedImages[selectedModel].choice
-                        };
+                    // Record the final choice in currentParticipant.results
+                    currentParticipant.results.user_choices.final_choice = {
+                        model: selectedModel,
+                        reaction_time: parseFloat(reactionTime.toFixed(2)),
+                        description: selectedImages[selectedModel].choice
+                    };
 
-                        // Record the final choice in currentParticipant.results
-                        currentParticipant.results.user_choices.final_choice = {
-                            model: selectedModel,
-                            reaction_time: parseFloat(reactionTime.toFixed(2)),
-                            description: selectedImages[selectedModel].choice
-                        };
-
-                        // End the trial to move to completion
-                        jsPsych.finishTrial({
-                            final_selected_model: finalSelectedModel,
-                            rt: reactionTime
-                        });
+                    // End the trial to move to completion
+                    jsPsych.finishTrial({
+                        final_selected_model: finalSelectedModel,
+                        rt: reactionTime
                     });
                 });
-            }
-        };
+            });
+        }
+    };
 
         // Create completion screen
         const completionTrial = {
@@ -351,77 +507,12 @@
             }
         };
 
-        // Preload trial (dynamically generated after metadata is loaded)
-        function createPreloadTrial() {
-            // Create a list of all images to preload
-            const imagesToPreload = [];
-
-            // Only attempt to preload images after study data is initialized
-            if (highImageryDescription && lowImageryDescription) {
-                // Add participant images
-                metadata.available_models.forEach(model => {
-                    imagesToPreload.push(getImagePath("participant", model));
-                });
-
-                // Add high and low imagery images
-                metadata.available_models.forEach(model => {
-                    imagesToPreload.push(getImagePath("high", model));
-                    imagesToPreload.push(getImagePath("low", model));
-                });
-            } else {
-                console.warn("Skipping image preload because study data is not yet initialized");
-            }
-
-            return {
-                type: jsPsychPreload,
-                images: imagesToPreload,
-                auto_preload: true,
-                message: "Loading study images...",
-                show_progress_bar: true,
-                on_success: function() {
-                    console.log("All images have been preloaded!");
-                },
-                on_error: function(file) {
-                    console.error(`Error preloading ${file}`);
-                }
-            };
-        }
-
         // Start the experiment
-        function startExperiment() {
+        async function startExperiment() { // ADD 'async' here
             const timeline = [
                 participantIdTrial,
                 welcomeTrial,
-                { // This is the modified preload section
-                    type: jsPsychPreload,
-                    images: [], // Images will be dynamically added below
-                    auto_preload: true,
-                    message: "Loading study images...",
-                    show_progress_bar: true,
-                    on_load: function() {
-                        console.log("All images have been preloaded!");
-                        // jsPsych.finishTrial(); // If you want to immediately move on from the preload screen
-                    },
-                    on_error: function(file) {
-                        console.error(`Error preloading ${file}`);
-                    },
-                    timeline: function() { // Dynamically generate the images to preload
-                        const imagesToPreload = [];
-                        if (highImageryDescription && lowImageryDescription) {
-                            metadata.available_models.forEach(model => {
-                                imagesToPreload.push(getImagePath("participant", model));
-                                imagesToPreload.push(getImagePath("high", model));
-                                imagesToPreload.push(getImagePath("low", model));
-                            });
-                        } else {
-                            console.warn("Skipping image preload because study data is not yet initialized");
-                        }
-                        return [{
-                            timeline: [], // No actual trials here, just the preload logic
-                            preload_images: imagesToPreload
-                        }];
-                    }()
-                }
+                preloadTrial // Ensure preload trial is after welcome so participant data is initialized
             ];
 
             metadata.available_models.forEach((model, index) => {

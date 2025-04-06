@@ -1,0 +1,355 @@
+{
+  "aphantasia_images": {
+    "1216": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1216_dalle.webp",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1216_gpt4.5.jpeg",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1216_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1216_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1216_claude.png"
+    },
+    "1671": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1671_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1671_stable.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1671_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1671_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1671_dalle.webp"
+    },
+    "737": {
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/737_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/737_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/737_dalle.webp",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/737_gpt4.5.webp",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/737_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/737_stable.png"
+    },
+    "3502": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3502_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3502_stable.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3502_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3502_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3502_dalle.webp"
+    },
+    "3271": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3271_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3271_stable.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3271_gemini.jpeg",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3271_gpto.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3271_dalle.webp"
+    },
+    "2417": {
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2417_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2417_claude.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2417_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2417_dalle.webp",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2417_gpto.png"
+    },
+    "33": {
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/33_gpt4.5.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/33_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/33_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/33_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/33_stable.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/33_dalle.png"
+    },
+    "154": {
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/154_gpt4.5.webp",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/154_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/154_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/154_stable.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/154_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/154_dalle.webp"
+    },
+    "3666": {
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3666_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3666_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3666_stable.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3666_gpto.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3666_dalle.webp"
+    },
+    "1645": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1645_dalle.webp",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1645_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1645_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1645_claude.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1645_gemini.jpeg"
+    },
+    "44": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/44_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/44_stable.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/44_gemini.jpeg",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/44_gpto.png",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/44_gpt4.5.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/44_dalle.png"
+    },
+    "83": {
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/83_stable.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/83_dalle.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/83_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/83_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/83_gemini.jpeg",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/83_gpt4.5.png"
+    },
+    "1978": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1978_claude.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1978_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1978_stable.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1978_gpto.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1978_dalle.webp"
+    },
+    "3029": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3029_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3029_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3029_stable.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3029_gpto.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3029_claude.png"
+    },
+    "3199": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3199_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3199_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3199_stable.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3199_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3199_gemini.jpeg"
+    },
+    "4104": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/4104_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/4104_stable.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/4104_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/4104_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/4104_dalle.webp"
+    },
+    "608": {
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/608_gpt4.5.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/608_dalle.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/608_gpto.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/608_claude.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/608_gemini.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/608_stable.png"
+    },
+    "1819": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1819_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1819_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1819_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1819_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1819_gpto.png"
+    },
+    "2549": {
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2549_gpt4.5.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2549_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2549_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2549_claude.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2549_dalle.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/2549_stable.png"
+    },
+    "32": {
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/32_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/32_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/32_stable.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/32_gpto.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/32_dalle.png",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/32_gpt4.5.png"
+    },
+    "279": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/279_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/279_gpto.png",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/279_gpt4.5.webp",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/279_stable.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/279_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/279_gemini.jpeg"
+    },
+    "16": {
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/16_stable.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/16_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/16_dalle.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/16_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/16_gpto.png",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/16_gpt4.5.png"
+    },
+    "1558": {
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1558_gpto.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1558_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1558_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1558_stable.png"
+    },
+    "3991": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3991_dalle.webp",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3991_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3991_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3991_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/3991_stable.png"
+    },
+    "1865": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1865_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1865_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1865_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1865_stable.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/aphantasia_images/1865_gpto.png"
+    }
+  },
+  "phantasia_images": {
+    "4069": {
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4069_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4069_claude.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4069_dalle.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4069_gemini.jpeg",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4069_gpto.png",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4069_gpt4.5.png"
+    },
+    "3188": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3188_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3188_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3188_stable.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3188_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3188_dalle.webp"
+    },
+    "3600": {
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3600_gpt4.5.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3600_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3600_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3600_claude.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3600_dalle.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3600_stable.png"
+    },
+    "2714": {
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2714_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2714_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2714_claude.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2714_dalle.webp",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2714_gpto.png"
+    },
+    "3935": {
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3935_stable.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3935_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3935_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3935_gpto.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3935_dalle.webp"
+    },
+    "2784": {
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2784_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2784_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2784_claude.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2784_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2784_gemini.jpeg"
+    },
+    "2229": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2229_dalle.webp",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2229_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2229_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2229_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2229_claude.png"
+    },
+    "3002": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3002_dalle.webp",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3002_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3002_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3002_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3002_claude.png"
+    },
+    "3401": {
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3401_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3401_dalle.webp",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3401_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3401_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3401_claude.png"
+    },
+    "143": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/143_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/143_gemini.jpeg",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/143_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/143_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/143_claude.png"
+    },
+    "4047": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4047_dalle.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4047_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4047_claude.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4047_gemini.jpeg",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4047_gpto.png",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4047_gpt4.5.png"
+    },
+    "220": {
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/220_gpto.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/220_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/220_dalle.webp",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/220_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/220_stable.png"
+    },
+    "4329": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4329_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4329_stable.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4329_dalle.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4329_gemini.jpeg",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4329_gpt4.5.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/4329_gpto.png"
+    },
+    "121": {
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/121_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/121_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/121_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/121_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/121_gpto.png"
+    },
+    "1060": {
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1060_gpto.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1060_claude.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1060_stable.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1060_dalle.webp",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1060_gemini.jpeg"
+    },
+    "2158": {
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2158_stable.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2158_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2158_claude.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2158_dalle.webp",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2158_gpto.png"
+    },
+    "3519": {
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3519_gpto.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3519_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3519_claude.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3519_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3519_dalle.png",
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3519_gpt4.5.png"
+    },
+    "2827": {
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2827_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2827_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2827_claude.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2827_dalle.webp"
+    },
+    "1034": {
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1034_gpto.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1034_dalle.webp",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1034_claude.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1034_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/1034_stable.png"
+    },
+    "2056": {
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2056_gpt4.5.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2056_gemini.jpeg",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2056_claude.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2056_gpto.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2056_dalle.png",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2056_stable.png"
+    },
+    "3471": {
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3471_claude.png"
+    },
+    "276": {
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/276_stable.png",
+      "claude": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/276_claude.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/276_gemini.jpeg",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/276_dalle.webp",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/276_gpto.png"
+    },
+    "2817": {
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/2817_gpto.png"
+    },
+    "3472": {
+      "gpt4.5": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3472_gpt4.5.png",
+      "gemini": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3472_gemini.jpeg",
+      "stable": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3472_stable.png",
+      "dalle": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3472_dalle.png",
+      "gpto": "/Users/connorgag/Desktop/Ganzflicker-Study/images/phantasia_images/3472_gpto.png"
+    }
+  }
+}
