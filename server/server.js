@@ -1,14 +1,18 @@
 const express = require('express');
-const fs = require('fs').promises; // Use promises for cleaner async/await
+const fs = require('fs').promises;
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path'); // Import the 'path' module
 
 const app = express();
 const port = 3000;
-const RESULTS_FILE = '../results.json'; // Path to your results.json file
+const RESULTS_FILE = '../results.json';
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve static files from the parent directory
+app.use(express.static(path.join(__dirname, '..')));
 
 // Function to read the results file
 async function readResults() {
