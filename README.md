@@ -22,7 +22,7 @@
 In the **server** directory, run:
 
 ```bash
-node server.js
+npm start
 ```
 
 And click on the link that pops up (should be http://localhost:3000).
