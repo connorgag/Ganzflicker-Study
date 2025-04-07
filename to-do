@@ -1,6 +1,6 @@
 To-do
 
-[+] Make sure images are same size; square shaped;
+[+] Make sure images are same size; square shaped
 [] let's increase the size of images a bit as there are lots of details in some pictures and will be nice if everything is visible
 [+] Once they choose an image, let's overlay a square contour around it so that they get feedback that something changed
 [] Once they choose an image, let's show a "next" button to let them know they can advance; Or maybe we can let them just press space to advance to the next page. However, that should be disabled until they have made their choice
@@ -36,3 +36,4 @@ To-do
 	[] Debrief: What do you think the study is about?
 	[] General feedback: Do you have any comments/feedback for us?
 [] Last page with thank you and confetti! :)
+[] Make study fullscreen
