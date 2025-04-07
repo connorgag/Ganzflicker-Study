@@ -9,8 +9,31 @@
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-image-button-response@1.1.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Added styles for the next button */
+        .next-button {
+            display: none;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .next-button:hover {
+            background-color: #45a049;
+        }
+        .selected-image {
+            border: 3px solid #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+        }
+    </style>
 </head>
 <body>
     <div id="jspsych-target"></div>
@@ -262,7 +285,6 @@
             }
         };
 
-
         // Create participant ID input screen
         const participantIdTrial = {
             type: jsPsychHtmlKeyboardResponse,
@@ -285,7 +307,7 @@
             }
         };
 
-        // Create welcome screen
+        // Create welcome screen with fullscreen functionality
         const welcomeTrial = {
             type: jsPsychHtmlButtonResponse,
             stimulus: function() {
@@ -299,14 +321,58 @@
                         For each set, please select the image that best represents what you perceived during the ganzflicker experience.
                         <br><br>
                         At the end, you will make a final selection from your previous choices.
+                        <br><br>
+                        <b>The study will switch to fullscreen mode when you click "Begin Study".</b>
                     </p>
                 `;
             },
             choices: ["Begin Study"],
+            on_load: function() {
+                // Add event listener to the button to enter fullscreen before finishing the trial
+                document.querySelector('.jspsych-btn').addEventListener('click', function(e) {
+                    // Prevent default button behavior temporarily
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Request fullscreen
+                    const element = document.documentElement;
+                    if (element.requestFullscreen) {
+                        element.requestFullscreen();
+                    } else if (element.mozRequestFullScreen) {
+                        element.mozRequestFullScreen();
+                    } else if (element.webkitRequestFullscreen) {
+                        element.webkitRequestFullscreen();
+                    } else if (element.msRequestFullscreen) {
+                        element.msRequestFullscreen();
+                    }
+                    
+                    // Continue with the trial after a short delay to allow fullscreen to engage
+                    setTimeout(() => {
+                        // Initialize the study data and continue
+                        initializeStudyData();
+                        
+                        // Now finish the trial
+                        const clickEvent = new MouseEvent('click', {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window
+                        });
+                        
+                        // We need to simulate a new click after the fullscreen request
+                        document.querySelector('.jspsych-btn').dispatchEvent(clickEvent);
+                    }, 500);
+                }, { once: true }); // Use once: true to prevent multiple handlers
+            },
             on_finish: function() {
-                // Initialize the study data after participant ID is entered and welcome screen is confirmed
-                initializeStudyData();
+                console.log("Welcome trial completed, study data initialized");
             }
+        };
+
+        // Create exit fullscreen trial for the end of the experiment
+        const exitFullscreenTrial = {
+            type: jsPsychFullscreen,
+            fullscreen_mode: false,
+            delay_after: 0
         };
 
         // Create image trial for each model
@@ -315,22 +381,22 @@
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus: function() {
                     const imageOptions = [
-                {
-                    type: "aphantasia",
-                    path: getImagePath("aphantasia", model),
-                    desc: currentParticipant.results.aphantasia_description
-                },
-                {
-                    type: "phantasia",
-                    path: getImagePath("phantasia", model),
-                    desc: currentParticipant.results.phantasia_description
-                },
-                {
-                    type: "participant",
-                    path: getImagePath("participant", model),
-                    desc: currentParticipant.description
-                }
-                ];
+                        {
+                            type: "aphantasia",
+                            path: getImagePath("aphantasia", model),
+                            desc: currentParticipant.results.aphantasia_description
+                        },
+                        {
+                            type: "phantasia",
+                            path: getImagePath("phantasia", model),
+                            desc: currentParticipant.results.phantasia_description
+                        },
+                        {
+                            type: "participant",
+                            path: getImagePath("participant", model),
+                            desc: currentParticipant.description
+                        }
+                    ];
 
                     // Shuffle the options
                     const shuffledOptions = shuffleArray(imageOptions);
@@ -351,18 +417,48 @@
                                 </div>
                             `).join('')}
                         </div>
+                        <button class="next-button" id="next-button">Next</button>
                     `;
                 },
                 choices: [],
                 trial_duration: null,
                 on_load: function() {
                     const startTime = performance.now();
+                    let selectedElement = null;
+                    let selectionTime = null;
+                    
+                    // Get the next button element
+                    const nextButton = document.getElementById('next-button');
 
-                    // Add click event to images that advances to the next trial
+                    // Add click event to images
                     document.querySelectorAll('.image-option').forEach(element => {
                         element.addEventListener('click', function() {
-                            const selectedType = this.getAttribute('data-type');
-                            const position = parseInt(this.getAttribute('data-position'));
+                            // First, remove selection class from all images
+                            document.querySelectorAll('.image-option').forEach(el => {
+                                el.querySelector('img').classList.remove('selected-image');
+                            });
+                            
+                            // Add selection class to clicked image
+                            this.querySelector('img').classList.add('selected-image');
+                            
+                            // Record the selection
+                            selectedElement = this;
+                            
+                            // Record selection time if not already recorded
+                            if (!selectionTime) {
+                                selectionTime = performance.now();
+                            }
+                            
+                            // Show the next button
+                            nextButton.style.display = 'block';
+                        });
+                    });
+                    
+                    // Add click event for the next button to advance to the next trial
+                    nextButton.addEventListener('click', function() {
+                        if (selectedElement) {
+                            const selectedType = selectedElement.getAttribute('data-type');
+                            const position = parseInt(selectedElement.getAttribute('data-position'));
 
                             let choiceCategory;
                             if (selectedType === "aphantasia") {
@@ -374,11 +470,11 @@
                             }
 
                             // Calculate reaction time
-                            const reactionTime = (performance.now() - startTime) / 1000;
+                            const reactionTime = (selectionTime - startTime) / 1000;
 
                             // Store the selection
                             selectedImages[model] = {
-                                path: this.querySelector('img').src,
+                                path: selectedElement.querySelector('img').src,
                                 type: selectedType,
                                 choice: choiceCategory,
                                 image_choice_location: position,
@@ -398,7 +494,7 @@
                                 selected_image: selectedImages[model],
                                 rt: reactionTime
                             });
-                        });
+                        }
                     });
                 }
             };
@@ -421,105 +517,144 @@
                             </div>
                         `).join('')}
                     </div>
+                    <button class="next-button" id="final-next-button">Complete Study</button>
                 `;
             },
             choices: [],
             trial_duration: null,
             on_load: function() {
                 const startTime = performance.now();
+                let selectedElement = null;
+                let selectionTime = null;
+                
+                // Get the next button element
+                const nextButton = document.getElementById('final-next-button');
+                nextButton.style.display = 'none';
 
-                // Add click event to final options that completes this trial
+                // Add click event to final options
                 document.querySelectorAll('.final-option').forEach(element => {
                     element.addEventListener('click', function() {
-                        const selectedModel = this.getAttribute('data-model');
-                    // Calculate reaction time
-                    const reactionTime = (performance.now() - startTime) / 1000;
-
-                    // Store the final selection
-                    finalSelectedModel = {
-                        model: selectedModel,
-                        reaction_time: reactionTime.toFixed(2),
-                        description: selectedImages[selectedModel].choice
-                    };
-
-                    // Record the final choice in currentParticipant.results
-                    currentParticipant.results.user_choices.final_choice = {
-                        model: selectedModel,
-                        reaction_time: parseFloat(reactionTime.toFixed(2)),
-                        description: selectedImages[selectedModel].choice
-                    };
-
-                    // End the trial to move to completion
-                    jsPsych.finishTrial({
-                        final_selected_model: finalSelectedModel,
-                        rt: reactionTime
+                        // First, remove selection class from all images
+                        document.querySelectorAll('.final-option img').forEach(img => {
+                            img.classList.remove('selected-image');
+                        });
+                        
+                        // Add selection class to clicked image
+                        this.querySelector('img').classList.add('selected-image');
+                        
+                        // Record the selection
+                        selectedElement = this;
+                        
+                        // Record selection time if not already recorded
+                        if (!selectionTime) {
+                            selectionTime = performance.now();
+                        }
+                        
+                        // Show the next button
+                        nextButton.style.display = 'block';
                     });
                 });
-            });
-        }
-    };
+                
+                // Add click event for the next button to complete the study
+                nextButton.addEventListener('click', function() {
+                    if (selectedElement) {
+                        const selectedModel = selectedElement.getAttribute('data-model');
+                        
+                        // Calculate reaction time
+                        const reactionTime = (selectionTime - startTime) / 1000;
 
-        // Create completion screen
+                        // Store the final selection
+                        finalSelectedModel = {
+                            model: selectedModel,
+                            reaction_time: reactionTime.toFixed(2),
+                            description: selectedImages[selectedModel].choice
+                        };
+
+                        // Record the final choice in currentParticipant.results
+                        currentParticipant.results.user_choices.final_choice = {
+                            model: selectedModel,
+                            reaction_time: parseFloat(reactionTime.toFixed(2)),
+                            description: selectedImages[selectedModel].choice
+                        };
+
+                        // End the trial to move to completion
+                        jsPsych.finishTrial({
+                            final_selected_model: finalSelectedModel,
+                            rt: reactionTime
+                        });
+                    }
+                });
+            }
+        };
+        // Add this function to download JSON data
+        function downloadObjectAsJson(exportObj, exportName){
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", exportName + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        // Modify the completionTrial to automatically download data
         const completionTrial = {
-            type: jsPsychHtmlButtonResponse, // Keep it as button response for now
+            type: jsPsychHtmlButtonResponse,
             stimulus: `
                 <h2>Study Completed</h2>
                 <p class="instruction-text">
                     Thank you for participating in this study!
                 </p>
+                <p class="download-status">Your data is being saved...</p>
+                <button class="start-over-button" onclick="window.location.href='${window.location.href}'">Start Over</button>
             `,
-            choices: [], // Remove the "Close" button initially
+            choices: [], // No default button choices
             on_load: function() {
-                const participantData = {
-                    subject_id: participantId,
-                    results: currentParticipant.results
-                };
-
-                // Send data to the local server
+                const display = jsPsych.getDisplayElement();
+                const statusElement = display.querySelector('.download-status');
+                
+                // Automatically download the participant data
+                downloadObjectAsJson(currentParticipant.results, `participant_${participantId}_data`);
+                
+                // Update download status
+                statusElement.textContent = 'Your data has been downloaded.';
+                
+                // Still send the data to the server
                 fetch('http://localhost:3000/save-participant-data', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(participantData),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ subject_id: participantId, results: currentParticipant.results }),
                 })
                 .then(response => response.text())
                 .then(message => {
-                    console.log(message); // Log server response
-                    document.querySelector('#jspsych-target').innerHTML = `
-                        <h2>Study Completed</h2>
-                        <p class="instruction-text">
-                            Thank you for participating in this study! Your data has been successfully saved. You may now close this window.
-                        </p>
-                    `;
+                    // Update the status message
+                    statusElement.textContent = 'Your data has been downloaded and saved to the server.';
                 })
                 .catch(error => {
-                    console.error('Error saving data:', error);
-                    document.querySelector('#jspsych-target').innerHTML = `
-                        <h2 style="color: red;">Error</h2>
-                        <p class="instruction-text" style="color: red;">
-                            There was an error saving your data. Please try again or contact the researcher.
-                        </p>
-                    `;
+                    // Show error but data is still downloaded
+                    statusElement.textContent = 'Your data has been downloaded. However, there was an error saving to the server.';
+                    statusElement.style.color = 'red';
                 });
-
-                console.log('Attempting to save data on completion screen load.');
             }
         };
 
         // Start the experiment
-        async function startExperiment() { // ADD 'async' here
+        async function startExperiment() {
             const timeline = [
                 participantIdTrial,
-                welcomeTrial,
-                preloadTrial // Ensure preload trial is after welcome so participant data is initialized
+                welcomeTrial, // This will now handle fullscreen entry
+                preloadTrial
             ];
 
             metadata.available_models.forEach((model, index) => {
                 timeline.push(createModelImageTrial(model, index));
             });
 
-            timeline.push(finalSelectionTrial, completionTrial);
+            timeline.push(
+                finalSelectionTrial, 
+                exitFullscreenTrial, // Exit fullscreen before showing completion
+                completionTrial
+            );
 
             jsPsych.run(timeline);
         }

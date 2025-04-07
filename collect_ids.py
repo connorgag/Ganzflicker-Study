@@ -70,7 +70,6 @@ def scan_image_folders_and_update_config():
                 print(f"Warning: Could not decode existing {config_file}. Creating a new one.")
 
     # Only include the IDs that have all available models images
-    # FIXED: Initialize new_image_data as a dictionary with the same structure as image_data
     new_image_data = {
         "aphantasia_images": {},
         "phantasia_images": {}

@@ -64,11 +64,26 @@
 }
 
 .final-option img {
-    max-width: 100%;
+    max-width: 60%;
     height: auto;
     margin-bottom: 10px;
 }
+/* Style for the Start Over button */
+.start-over-button {
+    margin-top: 20px; /* Adds some space above the button */
+    padding: 10px 20px; /* Sets vertical and horizontal padding */
+    background-color: #007bff; /* A blue background color (you can change this) */
+    color: white; /* White text color */
+    border: none; /* Removes the default button border */
+    border-radius: 4px; /* Slightly rounded corners */
+    font-size: 16px; /* Sets the font size */
+    cursor: pointer; /* Changes the cursor to a pointer on hover, indicating it's clickable */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
 
+.start-over-button:hover {
+    background-color: #0056b3; /* A darker shade of blue on hover */
+}
 .model-label {
     font-weight: bold;
     font-size: 16px;

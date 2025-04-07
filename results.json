@@ -4,27 +4,44 @@
       "subject_id": "002",
       "results": {
         "subject_id": "002",
-        "random_low_imagery_description": "A glowing orb surrounded by geometric shapes.",
-        "random_high_imagery_description": "A field of stars that seem to pulse and shift in a rhythmic pattern with hands from the sky.",
+        "aphantasia_id": 83,
+        "phantasia_id": 4047,
+        "aphantasia_description": "I saw purple dots that were circling around like stars in a galaxy, also with spiral arms etc. They were going quite fast, I wanted them to slow down (to imitate a galaxy) but they didn't. Then in the next few seconds the purple dots would form other shapes like waves or pillars that were turning as well.",
+        "phantasia_description": "There appeared a long hallway with painted white walls that were a little bit reflective. At the end of the hall, I saw a being walk past the doorway, back up, then just stand there. In a flash, he was standing at the end of the hall and a bit to the left and appeared to be looking at me. He would periodically move closer to me and then be back at the far end of the hall. Eventually, another like him was also there.     This was a very strange feeling. ",
         "user_choices": {
           "claude": {
-            "choice": "own_description",
-            "reaction_time": 1.88,
-            "image_choice_location": "right"
+            "choice": "phantasia_description",
+            "reaction_time": 0.59,
+            "image_choice_location": "middle"
           },
           "dalle": {
-            "choice": "own_description",
-            "reaction_time": 0.71,
-            "image_choice_location": "right"
+            "choice": "aphantasia_description",
+            "reaction_time": 0.25,
+            "image_choice_location": "middle"
           },
-          "gpt": {
+          "gemini": {
+            "choice": "phantasia_description",
+            "reaction_time": 0.28,
+            "image_choice_location": "middle"
+          },
+          "gpto": {
             "choice": "own_description",
-            "reaction_time": 0.85,
+            "reaction_time": 0.3,
+            "image_choice_location": "middle"
+          },
+          "stable": {
+            "choice": "own_description",
+            "reaction_time": 0.35,
+            "image_choice_location": "middle"
+          },
+          "gpt4.5": {
+            "choice": "phantasia_description",
+            "reaction_time": 0.28,
             "image_choice_location": "middle"
           },
           "final_choice": {
-            "model": "dalle",
-            "reaction_time": 0.95,
+            "model": "stable",
+            "reaction_time": 43.55,
             "description": "own_description"
           }
         }
@@ -34,58 +51,45 @@
       "subject_id": "001",
       "results": {
         "subject_id": "001",
-        "random_low_imagery_description": "A glowing orb surrounded by geometric shapes.",
-        "random_high_imagery_description": "A swirling vortex of vibrant colors blending into each other with people dancing around it.",
+        "aphantasia_id": 33,
+        "phantasia_id": 2056,
+        "aphantasia_description": "The flickering screen red and black and after a short time.. 30 sec to a min maybe? Hard to say... I noticed faint variations in the shades of red and black. Not really other colors but more like hues or red and black at different constantly changing / flashing spots on the screen that gave the impression of seeing faint shapes or balls of a brighter hue than the background, random patterns.",
+        "phantasia_description": "I was taking a train trip somewhere there were many people on train, I was in jungle with tigers not frightening just vividly alive",
         "user_choices": {
           "claude": {
-            "choice": "high_imagery_description",
-            "reaction_time": 0.47,
+            "choice": "phantasia_description",
+            "reaction_time": 0.59,
             "image_choice_location": "middle"
           },
           "dalle": {
             "choice": "own_description",
-            "reaction_time": 0.2,
+            "reaction_time": 1.25,
             "image_choice_location": "middle"
           },
-          "gpt": {
-            "choice": "low_imagery_description",
-            "reaction_time": 0.18,
+          "gemini": {
+            "choice": "aphantasia_description",
+            "reaction_time": 0.73,
+            "image_choice_location": "right"
+          },
+          "gpto": {
+            "choice": "aphantasia_description",
+            "reaction_time": 0.48,
+            "image_choice_location": "middle"
+          },
+          "stable": {
+            "choice": "phantasia_description",
+            "reaction_time": 0.7,
+            "image_choice_location": "middle"
+          },
+          "gpt4.5": {
+            "choice": "aphantasia_description",
+            "reaction_time": 0.57,
             "image_choice_location": "middle"
           },
           "final_choice": {
-            "model": "dalle",
-            "reaction_time": 0.49,
-            "description": "own_description"
-          }
-        }
-      }
-    },
-    {
-      "subject_id": "5",
-      "results": {
-        "subject_id": "5",
-        "random_low_imagery_description": "A glowing orb surrounded by geometric shapes.",
-        "random_high_imagery_description": "A field of stars that seem to pulse and shift in a rhythmic pattern with hands from the sky.",
-        "user_choices": {
-          "claude": {
-            "choice": "own_description",
-            "reaction_time": 1.19,
-            "image_choice_location": "right"
-          },
-          "dalle": {
-            "choice": "own_description",
-            "reaction_time": 0.78,
-            "image_choice_location": "right"
-          },
-          "gpt": {
-            "choice": "own_description",
-            "reaction_time": 0.75,
-            "image_choice_location": "middle"
-          },
-          "final_choice": {
-            "model": "dalle",
-            "reaction_time": 1.17,
-            "description": "own_description"
+            "model": "gpt4.5",
+            "reaction_time": 1.4,
+            "description": "aphantasia_description"
           }
         }
       }
