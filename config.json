@@ -9,45 +9,125 @@
   ],
   "image_paths": {
     "aphantasia_images": {
+      "1671": {
+        "gemini": "images/aphantasia_images/1671_gemini.png",
+        "claude": "images/aphantasia_images/1671_claude.png",
+        "stable": "images/aphantasia_images/1671_stable.png",
+        "dalle": "images/aphantasia_images/1671_dalle.png",
+        "gpto": "images/aphantasia_images/1671_gpto.png",
+        "gpt4.5": "images/aphantasia_images/1671_gpt4.5.png"
+      },
       "737": {
         "gpto": "images/aphantasia_images/737_gpto.png",
-        "gemini": "images/aphantasia_images/737_gemini.jpeg",
-        "dalle": "images/aphantasia_images/737_dalle.webp",
-        "gpt4.5": "images/aphantasia_images/737_gpt4.5.webp",
+        "gpt4.5": "images/aphantasia_images/737_gpt4.5.png",
         "claude": "images/aphantasia_images/737_claude.png",
-        "stable": "images/aphantasia_images/737_stable.png"
+        "gemini": "images/aphantasia_images/737_gemini.png",
+        "stable": "images/aphantasia_images/737_stable.png",
+        "dalle": "images/aphantasia_images/737_dalle.png"
+      },
+      "1558": {
+        "gpt4.5": "images/aphantasia_images/1558_gpt4.5.png",
+        "gpto": "images/aphantasia_images/1558_gpto.png",
+        "gemini": "images/aphantasia_images/1558_gemini.png",
+        "claude": "images/aphantasia_images/1558_claude.png",
+        "stable": "images/aphantasia_images/1558_stable.png",
+        "dalle": "images/aphantasia_images/1558_dalle.png"
+      },
+      "3502": {
+        "gemini": "images/aphantasia_images/3502_gemini.png",
+        "claude": "images/aphantasia_images/3502_claude.png",
+        "dalle": "images/aphantasia_images/3502_dalle.png",
+        "stable": "images/aphantasia_images/3502_stable.png",
+        "gpto": "images/aphantasia_images/3502_gpto.png",
+        "gpt4.5": "images/aphantasia_images/3502_gpt4.5.png"
+      },
+      "3271": {
+        "claude": "images/aphantasia_images/3271_claude.png",
+        "gemini": "images/aphantasia_images/3271_gemini.png",
+        "dalle": "images/aphantasia_images/3271_dalle.png",
+        "stable": "images/aphantasia_images/3271_stable.png",
+        "gpt4.5": "images/aphantasia_images/3271_gpt4.5.png",
+        "gpto": "images/aphantasia_images/3271_gpto.png"
+      },
+      "3029": {
+        "dalle": "images/aphantasia_images/3029_dalle.png",
+        "gpt4.5": "images/aphantasia_images/3029_gpt4.5.png",
+        "stable": "images/aphantasia_images/3029_stable.png",
+        "gpto": "images/aphantasia_images/3029_gpto.png",
+        "gemini": "images/aphantasia_images/3029_gemini.png",
+        "claude": "images/aphantasia_images/3029_claude.png"
+      },
+      "2417": {
+        "stable": "images/aphantasia_images/2417_stable.png",
+        "claude": "images/aphantasia_images/2417_claude.png",
+        "gemini": "images/aphantasia_images/2417_gemini.png",
+        "dalle": "images/aphantasia_images/2417_dalle.png",
+        "gpt4.5": "images/aphantasia_images/2417_gpt4.5.png",
+        "gpto": "images/aphantasia_images/2417_gpto.png"
       },
       "33": {
         "gpt4.5": "images/aphantasia_images/33_gpt4.5.png",
-        "gemini": "images/aphantasia_images/33_gemini.jpeg",
+        "gemini": "images/aphantasia_images/33_gemini.png",
         "claude": "images/aphantasia_images/33_claude.png",
         "gpto": "images/aphantasia_images/33_gpto.png",
         "stable": "images/aphantasia_images/33_stable.png",
         "dalle": "images/aphantasia_images/33_dalle.png"
       },
-      "154": {
-        "gpt4.5": "images/aphantasia_images/154_gpt4.5.webp",
-        "claude": "images/aphantasia_images/154_claude.png",
-        "gpto": "images/aphantasia_images/154_gpto.png",
-        "stable": "images/aphantasia_images/154_stable.png",
-        "gemini": "images/aphantasia_images/154_gemini.jpeg",
-        "dalle": "images/aphantasia_images/154_dalle.webp"
+      "1865": {
+        "gpt4.5": "images/aphantasia_images/1865_gpt4.5.png",
+        "dalle": "images/aphantasia_images/1865_dalle.png",
+        "claude": "images/aphantasia_images/1865_claude.png",
+        "gemini": "images/aphantasia_images/1865_gemini.png",
+        "stable": "images/aphantasia_images/1865_stable.png",
+        "gpto": "images/aphantasia_images/1865_gpto.png"
       },
       "44": {
+        "gemini": "images/aphantasia_images/44_gemini.png",
         "claude": "images/aphantasia_images/44_claude.png",
         "stable": "images/aphantasia_images/44_stable.png",
-        "gemini": "images/aphantasia_images/44_gemini.jpeg",
         "gpto": "images/aphantasia_images/44_gpto.png",
         "gpt4.5": "images/aphantasia_images/44_gpt4.5.png",
         "dalle": "images/aphantasia_images/44_dalle.png"
       },
+      "3666": {
+        "claude": "images/aphantasia_images/3666_claude.png",
+        "gemini": "images/aphantasia_images/3666_gemini.png",
+        "stable": "images/aphantasia_images/3666_stable.png",
+        "dalle": "images/aphantasia_images/3666_dalle.png",
+        "gpto": "images/aphantasia_images/3666_gpto.png",
+        "gpt4.5": "images/aphantasia_images/3666_gpt4.5.png"
+      },
       "83": {
         "stable": "images/aphantasia_images/83_stable.png",
         "dalle": "images/aphantasia_images/83_dalle.png",
+        "gemini": "images/aphantasia_images/83_gemini.png",
         "claude": "images/aphantasia_images/83_claude.png",
         "gpto": "images/aphantasia_images/83_gpto.png",
-        "gemini": "images/aphantasia_images/83_gemini.jpeg",
         "gpt4.5": "images/aphantasia_images/83_gpt4.5.png"
+      },
+      "1978": {
+        "gemini": "images/aphantasia_images/1978_gemini.png",
+        "claude": "images/aphantasia_images/1978_claude.png",
+        "stable": "images/aphantasia_images/1978_stable.png",
+        "gpto": "images/aphantasia_images/1978_gpto.png",
+        "gpt4.5": "images/aphantasia_images/1978_gpt4.5.png",
+        "dalle": "images/aphantasia_images/1978_dalle.png"
+      },
+      "3199": {
+        "claude": "images/aphantasia_images/3199_claude.png",
+        "gemini": "images/aphantasia_images/3199_gemini.png",
+        "gpto": "images/aphantasia_images/3199_gpto.png",
+        "stable": "images/aphantasia_images/3199_stable.png",
+        "dalle": "images/aphantasia_images/3199_dalle.png",
+        "gpt4.5": "images/aphantasia_images/3199_gpt4.5.png"
+      },
+      "4104": {
+        "claude": "images/aphantasia_images/4104_claude.png",
+        "gemini": "images/aphantasia_images/4104_gemini.png",
+        "stable": "images/aphantasia_images/4104_stable.png",
+        "gpto": "images/aphantasia_images/4104_gpto.png",
+        "gpt4.5": "images/aphantasia_images/4104_gpt4.5.png",
+        "dalle": "images/aphantasia_images/4104_dalle.png"
       },
       "608": {
         "gpt4.5": "images/aphantasia_images/608_gpt4.5.png",
@@ -57,87 +137,239 @@
         "gemini": "images/aphantasia_images/608_gemini.png",
         "stable": "images/aphantasia_images/608_stable.png"
       },
+      "154": {
+        "gemini": "images/aphantasia_images/154_gemini.png",
+        "claude": "images/aphantasia_images/154_claude.png",
+        "gpto": "images/aphantasia_images/154_gpto.png",
+        "stable": "images/aphantasia_images/154_stable.png",
+        "gpt4.5": "images/aphantasia_images/154_gpt4.5.png",
+        "dalle": "images/aphantasia_images/154_dalle.png"
+      },
       "2549": {
         "gpt4.5": "images/aphantasia_images/2549_gpt4.5.png",
         "gpto": "images/aphantasia_images/2549_gpto.png",
-        "gemini": "images/aphantasia_images/2549_gemini.jpeg",
+        "gemini": "images/aphantasia_images/2549_gemini.png",
         "claude": "images/aphantasia_images/2549_claude.png",
         "dalle": "images/aphantasia_images/2549_dalle.png",
         "stable": "images/aphantasia_images/2549_stable.png"
       },
+      "3991": {
+        "gpt4.5": "images/aphantasia_images/3991_gpt4.5.png",
+        "dalle": "images/aphantasia_images/3991_dalle.png",
+        "gemini": "images/aphantasia_images/3991_gemini.png",
+        "claude": "images/aphantasia_images/3991_claude.png",
+        "gpto": "images/aphantasia_images/3991_gpto.png",
+        "stable": "images/aphantasia_images/3991_stable.png"
+      },
+      "1645": {
+        "dalle": "images/aphantasia_images/1645_dalle.png",
+        "gpt4.5": "images/aphantasia_images/1645_gpt4.5.png",
+        "gpto": "images/aphantasia_images/1645_gpto.png",
+        "stable": "images/aphantasia_images/1645_stable.png",
+        "gemini": "images/aphantasia_images/1645_gemini.png",
+        "claude": "images/aphantasia_images/1645_claude.png"
+      },
+      "279": {
+        "gemini": "images/aphantasia_images/279_gemini.png",
+        "claude": "images/aphantasia_images/279_claude.png",
+        "gpto": "images/aphantasia_images/279_gpto.png",
+        "stable": "images/aphantasia_images/279_stable.png",
+        "dalle": "images/aphantasia_images/279_dalle.png",
+        "gpt4.5": "images/aphantasia_images/279_gpt4.5.png"
+      },
       "32": {
-        "gemini": "images/aphantasia_images/32_gemini.jpeg",
+        "gemini": "images/aphantasia_images/32_gemini.png",
         "claude": "images/aphantasia_images/32_claude.png",
         "stable": "images/aphantasia_images/32_stable.png",
         "gpto": "images/aphantasia_images/32_gpto.png",
         "dalle": "images/aphantasia_images/32_dalle.png",
         "gpt4.5": "images/aphantasia_images/32_gpt4.5.png"
       },
-      "279": {
-        "claude": "images/aphantasia_images/279_claude.png",
-        "gpto": "images/aphantasia_images/279_gpto.png",
-        "gpt4.5": "images/aphantasia_images/279_gpt4.5.webp",
-        "stable": "images/aphantasia_images/279_stable.png",
-        "dalle": "images/aphantasia_images/279_dalle.webp",
-        "gemini": "images/aphantasia_images/279_gemini.jpeg"
-      },
       "16": {
         "stable": "images/aphantasia_images/16_stable.png",
-        "gemini": "images/aphantasia_images/16_gemini.jpeg",
         "dalle": "images/aphantasia_images/16_dalle.png",
         "claude": "images/aphantasia_images/16_claude.png",
+        "gemini": "images/aphantasia_images/16_gemini.png",
         "gpto": "images/aphantasia_images/16_gpto.png",
         "gpt4.5": "images/aphantasia_images/16_gpt4.5.png"
+      },
+      "1216": {
+        "dalle": "images/aphantasia_images/1216_dalle.png",
+        "gpto": "images/aphantasia_images/1216_gpto.png",
+        "gpt4.5": "images/aphantasia_images/1216_gpt4.5.png",
+        "stable": "images/aphantasia_images/1216_stable.png",
+        "gemini": "images/aphantasia_images/1216_gemini.png",
+        "claude": "images/aphantasia_images/1216_claude.png"
+      },
+      "1819": {
+        "gpt4.5": "images/aphantasia_images/1819_gpt4.5.png",
+        "stable": "images/aphantasia_images/1819_stable.png",
+        "dalle": "images/aphantasia_images/1819_dalle.png",
+        "gemini": "images/aphantasia_images/1819_gemini.png",
+        "claude": "images/aphantasia_images/1819_claude.png",
+        "gpto": "images/aphantasia_images/1819_gpto.png"
       }
     },
     "phantasia_images": {
+      "3188": {
+        "gemini": "images/phantasia_images/3188_gemini.png",
+        "claude": "images/phantasia_images/3188_claude.png",
+        "gpto": "images/phantasia_images/3188_gpto.png",
+        "stable": "images/phantasia_images/3188_stable.png",
+        "dalle": "images/phantasia_images/3188_dalle.png",
+        "gpt4.5": "images/phantasia_images/3188_gpt4.5.png"
+      },
       "4069": {
         "stable": "images/phantasia_images/4069_stable.png",
+        "gemini": "images/phantasia_images/4069_gemini.png",
         "claude": "images/phantasia_images/4069_claude.png",
         "dalle": "images/phantasia_images/4069_dalle.png",
-        "gemini": "images/phantasia_images/4069_gemini.jpeg",
         "gpto": "images/phantasia_images/4069_gpto.png",
         "gpt4.5": "images/phantasia_images/4069_gpt4.5.png"
       },
       "3600": {
         "gpt4.5": "images/phantasia_images/3600_gpt4.5.png",
         "gpto": "images/phantasia_images/3600_gpto.png",
-        "gemini": "images/phantasia_images/3600_gemini.jpeg",
+        "gemini": "images/phantasia_images/3600_gemini.png",
         "claude": "images/phantasia_images/3600_claude.png",
         "dalle": "images/phantasia_images/3600_dalle.png",
         "stable": "images/phantasia_images/3600_stable.png"
       },
-      "4047": {
-        "dalle": "images/phantasia_images/4047_dalle.png",
-        "stable": "images/phantasia_images/4047_stable.png",
-        "claude": "images/phantasia_images/4047_claude.png",
-        "gemini": "images/phantasia_images/4047_gemini.jpeg",
-        "gpto": "images/phantasia_images/4047_gpto.png",
-        "gpt4.5": "images/phantasia_images/4047_gpt4.5.png"
+      "220": {
+        "dalle": "images/phantasia_images/220_dalle.png",
+        "gpt4.5": "images/phantasia_images/220_gpt4.5.png",
+        "gpto": "images/phantasia_images/220_gpto.png",
+        "gemini": "images/phantasia_images/220_gemini.png",
+        "claude": "images/phantasia_images/220_claude.png",
+        "stable": "images/phantasia_images/220_stable.png"
+      },
+      "3935": {
+        "stable": "images/phantasia_images/3935_stable.png",
+        "claude": "images/phantasia_images/3935_claude.png",
+        "gemini": "images/phantasia_images/3935_gemini.png",
+        "gpto": "images/phantasia_images/3935_gpto.png",
+        "gpt4.5": "images/phantasia_images/3935_gpt4.5.png",
+        "dalle": "images/phantasia_images/3935_dalle.png"
+      },
+      "2784": {
+        "gpto": "images/phantasia_images/2784_gpto.png",
+        "stable": "images/phantasia_images/2784_stable.png",
+        "gemini": "images/phantasia_images/2784_gemini.png",
+        "claude": "images/phantasia_images/2784_claude.png",
+        "dalle": "images/phantasia_images/2784_dalle.png",
+        "gpt4.5": "images/phantasia_images/2784_gpt4.5.png"
       },
       "4329": {
+        "gemini": "images/phantasia_images/4329_gemini.png",
         "claude": "images/phantasia_images/4329_claude.png",
         "stable": "images/phantasia_images/4329_stable.png",
         "dalle": "images/phantasia_images/4329_dalle.png",
-        "gemini": "images/phantasia_images/4329_gemini.jpeg",
         "gpt4.5": "images/phantasia_images/4329_gpt4.5.png",
         "gpto": "images/phantasia_images/4329_gpto.png"
+      },
+      "4047": {
+        "dalle": "images/phantasia_images/4047_dalle.png",
+        "stable": "images/phantasia_images/4047_stable.png",
+        "gemini": "images/phantasia_images/4047_gemini.png",
+        "claude": "images/phantasia_images/4047_claude.png",
+        "gpto": "images/phantasia_images/4047_gpto.png",
+        "gpt4.5": "images/phantasia_images/4047_gpt4.5.png"
+      },
+      "276": {
+        "dalle": "images/phantasia_images/276_dalle.png",
+        "stable": "images/phantasia_images/276_stable.png",
+        "claude": "images/phantasia_images/276_claude.png",
+        "gemini": "images/phantasia_images/276_gemini.png",
+        "gpto": "images/phantasia_images/276_gpto.png",
+        "gpt4.5": "images/phantasia_images/276_gpt4.5.png"
+      },
+      "1034": {
+        "gpt4.5": "images/phantasia_images/1034_gpt4.5.png",
+        "gpto": "images/phantasia_images/1034_gpto.png",
+        "dalle": "images/phantasia_images/1034_dalle.png",
+        "gemini": "images/phantasia_images/1034_gemini.png",
+        "claude": "images/phantasia_images/1034_claude.png",
+        "stable": "images/phantasia_images/1034_stable.png"
+      },
+      "1060": {
+        "gpto": "images/phantasia_images/1060_gpto.png",
+        "claude": "images/phantasia_images/1060_claude.png",
+        "gemini": "images/phantasia_images/1060_gemini.png",
+        "stable": "images/phantasia_images/1060_stable.png",
+        "gpt4.5": "images/phantasia_images/1060_gpt4.5.png",
+        "dalle": "images/phantasia_images/1060_dalle.png"
+      },
+      "3401": {
+        "dalle": "images/phantasia_images/3401_dalle.png",
+        "gpt4.5": "images/phantasia_images/3401_gpt4.5.png",
+        "gpto": "images/phantasia_images/3401_gpto.png",
+        "stable": "images/phantasia_images/3401_stable.png",
+        "claude": "images/phantasia_images/3401_claude.png",
+        "gemini": "images/phantasia_images/3401_gemini.png"
+      },
+      "2158": {
+        "stable": "images/phantasia_images/2158_stable.png",
+        "gemini": "images/phantasia_images/2158_gemini.png",
+        "claude": "images/phantasia_images/2158_claude.png",
+        "gpto": "images/phantasia_images/2158_gpto.png",
+        "dalle": "images/phantasia_images/2158_dalle.png",
+        "gpt4.5": "images/phantasia_images/2158_gpt4.5.png"
       },
       "3519": {
         "gpto": "images/phantasia_images/3519_gpto.png",
         "stable": "images/phantasia_images/3519_stable.png",
+        "gemini": "images/phantasia_images/3519_gemini.png",
         "claude": "images/phantasia_images/3519_claude.png",
-        "gemini": "images/phantasia_images/3519_gemini.jpeg",
         "dalle": "images/phantasia_images/3519_dalle.png",
         "gpt4.5": "images/phantasia_images/3519_gpt4.5.png"
       },
       "2056": {
         "gpt4.5": "images/phantasia_images/2056_gpt4.5.png",
-        "gemini": "images/phantasia_images/2056_gemini.jpeg",
+        "gemini": "images/phantasia_images/2056_gemini.png",
         "claude": "images/phantasia_images/2056_claude.png",
         "gpto": "images/phantasia_images/2056_gpto.png",
         "dalle": "images/phantasia_images/2056_dalle.png",
         "stable": "images/phantasia_images/2056_stable.png"
+      },
+      "2229": {
+        "gpto": "images/phantasia_images/2229_gpto.png",
+        "gpt4.5": "images/phantasia_images/2229_gpt4.5.png",
+        "stable": "images/phantasia_images/2229_stable.png",
+        "gemini": "images/phantasia_images/2229_gemini.png",
+        "claude": "images/phantasia_images/2229_claude.png",
+        "dalle": "images/phantasia_images/2229_dalle.png"
+      },
+      "2714": {
+        "stable": "images/phantasia_images/2714_stable.png",
+        "dalle": "images/phantasia_images/2714_dalle.png",
+        "claude": "images/phantasia_images/2714_claude.png",
+        "gemini": "images/phantasia_images/2714_gemini.png",
+        "gpto": "images/phantasia_images/2714_gpto.png",
+        "gpt4.5": "images/phantasia_images/2714_gpt4.5.png"
+      },
+      "121": {
+        "dalle": "images/phantasia_images/121_dalle.png",
+        "gpt4.5": "images/phantasia_images/121_gpt4.5.png",
+        "stable": "images/phantasia_images/121_stable.png",
+        "gemini": "images/phantasia_images/121_gemini.png",
+        "claude": "images/phantasia_images/121_claude.png",
+        "gpto": "images/phantasia_images/121_gpto.png"
+      },
+      "3002": {
+        "gpto": "images/phantasia_images/3002_gpto.png",
+        "gpt4.5": "images/phantasia_images/3002_gpt4.5.png",
+        "dalle": "images/phantasia_images/3002_dalle.png",
+        "stable": "images/phantasia_images/3002_stable.png",
+        "gemini": "images/phantasia_images/3002_gemini.png",
+        "claude": "images/phantasia_images/3002_claude.png"
+      },
+      "143": {
+        "gpto": "images/phantasia_images/143_gpto.png",
+        "gpt4.5": "images/phantasia_images/143_gpt4.5.png",
+        "dalle": "images/phantasia_images/143_dalle.png",
+        "stable": "images/phantasia_images/143_stable.png",
+        "claude": "images/phantasia_images/143_claude.png",
+        "gemini": "images/phantasia_images/143_gemini.png"
       }
     }
   },
@@ -151,12 +383,41 @@
     279,
     608,
     737,
-    2549
+    1216,
+    1558,
+    1645,
+    1671,
+    1819,
+    1865,
+    1978,
+    2417,
+    2549,
+    3029,
+    3199,
+    3271,
+    3502,
+    3666,
+    3991,
+    4104
   ],
   "phantasia_ids": [
+    121,
+    143,
+    220,
+    276,
+    1034,
+    1060,
     2056,
+    2158,
+    2229,
+    2714,
+    2784,
+    3002,
+    3188,
+    3401,
     3519,
     3600,
+    3935,
     4047,
     4069,
     4329

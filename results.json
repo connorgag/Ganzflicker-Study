@@ -1,98 +1,218 @@
 {
-  "current_participant_data": [
-    {
-      "subject_id": "002",
-      "results": {
+  "current_participant_data": {
+    "002": [
+      {
         "subject_id": "002",
-        "aphantasia_id": 83,
-        "phantasia_id": 4047,
-        "aphantasia_description": "I saw purple dots that were circling around like stars in a galaxy, also with spiral arms etc. They were going quite fast, I wanted them to slow down (to imitate a galaxy) but they didn't. Then in the next few seconds the purple dots would form other shapes like waves or pillars that were turning as well.",
-        "phantasia_description": "There appeared a long hallway with painted white walls that were a little bit reflective. At the end of the hall, I saw a being walk past the doorway, back up, then just stand there. In a flash, he was standing at the end of the hall and a bit to the left and appeared to be looking at me. He would periodically move closer to me and then be back at the far end of the hall. Eventually, another like him was also there.     This was a very strange feeling. ",
-        "user_choices": {
-          "claude": {
-            "choice": "phantasia_description",
-            "reaction_time": 0.59,
-            "image_choice_location": "middle"
-          },
-          "dalle": {
-            "choice": "aphantasia_description",
-            "reaction_time": 0.25,
-            "image_choice_location": "middle"
-          },
-          "gemini": {
-            "choice": "phantasia_description",
-            "reaction_time": 0.28,
-            "image_choice_location": "middle"
-          },
-          "gpto": {
-            "choice": "own_description",
-            "reaction_time": 0.3,
-            "image_choice_location": "middle"
-          },
-          "stable": {
-            "choice": "own_description",
-            "reaction_time": 0.35,
-            "image_choice_location": "middle"
-          },
-          "gpt4.5": {
-            "choice": "phantasia_description",
-            "reaction_time": 0.28,
-            "image_choice_location": "middle"
-          },
-          "final_choice": {
-            "model": "stable",
-            "reaction_time": 43.55,
-            "description": "own_description"
-          }
-        }
+        "trial_type": "normal",
+        "model": "gpto",
+        "aphantasia_image": "608_gpto",
+        "phantasia_image": "121_gpto",
+        "target": "002_gpto",
+        "choice": "aphantasia",
+        "reaction_time": 1.21,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "608_gpto",
+        "datetime": "2025-04-08T17:30:46.677Z"
+      },
+      {
+        "subject_id": "002",
+        "trial_type": "normal",
+        "model": "stable",
+        "aphantasia_image": "608_stable",
+        "phantasia_image": "121_stable",
+        "target": "002_stable",
+        "choice": "phantasia",
+        "reaction_time": 1.1,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "121_stable",
+        "datetime": "2025-04-08T17:30:47.778Z"
+      },
+      {
+        "subject_id": "002",
+        "trial_type": "normal",
+        "model": "dalle",
+        "aphantasia_image": "608_dalle",
+        "phantasia_image": "121_dalle",
+        "target": "002_dalle",
+        "choice": "aphantasia",
+        "reaction_time": 0.96,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "608_dalle",
+        "datetime": "2025-04-08T17:30:48.745Z"
+      },
+      {
+        "subject_id": "002",
+        "trial_type": "normal",
+        "model": "gemini",
+        "aphantasia_image": "608_gemini",
+        "phantasia_image": "121_gemini",
+        "target": "002_gemini",
+        "choice": "own",
+        "reaction_time": 0.91,
+        "image_choice_location": "middle",
+        "accuracy": 1,
+        "chosen_model": "na",
+        "chosen_image": "participant_002_gemini",
+        "datetime": "2025-04-08T17:30:49.660Z"
+      },
+      {
+        "subject_id": "002",
+        "trial_type": "normal",
+        "model": "claude",
+        "aphantasia_image": "608_claude",
+        "phantasia_image": "121_claude",
+        "target": "002_claude",
+        "choice": "phantasia",
+        "reaction_time": 0.78,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "121_claude",
+        "datetime": "2025-04-08T17:30:50.443Z"
+      },
+      {
+        "subject_id": "002",
+        "trial_type": "normal",
+        "model": "gpt4.5",
+        "aphantasia_image": "608_gpt4.5",
+        "phantasia_image": "121_gpt4.5",
+        "target": "002_gpt4.5",
+        "choice": "aphantasia",
+        "reaction_time": 0.68,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "608_gpt4",
+        "datetime": "2025-04-08T17:30:51.128Z"
+      },
+      {
+        "subject_id": "002",
+        "trial_type": "final",
+        "model": "na",
+        "aphantasia_image": "na",
+        "phantasia_image": "na",
+        "target": "na",
+        "choice": "phantasia",
+        "reaction_time": 1.17,
+        "image_choice_location": "bottom_middle",
+        "accuracy": 0,
+        "chosen_model": "stable",
+        "chosen_image": "121_stable",
+        "datetime": "2025-04-08T17:30:52.295Z"
       }
-    },
-    {
-      "subject_id": "001",
-      "results": {
+    ],
+    "001": [
+      {
         "subject_id": "001",
-        "aphantasia_id": 33,
-        "phantasia_id": 2056,
-        "aphantasia_description": "The flickering screen red and black and after a short time.. 30 sec to a min maybe? Hard to say... I noticed faint variations in the shades of red and black. Not really other colors but more like hues or red and black at different constantly changing / flashing spots on the screen that gave the impression of seeing faint shapes or balls of a brighter hue than the background, random patterns.",
-        "phantasia_description": "I was taking a train trip somewhere there were many people on train, I was in jungle with tigers not frightening just vividly alive",
-        "user_choices": {
-          "claude": {
-            "choice": "phantasia_description",
-            "reaction_time": 0.59,
-            "image_choice_location": "middle"
-          },
-          "dalle": {
-            "choice": "own_description",
-            "reaction_time": 1.25,
-            "image_choice_location": "middle"
-          },
-          "gemini": {
-            "choice": "aphantasia_description",
-            "reaction_time": 0.73,
-            "image_choice_location": "right"
-          },
-          "gpto": {
-            "choice": "aphantasia_description",
-            "reaction_time": 0.48,
-            "image_choice_location": "middle"
-          },
-          "stable": {
-            "choice": "phantasia_description",
-            "reaction_time": 0.7,
-            "image_choice_location": "middle"
-          },
-          "gpt4.5": {
-            "choice": "aphantasia_description",
-            "reaction_time": 0.57,
-            "image_choice_location": "middle"
-          },
-          "final_choice": {
-            "model": "gpt4.5",
-            "reaction_time": 1.4,
-            "description": "aphantasia_description"
-          }
-        }
+        "trial_type": "normal",
+        "model": "dalle",
+        "aphantasia_image": "2549_dalle",
+        "phantasia_image": "143_dalle",
+        "target": "001_dalle",
+        "choice": "own",
+        "reaction_time": 1.41,
+        "image_choice_location": "middle",
+        "accuracy": 1,
+        "chosen_model": "na",
+        "chosen_image": "participant_001_dalle",
+        "datetime": "2025-04-08T16:51:50.135Z"
+      },
+      {
+        "subject_id": "001",
+        "trial_type": "normal",
+        "model": "gpto",
+        "aphantasia_image": "2549_gpto",
+        "phantasia_image": "143_gpto",
+        "target": "001_gpto",
+        "choice": "aphantasia",
+        "reaction_time": 0.5,
+        "image_choice_location": "right",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "2549_gpto",
+        "datetime": "2025-04-08T16:51:51.417Z"
+      },
+      {
+        "subject_id": "001",
+        "trial_type": "normal",
+        "model": "gemini",
+        "aphantasia_image": "2549_gemini",
+        "phantasia_image": "143_gemini",
+        "target": "001_gemini",
+        "choice": "aphantasia",
+        "reaction_time": 0.45,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "2549_gemini",
+        "datetime": "2025-04-08T16:51:52.317Z"
+      },
+      {
+        "subject_id": "001",
+        "trial_type": "normal",
+        "model": "gpt4.5",
+        "aphantasia_image": "2549_gpt4.5",
+        "phantasia_image": "143_gpt4.5",
+        "target": "001_gpt4.5",
+        "choice": "aphantasia",
+        "reaction_time": 0.43,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "2549_gpt4",
+        "datetime": "2025-04-08T16:51:53.401Z"
+      },
+      {
+        "subject_id": "001",
+        "trial_type": "normal",
+        "model": "claude",
+        "aphantasia_image": "2549_claude",
+        "phantasia_image": "143_claude",
+        "target": "001_claude",
+        "choice": "phantasia",
+        "reaction_time": 0.5,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "143_claude",
+        "datetime": "2025-04-08T16:51:54.384Z"
+      },
+      {
+        "subject_id": "001",
+        "trial_type": "normal",
+        "model": "stable",
+        "aphantasia_image": "2549_stable",
+        "phantasia_image": "143_stable",
+        "target": "001_stable",
+        "choice": "aphantasia",
+        "reaction_time": 0.27,
+        "image_choice_location": "middle",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "2549_stable",
+        "datetime": "2025-04-08T16:51:55.202Z"
+      },
+      {
+        "subject_id": "001",
+        "trial_type": "final",
+        "model": "na",
+        "aphantasia_image": "na",
+        "phantasia_image": "na",
+        "target": "na",
+        "choice": "aphantasia",
+        "reaction_time": 0.87,
+        "image_choice_location": "bottom_middle",
+        "accuracy": 0,
+        "chosen_model": "stable",
+        "chosen_image": "2549_stable",
+        "datetime": "2025-04-08T16:51:56.617Z"
       }
-    }
-  ]
+    ]
+  }
 }

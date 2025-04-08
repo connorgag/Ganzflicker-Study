@@ -33,6 +33,9 @@
             border: 3px solid #4CAF50;
             box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
         }
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -40,7 +43,9 @@
 
     <script>
         let metadata;
-        let participantId;
+        function getCurrentDateTime() {
+            return new Date().toISOString();
+        }
 
         // Function to load JSON data from a file
         async function loadJSON(file) {
@@ -109,7 +114,7 @@
             });
 
             return data;
-            }
+        }
 
         // Function to get available ids from a folder using the pre-generated JSON
         async function getAvailableIds(folderPrefix) {
@@ -233,7 +238,8 @@
                 phantasia_id: phantasiaId,
                 aphantasia_description: aphantasiaParticipant["Please describe as much as you can remember about what you saw in the Ganzflicker:"],
                 phantasia_description: phantasiaParticipant["Please describe as much as you can remember about what you saw in the Ganzflicker:"],
-                user_choices: {}
+                trials: [], // New array to store all trial results in the new format
+                user_choices: {} // Keep the old format for compatibility
             };
 
             console.log("Study initialized for participant:", participantId);
@@ -241,7 +247,19 @@
             console.log("Phantasia ID:", phantasiaId, "Description:", currentParticipant.results.phantasia_description);
         }
 
-        // Function to get image path
+        // Function to get image base name without extension 
+        function getImageBaseName(descriptionType, model) {
+            if (descriptionType === "participant") {
+                return `${participantId}_${model}`;
+            } else if (descriptionType === "aphantasia") {
+                return `${aphantasiaParticipant.id}_${model}`;
+            } else if (descriptionType === "phantasia") {
+                return `${phantasiaParticipant.id}_${model}`;
+            }
+            return "placeholder";
+        }
+
+        // Function to get image path for display
         function getImagePath(descriptionType, model) {
             if (!aphantasiaParticipant || !phantasiaParticipant || !metadata) {
                 console.error("Data not yet initialized!");
@@ -375,7 +393,7 @@
             delay_after: 0
         };
 
-        // Create image trial for each model
+        // Create image trial for each model with updated data format
         function createModelImageTrial(model, modelIndex) {
             return {
                 type: jsPsychHtmlKeyboardResponse,
@@ -413,7 +431,6 @@
                             ${shuffledOptions.map((option, index) => `
                                 <div class="image-option" data-type="${option.type}" data-position="${index}" data-index="${modelIndex}">
                                     <img src="${option.path}" alt="Image option ${index + 1}">
-                                    <div class="image-caption">Option ${index + 1}</div>
                                 </div>
                             `).join('')}
                         </div>
@@ -423,9 +440,9 @@
                 choices: [],
                 trial_duration: null,
                 on_load: function() {
+                    // Start timing as soon as the trial loads
                     const startTime = performance.now();
                     let selectedElement = null;
-                    let selectionTime = null;
                     
                     // Get the next button element
                     const nextButton = document.getElementById('next-button');
@@ -444,11 +461,6 @@
                             // Record the selection
                             selectedElement = this;
                             
-                            // Record selection time if not already recorded
-                            if (!selectionTime) {
-                                selectionTime = performance.now();
-                            }
-                            
                             // Show the next button
                             nextButton.style.display = 'block';
                         });
@@ -457,9 +469,64 @@
                     // Add click event for the next button to advance to the next trial
                     nextButton.addEventListener('click', function() {
                         if (selectedElement) {
+                            // Record the time when the next button is clicked
+                            const endTime = performance.now();
+                            
                             const selectedType = selectedElement.getAttribute('data-type');
                             const position = parseInt(selectedElement.getAttribute('data-position'));
+                            const imagePath = selectedElement.querySelector('img').src;
+                            
+                            // Extract the image filename without extension
+                            const fullFilename = imagePath.split('/').pop();
+                            const imageBaseName = fullFilename.split('.')[0]; // Remove the extension
 
+                            // Convert position to location name
+                            const locationNames = ["left", "middle", "right"];
+                            const locationName = locationNames[position];
+
+                            // Convert to new choice format
+                            let choiceName;
+                            if (selectedType === "aphantasia") {
+                                choiceName = "aphantasia";
+                            } else if (selectedType === "phantasia") {
+                                choiceName = "phantasia";
+                            } else {
+                                choiceName = "own";
+                            }
+
+                            // Calculate if the choice is accurate (they chose their own description)
+                            const accuracy = selectedType === "participant" ? 1 : 0;
+
+                            // Calculate reaction time from trial load to Next button click
+                            const reactionTime = (endTime - startTime) / 1000;
+
+                            // Get current date and time
+                            const datetime = getCurrentDateTime();
+
+                            // Create the new format result entry
+                            const resultEntry = {
+                                subject_id: participantId,
+                                trial_type: "normal",
+                                model: model,
+                                aphantasia_image: getImageBaseName("aphantasia", model),
+                                phantasia_image: getImageBaseName("phantasia", model),
+                                target: getImageBaseName("participant", model),
+                                choice: choiceName,
+                                reaction_time: parseFloat(reactionTime.toFixed(2)),
+                                image_choice_location: locationName,
+                                accuracy: accuracy,
+                                chosen_model: "na",
+                                chosen_image: imageBaseName,  // Add the chosen image filename without extension
+                                datetime: datetime // Add the date and time
+                            };
+
+                            // Store the result entry in new format
+                            if (!currentParticipant.results.trials) {
+                                currentParticipant.results.trials = [];
+                            }
+                            currentParticipant.results.trials.push(resultEntry);
+
+                            // Also store the selection in the old format for compatibility
                             let choiceCategory;
                             if (selectedType === "aphantasia") {
                                 choiceCategory = "aphantasia_description";
@@ -468,31 +535,31 @@
                             } else {
                                 choiceCategory = "own_description";
                             }
-
-                            // Calculate reaction time
-                            const reactionTime = (selectionTime - startTime) / 1000;
-
-                            // Store the selection
+                            
                             selectedImages[model] = {
                                 path: selectedElement.querySelector('img').src,
                                 type: selectedType,
-                                choice: choiceCategory,
-                                image_choice_location: position,
-                                reaction_time: reactionTime.toFixed(2) // Convert to seconds
+                                choice: choiceName,
+                                image_choice_location: locationName,
+                                reaction_time: reactionTime.toFixed(2),
+                                imageBaseName: imageBaseName, // Store the image base name
+                                datetime: datetime // Add the date and time
                             };
 
-                            // Record the user's choice in currentParticipant.results
+                            // Also record for old format compatibility
                             currentParticipant.results.user_choices[model] = {
                                 choice: choiceCategory,
                                 reaction_time: parseFloat(reactionTime.toFixed(2)),
-                                image_choice_location: position === 0 ? "left" :
-                                                   (position === 1 ? "middle" : "right")
+                                image_choice_location: locationName,
+                                chosen_image: imageBaseName, // Add the chosen image base name
+                                datetime: datetime // Add the date and time
                             };
 
                             // End the trial to move to the next
                             jsPsych.finishTrial({
                                 selected_image: selectedImages[model],
-                                rt: reactionTime
+                                rt: reactionTime,
+                                datetime: datetime
                             });
                         }
                     });
@@ -500,18 +567,28 @@
             };
         }
 
-        // Create final selection trial
+        // Update the final selection trial to use the new data format
         const finalSelectionTrial = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
+                // Calculate grid positions for each model
+                const positions = {};
+                metadata.available_models.forEach((model, index) => {
+                    const row = Math.floor(index / 3);
+                    const col = index % 3;
+                    positions[model] = row === 0 
+                        ? (col === 0 ? 'top_left' : (col === 1 ? 'top_middle' : 'top_right'))
+                        : (col === 0 ? 'bottom_left' : (col === 1 ? 'bottom_middle' : 'bottom_right'));
+                });
+                
                 return `
                     <h2>Final Selection</h2>
                     <p class="instruction-text">
                         Now, please select the image that best represents what you perceived during the ganzflicker experience.
                     </p>
                     <div class="final-selection-container">
-                        ${metadata.available_models.map(model => `
-                            <div class="final-option" data-model="${model}">
+                        ${metadata.available_models.map((model, index) => `
+                            <div class="final-option" data-model="${model}" data-position="${positions[model]}">
                                 <div class="model-label">${model.toUpperCase()}</div>
                                 <img src="${selectedImages[model].path}" alt="${model} selected image">
                             </div>
@@ -523,9 +600,9 @@
             choices: [],
             trial_duration: null,
             on_load: function() {
+                // Start timing as soon as the final selection screen loads
                 const startTime = performance.now();
                 let selectedElement = null;
-                let selectionTime = null;
                 
                 // Get the next button element
                 const nextButton = document.getElementById('final-next-button');
@@ -545,11 +622,6 @@
                         // Record the selection
                         selectedElement = this;
                         
-                        // Record selection time if not already recorded
-                        if (!selectionTime) {
-                            selectionTime = performance.now();
-                        }
-                        
                         // Show the next button
                         nextButton.style.display = 'block';
                     });
@@ -558,46 +630,88 @@
                 // Add click event for the next button to complete the study
                 nextButton.addEventListener('click', function() {
                     if (selectedElement) {
-                        const selectedModel = selectedElement.getAttribute('data-model');
+                        // Record the time when the Complete Study button is clicked
+                        const endTime = performance.now();
                         
-                        // Calculate reaction time
-                        const reactionTime = (selectionTime - startTime) / 1000;
+                        const selectedModel = selectedElement.getAttribute('data-model');
+                        const position = selectedElement.getAttribute('data-position');
+                        const imagePath = selectedElement.querySelector('img').src;
+                        
+                        // Extract the image filename without extension
+                        const fullFilename = imagePath.split('/').pop();
+                        const imageBaseName = fullFilename.split('.')[0]; // Remove the extension
+                        
+                        // Calculate reaction time from trial load to Complete Study button click
+                        const reactionTime = (endTime - startTime) / 1000;
 
-                        // Store the final selection
+                        // Get current date and time
+                        const datetime = getCurrentDateTime();
+
+                        // Get the choice type from the previous selection
+                        const choiceType = selectedImages[selectedModel].choice;
+                        
+                        // Calculate if the choice is accurate (they chose their own description)
+                        const accuracy = choiceType === "own" ? 1 : 0;
+
+                        // Create the final selection entry in the new format
+                        const finalResultEntry = {
+                            subject_id: participantId,
+                            trial_type: "final",
+                            model: "na",
+                            aphantasia_image: "na",
+                            phantasia_image: "na",
+                            target: "na",
+                            choice: choiceType,
+                            reaction_time: parseFloat(reactionTime.toFixed(2)),
+                            image_choice_location: position,
+                            accuracy: accuracy,
+                            chosen_model: selectedModel,
+                            chosen_image: imageBaseName, // Add the chosen image filename without extension
+                            datetime: datetime // Add the date and time
+                        };
+
+                        // Add to the trials array
+                        currentParticipant.results.trials.push(finalResultEntry);
+                        
+                        // Store in old format for compatibility
+                        let descriptionType;
+                        if (choiceType === "aphantasia") {
+                            descriptionType = "aphantasia_description";
+                        } else if (choiceType === "phantasia") {
+                            descriptionType = "phantasia_description";
+                        } else {
+                            descriptionType = "own_description";
+                        }
+
+                        // Store the final selection in old format
                         finalSelectedModel = {
                             model: selectedModel,
                             reaction_time: reactionTime.toFixed(2),
-                            description: selectedImages[selectedModel].choice
+                            description: descriptionType,
+                            chosen_image: imageBaseName, // Add the chosen image filename without extension
+                            datetime: datetime // Add the date and time
                         };
 
-                        // Record the final choice in currentParticipant.results
+                        // Store in old format for compatibility
                         currentParticipant.results.user_choices.final_choice = {
                             model: selectedModel,
                             reaction_time: parseFloat(reactionTime.toFixed(2)),
-                            description: selectedImages[selectedModel].choice
+                            description: descriptionType,
+                            chosen_image: imageBaseName, // Add the chosen image filename without extension
+                            datetime: datetime // Add the date and time
                         };
 
                         // End the trial to move to completion
                         jsPsych.finishTrial({
                             final_selected_model: finalSelectedModel,
-                            rt: reactionTime
+                            rt: reactionTime,
+                            datetime: datetime
                         });
                     }
                 });
             }
         };
-        // Add this function to download JSON data
-        function downloadObjectAsJson(exportObj, exportName){
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", exportName + ".json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
 
-        // Modify the completionTrial to automatically download data
         const completionTrial = {
             type: jsPsychHtmlButtonResponse,
             stimulus: `
@@ -606,34 +720,53 @@
                     Thank you for participating in this study!
                 </p>
                 <p class="download-status">Your data is being saved...</p>
-                <button class="start-over-button" onclick="window.location.href='${window.location.href}'">Start Over</button>
+                <div class="button-container">
+                    <button class="start-over-button" onclick="window.location.href='${window.location.href}'">Start Over</button>
+                    <button id="manual-download-button" class="start-over-button" style="display: none;">Download Data</button>
+                </div>
             `,
             choices: [], // No default button choices
             on_load: function() {
                 const display = jsPsych.getDisplayElement();
                 const statusElement = display.querySelector('.download-status');
-                
-                // Automatically download the participant data
-                downloadObjectAsJson(currentParticipant.results, `participant_${participantId}_data`);
-                
-                // Update download status
-                statusElement.textContent = 'Your data has been downloaded.';
-                
-                // Still send the data to the server
+                const downloadButton = document.getElementById('manual-download-button');
+
                 fetch('http://localhost:3000/save-participant-data', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ subject_id: participantId, results: currentParticipant.results }),
+                    body: JSON.stringify({ 
+                        subject_id: participantId, 
+                        trials: currentParticipant.results.trials
+                    }),
                 })
                 .then(response => response.text())
                 .then(message => {
                     // Update the status message
-                    statusElement.textContent = 'Your data has been downloaded and saved to the server.';
+                    statusElement.textContent = 'Your data has been saved.';
                 })
                 .catch(error => {
-                    // Show error but data is still downloaded
-                    statusElement.textContent = 'Your data has been downloaded. However, there was an error saving to the server.';
+                    // Show error message
+                    statusElement.textContent = 'There was an error saving your data. Please use the button below to download your data.';
                     statusElement.style.color = 'red';
+                    statusElement.style.fontSize = '26px'; // Corrected font size
+                    console.error('Error saving data:', error);
+
+                    // Show the manual download button
+                    downloadButton.style.display = 'inline-block';
+
+                    // Add click event to download the data manually
+                    downloadButton.addEventListener('click', function() {
+                        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+                            subject_id: participantId,
+                            trials: currentParticipant.results.trials
+                        }, null, 2));
+                        const downloadAnchor = document.createElement('a');
+                        downloadAnchor.setAttribute('href', dataStr);
+                        downloadAnchor.setAttribute('download', `participant_${participantId}_data.json`);
+                        document.body.appendChild(downloadAnchor);
+                        downloadAnchor.click();
+                        document.body.removeChild(downloadAnchor);
+                    });
                 });
             }
         };
@@ -646,7 +779,16 @@
                 preloadTrial
             ];
 
-            metadata.available_models.forEach((model, index) => {
+            // Create a copy of the available models and shuffle it
+            const shuffledModels = shuffleArray([...metadata.available_models]);
+            
+            // Store the randomized order for data analysis
+            jsPsych.data.addProperties({
+                'model_presentation_order': shuffledModels
+            });
+            
+            // Add the model trials in the shuffled order
+            shuffledModels.forEach((model, index) => {
                 timeline.push(createModelImageTrial(model, index));
             });
 

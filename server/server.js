@@ -36,39 +36,26 @@ async function writeResults(data) {
 }
 
 app.post('/save-participant-data', async (req, res) => {
-    const participantData = req.body;
+    const { subject_id, trials } = req.body;
 
-    if (!participantData.subject_id || !participantData.results) {
-        return res.status(400).send('Participant ID and results are required.');
+    if (!subject_id || !Array.isArray(trials)) {
+        return res.status(400).send('Subject ID and trials are required.');
     }
 
     const results = await readResults();
-    const existingParticipantIndex = results.current_participant_data.findIndex(p => p.subject_id === participantData.subject_id);
 
-    if (existingParticipantIndex !== -1) {
-        // Update existing participant's data
-        results.current_participant_data[existingParticipantIndex] = participantData;
-    } else {
-        // Add new participant's data
-        results.current_participant_data.push(participantData);
+    // Initialize if not already an object
+    if (typeof results.current_participant_data !== 'object' || Array.isArray(results.current_participant_data)) {
+        results.current_participant_data = {};
     }
+
+    // Save or overwrite trials under the subject ID
+    results.current_participant_data[subject_id] = trials;
 
     await writeResults(results);
     res.status(200).send('Participant data saved successfully.');
 });
 
-// Example Express route handler
-app.get('/api/list-folder', async (req, res) => {
-    const folderPath = req.query.path;
-    
-    try {
-      const files = await fs.readdir(folderPath);
-      res.json(files);
-    } catch (error) {
-      console.error('Error listing folder:', error);
-      res.status(500).json({ error: 'Failed to list folder contents' });
-    }
-  });
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
