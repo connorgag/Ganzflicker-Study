@@ -51,44 +51,44 @@
       "subject_id": "001",
       "results": {
         "subject_id": "001",
-        "aphantasia_id": 33,
-        "phantasia_id": 2056,
-        "aphantasia_description": "The flickering screen red and black and after a short time.. 30 sec to a min maybe? Hard to say... I noticed faint variations in the shades of red and black. Not really other colors but more like hues or red and black at different constantly changing / flashing spots on the screen that gave the impression of seeing faint shapes or balls of a brighter hue than the background, random patterns.",
-        "phantasia_description": "I was taking a train trip somewhere there were many people on train, I was in jungle with tigers not frightening just vividly alive",
+        "aphantasia_id": 1558,
+        "phantasia_id": 3935,
+        "aphantasia_description": "I mostly saw geometric shapes.  A small amount of 3d effect.  I could largely guide the perception, like identifying shapes in cloud.  The only image that was slightly out of the ordinary (considering I was watching a flashing screen) was when a bright streak bounced around the screen, which I quickly figured out I could control.  Most imagery that wasn't a simple geometric pattern started from the edge of the screen.",
+        "phantasia_description": "The first images i experienced were clouds going on for long stretched then opening up to a full moon that became the sun. Then, I saw mountains that shifted from side to side on my screen, it seemed like the images were shaking their way off the screen and into reality. The last images I saw were from the inside of a cave and moving further and further out of the cave into the sunlight.",
         "user_choices": {
           "claude": {
-            "choice": "phantasia_description",
-            "reaction_time": 0.59,
-            "image_choice_location": "middle"
+            "choice": "aphantasia_description",
+            "reaction_time": 36.99,
+            "image_choice_location": "left"
           },
           "dalle": {
-            "choice": "own_description",
-            "reaction_time": 1.25,
-            "image_choice_location": "middle"
+            "choice": "aphantasia_description",
+            "reaction_time": 0.79,
+            "image_choice_location": "left"
           },
           "gemini": {
             "choice": "aphantasia_description",
-            "reaction_time": 0.73,
+            "reaction_time": 0.62,
             "image_choice_location": "right"
           },
           "gpto": {
-            "choice": "aphantasia_description",
-            "reaction_time": 0.48,
-            "image_choice_location": "middle"
+            "choice": "phantasia_description",
+            "reaction_time": 1.17,
+            "image_choice_location": "right"
           },
           "stable": {
             "choice": "phantasia_description",
-            "reaction_time": 0.7,
-            "image_choice_location": "middle"
+            "reaction_time": 0.67,
+            "image_choice_location": "left"
           },
           "gpt4.5": {
-            "choice": "aphantasia_description",
-            "reaction_time": 0.57,
+            "choice": "own_description",
+            "reaction_time": 1.09,
             "image_choice_location": "middle"
           },
           "final_choice": {
-            "model": "gpt4.5",
-            "reaction_time": 1.4,
+            "model": "gemini",
+            "reaction_time": 1.59,
             "description": "aphantasia_description"
           }
         }
