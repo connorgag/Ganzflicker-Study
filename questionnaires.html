@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Imagery Questionnaires</title>
+  <meta charset="UTF-8">
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css"/>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-multi-select@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.1.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.1"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.0.2/papaparse.min.js"></script>
+  <script src="questionnaires.js"></script>
+  <style>
+    .jspsych-display-element {
+      font-family: Arial, sans-serif;
+    }
+    .vviq-instructions {
+      font-weight: bold;
+      font-size: larger;
+      margin-bottom: 20px;
+    }
+    #jspsych-survey-likert-next,
+    #jspsych-survey-multi-choice-next {
+      margin-bottom: 20px;
+    }
+    #jspsych-survey-likert-form {
+      display: inline-block;
+      width: 700px;
+      max-width: 700px;
+    }
+  </style>
+</head>
+<body>
+<script>
+let timeline = [];
+let participantId = "";
+
+const participantIdTrial = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <h1>Please enter your Participant ID:</h1>
+    <input type="text" id="participant-id-input" style="font-size: 20px; padding: 5px;">
+    <button id="start-button" style="font-size: 20px;">Start Study</button>
+  `,
+  choices: 'NO_KEYS',
+  on_load: function() {
+    document.querySelector('#start-button').addEventListener('click', function() {
+      const input = document.querySelector('#participant-id-input');
+      if (input && input.value.trim() !== '') {
+        participantId = input.value.trim();
+        jsPsych.data.addProperties({ participant_id: participantId });
+        jsPsych.finishTrial();
+      } else {
+        alert('Please enter a valid Participant ID.');
+      }
+    });
+  }
+};
+timeline.push(participantIdTrial);
+
+timeline.push({ type: jsPsychFullscreen, fullscreen_mode: true });
+
+function reshapeDataAndReturnCSV() {
+  const allData = jsPsych.data.get().filterCustom(trial => {
+    return ["survey-likert", "survey-multi-choice", "survey-multi-select", "survey-text"].includes(trial.trial_type);
+  }).values();
+  const reshapedData = [];
+  allData.forEach(trial => {
+    Object.keys(trial.response).forEach(key => {
+      const index = parseInt(key.replace('Q', ''), 10);
+      reshapedData.push({
+        participant_id: trial.participant_id || participantId,
+        trial_index: trial.trial_index,
+        time_elapsed: trial.time_elapsed,
+        internal_node_id: trial.internal_node_id,
+        response: trial.response[key],
+        item_id: trial.item_ids ? trial.item_ids[index] : 'N/A',
+        item: trial.items ? trial.items[index] : 'N/A',
+        category: trial.categories ? trial.categories[index] : 'N/A',
+        questionnaire: trial.questionnaires ? trial.questionnaires[index] : 'N/A'
+      });
+    });
+  });
+  return Papa.unparse(reshapedData);
+}
+
+const introduction = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: '<p><b>Welcome to the second part of the study!</b></p><p>In this section, you will be presented with a series of statements. Please indicate your level of agreement or disagreement with each one.</p><p><b><br><br>Please read the instructions before moving to the next page.<br><br></b>Visual imagery refers to the ability to visualize, that is, the ability to form mental pictures, or to “see in the minds\’ eye.”<br><br>The aim of this test is to determine the vividness of your visual imagery. The items of the test will possibly bring certain images to your mind.<br><br>You are asked to rate the vividness of each image by reference to the 5-point scale given below: No image at all/ Vague and dim/ Moderately clear and vivid/ Reasonably clear and vivid/ Perfectly clear & vivid as if I was actually seeing it.<br><br>After reading each item, close your eyes for a moment, try to visualize the item, and then open your eyes and rate the item.</p>',
+  choices: ['Continue'],
+  on_start: function() {
+    jsPsych.setProgressBar(0);
+  }
+};
+timeline.push(introduction);
+
+// Shuffle the osivq array
+shuffleArray(osivq);
+
+function generateOsivqTrial(itemsChunk) {
+  return {
+    type: jsPsychSurveyLikert,
+    questions: itemsChunk.map(item => ({
+      prompt: item.item,
+      labels: ['1', '2', '3', '4', '5'],
+      required: true
+    })),
+    on_finish: function(data) {
+      data.item_ids = itemsChunk.map(i => i.item_id);
+      data.items = itemsChunk.map(i => i.item);
+      data.categories = itemsChunk.map(i => i.category);
+      data.questionnaires = itemsChunk.map(i => i.questionnaire);
+      let curr = jsPsych.getProgressBarCompleted();
+      jsPsych.setProgressBar(curr + (1/20));
+    }
+  };
+}
+
+for (let i = 0; i < osivq.length; i += 6) {
+  let itemsChunk = osivq.slice(i, i + 6);
+  timeline.push(generateOsivqTrial(itemsChunk));
+}
+
+// Shuffle the irq array
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+shuffleArray(irq);
+
+function generateIrqTrial(itemsChunk) {
+  return {
+    type: jsPsychSurveyLikert,
+    questions: itemsChunk.map(item => ({
+      prompt: item.item,
+      labels: ['1', '2', '3', '4', '5'],
+      required: true
+    })),
+    on_finish: function(data) {
+      data.item_ids = itemsChunk.map(i => i.item_id);
+      data.items = itemsChunk.map(i => i.item);
+      data.categories = itemsChunk.map(i => i.category);
+      data.questionnaires = itemsChunk.map(i => i.questionnaire);
+
+      let curr = jsPsych.getProgressBarCompleted();
+      jsPsych.setProgressBar(curr + (1/20));
+    }
+  };
+}
+
+for (let i = 0; i < irq.length; i += 5) {
+  let itemsChunk = irq.slice(i, i + 5);
+  timeline.push(generateIrqTrial(itemsChunk));
+}
+
+const vviqInstructions = [
+  "In answering items 1 to 4, think of some relative or friend whom you frequently see and consider carefully the picture that comes your mind’s eye.",
+  "In answering items 5 to 8, visualize a sun. Consider the picture that comes before you minds’ eye.",
+  "In answering items 9 to 12, think of the front of a shop you often go to. Consider the picture that comes before you minds’ eye.",
+  "Finally, think of the front of a country scene which involves trees, mountains, and a lake. Consider the picture that comes before you minds’ eye."
+];
+
+for (let i = 0; i < vviq.length; i += 4) {
+  let itemsChunk = vviq.slice(i, i + 4);
+  let instructionIndex = i / 4;
+  timeline.push({
+    type: jsPsychSurveyMultiChoice,
+    preamble: `<div class="vviq-instructions">${vviqInstructions[instructionIndex]}</div>`,
+    questions: itemsChunk.map(item => ({
+      prompt: item.item,
+      options: [
+        'No image at all, I only "know" I am thinking of the object',
+        'Dim and vague image',
+        'Moderately realistic and vivid',
+        'Realistic and reasonably vivid',
+        'Perfectly realistic, as vivid as real seeing'
+      ],
+      required: true
+    })),
+    on_finish: function(data) {
+      data.item_ids = itemsChunk.map(i => i.item_id);
+      data.items = itemsChunk.map(i => i.item);
+      data.categories = itemsChunk.map(i => i.category);
+      data.questionnaires = itemsChunk.map(i => i.questionnaire);
+      let curr = jsPsych.getProgressBarCompleted();
+      jsPsych.setProgressBar(curr + (1/20));
+    }
+  });
+}
+
+timeline.push({
+  type: jsPsychHtmlButtonResponse,
+  stimulus: '<p><b>Almost done!</b><br><br>Thank you, you have completed all of the tasks.<br><br>You will now be asked a short series of questions about yourself and your thoughts about the experiment.</p>',
+  choices: ['Continue']
+});
+
+timeline.push({
+  timeline: [
+    {
+      type: jsPsychSurveyMultiChoice,
+      questions: [
+        {prompt: "Have you seen this study before?", options: ["Yes", "No"], required: true},
+        {prompt: "What is your gender?", options: ["Woman", "Man", "Non-binary", "Prefer not to say", "Prefer to self-describe"], required: true},
+        {prompt: "Which is your dominant hand?", options: ["Right", "Left"], required: true},
+        {prompt: "Do you see normally (either with or without corrective lenses)?", options: ["Yes", "No"], required: true},
+        {prompt: "Are you a native English speaker?", options: ["Yes", "No"], required: true},
+        {prompt: "What is the highest degree or level of school you have completed?", options: ["High School", "Bachelor's Degree", "Master's Degree", "Doctoral Degree"], required: true}
+      ]
+    },
+    {
+      type: jsPsychSurveyMultiSelect,
+      questions: [
+        {prompt: "Have you ever been diagnosed with any of the following conditions? (Choose all that apply)", options: ["Dyslexia", "ADHD", "ASD", "No"], required: true}
+      ]
+    },
+    {
+      type: jsPsychSurveyText,
+      questions: [
+        {prompt: "How old are you?", rows: 1, columns: 3, required: true},
+        {prompt: "What did you think the study was about?", rows: 5, columns: 40, required: true},
+        {prompt: "Do you have any other feedback or thoughts about the experiment? (Optional)", rows: 5, columns: 40}
+      ]
+    }
+  ]
+});
+
+timeline.push({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<p><b>The End!</b><br><br>Thank you, you have completed the study. Your data will now be saved automatically.</p>',
+  choices: "NO_KEYS",
+  on_load: function() {
+    const csvData = reshapeDataAndReturnCSV();
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${participantId}_questionnaires.csv`;
+    document.body.appendChild(a);
+    a.style.display = 'none';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 100);
+    document.body.removeChild(a);
+  }
+});
+
+timeline.push({ type: jsPsychFullscreen, fullscreen_mode: false });
+
+const jsPsych = initJsPsych({
+  timeline: timeline,
+  show_progress_bar: true,
+  auto_update_progress_bar: false,
+  message_progress_bar: 'Progress on Part II'
+});
+
+jsPsych.run(timeline);
+</script>
+</body>
+</html>
