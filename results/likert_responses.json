@@ -1,0 +1,26 @@
+{
+  "current_participant_data": {
+    "002": {
+      "subject_id": "002",
+      "final_image": "16_stable",
+      "responses": {
+        "Q0": 5,
+        "Q1": 5,
+        "Q2": 5,
+        "Q3": 5,
+        "Q4": 6
+      }
+    },
+    "001": {
+      "subject_id": "001",
+      "final_image": "3199_dalle",
+      "responses": {
+        "Q0": 8,
+        "Q1": 8,
+        "Q2": 8,
+        "Q3": 8,
+        "Q4": 8
+      }
+    }
+  }
+}

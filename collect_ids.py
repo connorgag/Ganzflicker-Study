@@ -5,17 +5,19 @@ from pathlib import Path
 
 def scan_image_folders_and_update_config():
     """
-    Scans the aphantasia and phantasia image folders and updates the
-    config.json file with the available participant IDs and their relative image paths.
+    Scans the aphantasia and phantasia image folders and the participant_data folder,
+    and updates the config.json file with the available participant IDs and their relative image paths.
     """
     # Define folder paths - adjust these to match your project structure
     base_dir = Path(__file__).parent  # Gets the directory of this script
     images_dir_name = "images"
+    participant_data_folder_name = "participant_data"
     aphantasia_folder_name = "aphantasia_images"
     phantasia_folder_name = "phantasia_images"
 
     aphantasia_dir = base_dir / images_dir_name / aphantasia_folder_name
     phantasia_dir = base_dir / images_dir_name / phantasia_folder_name
+    participant_data_dir = base_dir / participant_data_folder_name
     config_file = base_dir / "config.json"
 
     # Compile regex to extract IDs and model names from filenames
@@ -69,6 +71,16 @@ def scan_image_folders_and_update_config():
             except json.JSONDecodeError:
                 print(f"Warning: Could not decode existing {config_file}. Creating a new one.")
 
+    # Scan participant_data folder for participant IDs
+    participant_ids = []
+    if participant_data_dir.exists():
+        for folder in os.listdir(participant_data_dir):
+            if folder.startswith("participant_"):
+                participant_id = folder[12:]  # Extract the ID after "participant_"
+                participant_ids.append(participant_id)
+    else:
+        print(f"Warning: Directory not found: {participant_data_dir}")
+
     # Only include the IDs that have all available models images
     new_image_data = {
         "aphantasia_images": {},
@@ -95,6 +107,9 @@ def scan_image_folders_and_update_config():
     # Extract and add available IDs for convenience
     config["aphantasia_ids"] = sorted(list(new_image_data["aphantasia_images"].keys()))
     config["phantasia_ids"] = sorted(list(new_image_data["phantasia_images"].keys()))
+    
+    # Add participant IDs from participant_data folder - keep as strings
+    config["participant_ids"] = sorted(participant_ids)
 
     # Write the updated config back to config.json
     with open(config_file, 'w') as f:
@@ -105,6 +120,7 @@ def scan_image_folders_and_update_config():
     print(f"Available relative image paths written to {config_file}")
     print(f"Found {aphantasia_count} aphantasia images across {len(new_image_data['aphantasia_images'])} IDs")
     print(f"Found {phantasia_count} phantasia images across {len(new_image_data['phantasia_images'])} IDs")
+    print(f"Added {len(participant_ids)} participant IDs from participant_data folder: {', '.join(participant_ids)}")
 
     return config
 
