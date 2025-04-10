@@ -115,7 +115,7 @@ function generateOsivqTrial(itemsChunk) {
       data.categories = itemsChunk.map(i => i.category);
       data.questionnaires = itemsChunk.map(i => i.questionnaire);
       let curr = jsPsych.getProgressBarCompleted();
-      jsPsych.setProgressBar(curr + (1/20));
+      jsPsych.setProgressBar(curr + (1/23));
     }
   };
 }
@@ -150,7 +150,7 @@ function generateIrqTrial(itemsChunk) {
       data.questionnaires = itemsChunk.map(i => i.questionnaire);
 
       let curr = jsPsych.getProgressBarCompleted();
-      jsPsych.setProgressBar(curr + (1/20));
+      jsPsych.setProgressBar(curr + (1/23));
     }
   };
 }
@@ -165,7 +165,8 @@ const introduction_vviq = {
   stimulus: '<p><b>Please read the instructions before moving to the next page.<br><br></b>Visual imagery refers to the ability to visualize, that is, the ability to form mental pictures, or to “see in the minds\’ eye.”<br><br>The aim of this test is to determine the vividness of your visual imagery. The items of the test will possibly bring certain images to your mind.<br><br>You are asked to rate the vividness of each image by reference to the 5-point scale given below: No image at all/ Vague and dim/ Moderately clear and vivid/ Reasonably clear and vivid/ Perfectly clear & vivid as if I was actually seeing it.<br><brclear and vivid/ Perfectly clear & vivid as if I was actually seeing it.<br><br>After reading each item, close your eyes for a moment, try to visualize the item, and then open your eyes and rate the item.</p>',
   choices: ['Continue'],
   on_start: function() {
-    jsPsych.setProgressBar(0);
+    let curr = jsPsych.getProgressBarCompleted();
+    jsPsych.setProgressBar(curr + (1/23));
   }
 };
 timeline.push(introduction_vviq);
@@ -200,7 +201,7 @@ for (let i = 0; i < vviq.length; i += 4) {
       data.categories = itemsChunk.map(i => i.category);
       data.questionnaires = itemsChunk.map(i => i.questionnaire);
       let curr = jsPsych.getProgressBarCompleted();
-      jsPsych.setProgressBar(curr + (1/20));
+      jsPsych.setProgressBar(curr + (1/23));
     }
   });
 }
@@ -265,7 +266,7 @@ const jsPsych = initJsPsych({
   timeline: timeline,
   show_progress_bar: true,
   auto_update_progress_bar: false,
-  message_progress_bar: 'Progress on Part II'
+  message_progress_bar: 'Progress on Part III'
 });
 
 jsPsych.run(timeline);
