@@ -13,13 +13,13 @@
     },
     "001": {
       "subject_id": "001",
-      "final_image": "participant_001_claude",
-      "overall": "8",
-      "color": "9",
-      "content": "5",
-      "objects_visualized": "8",
-      "objects_not_seen": "2",
-      "detailed_feedback": "dsdskjdasoas"
+      "final_image": "44_dalle",
+      "overall": "0",
+      "color": "0",
+      "content": "0",
+      "objects_visualized": "0",
+      "objects_not_seen": "1",
+      "detailed_feedback": "test ana last"
     }
   }
 }
