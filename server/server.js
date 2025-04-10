@@ -10,6 +10,7 @@ const port = 3000;
 // Updated file paths to save in the "results" folder
 const RESULTS_FILE = path.join(__dirname, '../results/image_selection.json');
 const LIKERT_RESPONSES_FILE = path.join(__dirname, '../results/likert_responses.json');
+const IMAGE_DEBRIEF_FILE = path.join(__dirname, '../results/image_debrief.json');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -50,26 +51,32 @@ async function writeResults(filePath, data) {
 }
 
 app.post('/save-participant-data', async (req, res) => {
-    const { subject_id, trials } = req.body;
+    try {
+        const { current_participant_data } = req.body;
 
-    if (!subject_id || !Array.isArray(trials)) {
-        return res.status(400).send('Subject ID and trials are required.');
+        // Validate the request body
+        if (!current_participant_data || typeof current_participant_data !== 'object') {
+            console.error('Invalid request body: current_participant_data is missing or invalid.');
+            return res.status(400).send('Invalid request body: current_participant_data is required.');
+        }
+
+        await ensureResultsFolder(); // Ensure the "results" folder exists
+
+        const results = await readResults(RESULTS_FILE);
+
+        // Merge the new data with existing data
+        results.current_participant_data = {
+            ...results.current_participant_data,
+            ...current_participant_data
+        };
+
+        await writeResults(RESULTS_FILE, results);
+        console.log('Participant data saved successfully.');
+        res.status(200).send('Participant data saved successfully.');
+    } catch (error) {
+        console.error('Error in /save-participant-data:', error);
+        res.status(500).send('Internal Server Error.');
     }
-
-    await ensureResultsFolder(); // Ensure the "results" folder exists
-
-    const results = await readResults(RESULTS_FILE);
-
-    // Initialize if not already an object
-    if (typeof results.current_participant_data !== 'object' || Array.isArray(results.current_participant_data)) {
-        results.current_participant_data = {};
-    }
-
-    // Save or overwrite trials under the subject ID
-    results.current_participant_data[subject_id] = trials;
-
-    await writeResults(RESULTS_FILE, results);
-    res.status(200).send('Participant data saved successfully.');
 });
 
 app.post('/save-likert-data', async (req, res) => {
@@ -81,7 +88,7 @@ app.post('/save-likert-data', async (req, res) => {
 
     await ensureResultsFolder(); // Ensure the "results" folder exists
 
-    const existingData = await readResults(LIKERT_RESPONSES_FILE);
+    const existingData = await readResults(IMAGE_DEBRIEF_FILE); // Updated file path
 
     // Merge the new data with existing data
     existingData.current_participant_data = {
@@ -89,8 +96,8 @@ app.post('/save-likert-data', async (req, res) => {
         ...likertData.current_participant_data
     };
 
-    await writeResults(LIKERT_RESPONSES_FILE, existingData);
-    res.status(200).send('Likert data saved successfully.');
+    await writeResults(IMAGE_DEBRIEF_FILE, existingData); // Updated file path
+    res.status(200).send('Image debrief data saved successfully.');
 });
 
 app.listen(port, () => {

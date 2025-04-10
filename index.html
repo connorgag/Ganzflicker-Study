@@ -169,6 +169,56 @@
             }
         }
 
+        // Function to save participant data
+        async function saveParticipantData(participantId, trials) {
+            const requestBody = {
+                current_participant_data: {
+                    [participantId]: trials
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/save-participant-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to save participant data:', await response.text());
+                } else {
+                    console.log('Participant data saved successfully.');
+                }
+            } catch (error) {
+                console.error('Error saving participant data:', error);
+            }
+        }
+
+        // Function to save image debrief data
+        async function saveImageDebriefData(participantId, debriefData) {
+            const requestBody = {
+                current_participant_data: {
+                    [participantId]: debriefData
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/save-likert-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to save image debrief data:', await response.text());
+                } else {
+                    console.log('Image debrief data saved successfully.');
+                }
+            } catch (error) {
+                console.error('Error saving image debrief data:', error);
+            }
+        }
+
         // Initialize jsPsych
         const jsPsych = initJsPsych({
             on_finish: function(data) {
