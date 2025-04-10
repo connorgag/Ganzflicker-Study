@@ -1025,7 +1025,11 @@
                         alert('Please complete all rating scales before continuing.');
                         return;
                     }
-                    
+                    // Check if the detailed feedback is empty
+                    if (detailedFeedback === '') {
+                        alert('Please provide detailed feedback before continuing.');
+                        return;
+                    }
                     // Save the responses and feedback
                     currentParticipant.results.likert_responses = responses;
                     currentParticipant.results.detailed_feedback = detailedFeedback;

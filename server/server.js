@@ -9,7 +9,6 @@ const port = 3000;
 
 // Updated file paths to save in the "results" folder
 const RESULTS_FILE = path.join(__dirname, '../results/image_selection.json');
-const LIKERT_RESPONSES_FILE = path.join(__dirname, '../results/likert_responses.json');
 const IMAGE_DEBRIEF_FILE = path.join(__dirname, '../results/image_debrief.json');
 
 app.use(cors());

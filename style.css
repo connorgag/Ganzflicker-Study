@@ -1,5 +1,5 @@
 .jspsych-content {
-    max-width: 1200px;
+    max-width: 2200px;
 }
 
 .image-container {
@@ -46,9 +46,9 @@
 
 .final-selection-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
-    gap: 5px; /* Reduce spacing between images */
-    margin-bottom: 10px; /* Reduce space below the container */
+    grid-template-columns: repeat(3, 1fr); /* Keep 3 columns */
+    gap: 0px; /* Space between images */
+    margin-bottom: 20px; /* Space below the container */
     width: 100%; /* Ensure the container spans the full width */
     box-sizing: border-box; /* Include padding and borders in width calculations */
 }
@@ -70,10 +70,11 @@
 }
 
 .final-option img {
-    width: 100%; /* Make the image fill its container */
+    width: 70%; /* Reduce the width of the images */
     height: auto; /* Maintain aspect ratio */
     object-fit: contain; /* Ensure the image fits within its container */
-    margin: 0; /* Remove margin inside the image */
+    margin: 0 auto; /* Center the image horizontally */
+    display: block; /* Ensure the image is treated as a block element */
 }
 
 .button-container {
