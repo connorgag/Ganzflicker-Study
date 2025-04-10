@@ -140,7 +140,10 @@
         async function initializeMetadata() {
             try {
                 const configData = await loadJSON('config.json');
-                availableModels = configData.available_models || [];
+
+                // Randomize the order of available models
+                const availableModels = shuffleArray(configData.available_models || []);
+
                 const hallucinationsData = await loadCSV('hallucinations.csv');
                 const aphantasiaImages = configData.image_paths?.aphantasia_images || {};
                 const phantasiaImages = configData.image_paths?.phantasia_images || {};
@@ -148,13 +151,13 @@
                 const phantasiaIds = configData.phantasia_ids || Object.keys(phantasiaImages).map(Number);
 
                 metadata = {
-                    "available_models": availableModels,
-                    "hallucinations_data": hallucinationsData,
-                    "aphantasia_images": aphantasiaImages,
-                    "phantasia_images": phantasiaImages,
-                    "aphantasia_ids": aphantasiaIds,
-                    "phantasia_ids": phantasiaIds,
-                    "participant_ids": configData.participant_ids || []
+                    available_models: availableModels,
+                    hallucinations_data: hallucinationsData,
+                    aphantasia_images: aphantasiaImages,
+                    phantasia_images: phantasiaImages,
+                    aphantasia_ids: aphantasiaIds,
+                    phantasia_ids: phantasiaIds,
+                    participant_ids: configData.participant_ids || []
                 };
 
                 console.log("Metadata initialized:", metadata);
@@ -817,9 +820,8 @@
         };
 
         const finalWinnerRatingTrial = {
-            type: jsPsychSurveyLikert,
-            preamble: function() {
-                // Use getImagePath to dynamically get the correct path for the final winner image
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: function() {
                 const winnerImagePath = getImagePath(finalSelectedModel.description, finalSelectedModel.model);
                 return `
                     <h2>Final Winner Image</h2>
@@ -827,52 +829,138 @@
                         Below is the image you selected as the best representation of your Ganzflicker experience.
                         Please rate the image on the following dimensions.
                     </p>
-                    <div style="text-align: center;">
+                    <div style="text-align: center; margin-bottom: 30px;">
                         <img src="${winnerImagePath}" alt="Final Winner Image" style="max-width: 40%; height: auto; border: 2px solid #ccc; border-radius: 5px;">
+                    </div>
+                    
+                    <div id="custom-likert-form" style="width: 100%; max-width: 800px; margin: 0 auto;">
+                        <!-- Likert item 1 -->
+                        <div class="likert-item" style="margin-bottom: 25px;">
+                            <p style="margin-bottom: 8px; font-weight: bold;">Overall resemblance to your Ganzflicker experience</p>
+                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
+                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
+                                <div style="display: flex; justify-content: space-between; flex: 1;">
+                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
+                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
+                                            <input type="radio" id="likert-1-${num}" name="likert-1" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-1-${num}" style="font-size: 12px;">${num}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Likert item 2 -->
+                        <div class="likert-item" style="margin-bottom: 25px;">
+                            <p style="margin-bottom: 8px; font-weight: bold;">Resemblance in terms of color</p>
+                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
+                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
+                                <div style="display: flex; justify-content: space-between; flex: 1;">
+                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
+                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
+                                            <input type="radio" id="likert-2-${num}" name="likert-2" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-2-${num}" style="font-size: 12px;">${num}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Likert item 3 -->
+                        <div class="likert-item" style="margin-bottom: 25px;">
+                            <p style="margin-bottom: 8px; font-weight: bold;">Resemblance in terms of content</p>
+                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
+                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
+                                <div style="display: flex; justify-content: space-between; flex: 1;">
+                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
+                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
+                                            <input type="radio" id="likert-3-${num}" name="likert-3" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-3-${num}" style="font-size: 12px;">${num}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Likert item 4 -->
+                        <div class="likert-item" style="margin-bottom: 25px;">
+                            <p style="margin-bottom: 8px; font-weight: bold;">All the objects in the image were accurately visualized</p>
+                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
+                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
+                                <div style="display: flex; justify-content: space-between; flex: 1;">
+                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
+                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
+                                            <input type="radio" id="likert-4-${num}" name="likert-4" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-4-${num}" style="font-size: 12px;">${num}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Likert item 5 -->
+                        <div class="likert-item" style="margin-bottom: 25px;">
+                            <p style="margin-bottom: 8px; font-weight: bold;">There were objects in the image that you did not see</p>
+                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
+                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
+                                <div style="display: flex; justify-content: space-between; flex: 1;">
+                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
+                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
+                                            <input type="radio" id="likert-5-${num}" name="likert-5" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-5-${num}" style="font-size: 12px;">${num}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
+                            </div>
+                        </div>
+
+                        <!-- Textarea for detailed feedback -->
+                        <div style="margin-top: 40px; margin-bottom: 20px;">
+                            <label for="detailed-feedback" style="display: block; margin-bottom: 10px; font-weight: bold;">
+                                Can you tell us more about how generated images differed/resembled your Ganzflicker experience? Be as detailed as possible.
+                            </label>
+                            <textarea id="detailed-feedback" rows="6" style="width: 100%; padding: 10px; box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc;"></textarea>
+                        </div>
+                        
+                        <!-- Continue button at the bottom -->
+                        <div style="margin-top: 40px; margin-bottom: 40px; text-align: center;">
+                            <button id="submit-custom-form" style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Continue</button>
+                        </div>
                     </div>
                 `;
             },
-            questions: [
-                {prompt: "Overall resemblance to your Ganzflicker experience", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true},
-                {prompt: "Resemblance in terms of color", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true},
-                {prompt: "Resemblance in terms of content", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true},
-                {prompt: "All the objects in the image were accurately visualized", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true},
-                {prompt: "There were objects in the image that you did not see", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true}
-            ],
-            scale_width: 600, // Adjust the width of the scale
-            on_finish: function(data) {
-                // Prepare the data to save
-                const likertData = {
-                    current_participant_data: {
-                        [participantId]: {
-                            subject_id: participantId,
-                            final_image: `${finalSelectedModel.chosen_image}`,
-                            responses: data.response
-                        }
+            choices: [],
+            trial_duration: null,
+            on_load: function() {
+                document.getElementById('submit-custom-form').addEventListener('click', function() {
+                    // Collect the data
+                    const responses = {
+                        overall: document.querySelector('input[name="likert-1"]:checked')?.value,
+                        color: document.querySelector('input[name="likert-2"]:checked')?.value,
+                        content: document.querySelector('input[name="likert-3"]:checked')?.value,
+                        objects_visualized: document.querySelector('input[name="likert-4"]:checked')?.value,
+                        objects_not_seen: document.querySelector('input[name="likert-5"]:checked')?.value
+                    };
+                    
+                    const detailedFeedback = document.getElementById('detailed-feedback')?.value || '';
+                    
+                    // Check if all required fields are filled
+                    if (Object.values(responses).some(value => value === undefined)) {
+                        alert('Please complete all rating scales before continuing.');
+                        return;
                     }
-                };
+                    
+                    // Save the responses and feedback
+                    currentParticipant.results.likert_responses = responses;
+                    currentParticipant.results.detailed_feedback = detailedFeedback;
 
-                // Save the data to the server
-                fetch('http://localhost:3000/save-likert-data', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(likertData),
-                })
-                .then(response => response.text())
-                .then(message => {
-                    console.log("Likert data saved successfully:", message);
-                })
-                .catch(error => {
-                    console.error("Error saving Likert data:", error);
-
-                    // Allow manual download if saving fails
-                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(likertData, null, 2));
-                    const downloadAnchor = document.createElement('a');
-                    downloadAnchor.setAttribute('href', dataStr);
-                    downloadAnchor.setAttribute('download', `likert_responses_${participantId}.json`);
-                    document.body.appendChild(downloadAnchor);
-                    downloadAnchor.click();
-                    document.body.removeChild(downloadAnchor);
+                    // Move to the next trial
+                    jsPsych.finishTrial();
                 });
             }
         };
@@ -886,72 +974,83 @@
                 </p>
                 <p class="download-status">Your data is being saved...</p>
                 <div class="button-container">
-                    <button id="manual-download-button" class="download-button" style="display: none;">Download Data</button>
+                    <button id="manual-download-button" class="download-button" style="display: none;">Download Backup Data</button>
                 </div>
             `,
             choices: [], // No default button choices
-            on_load: function() {
-                const display = jsPsych.getDisplayElement();
-                const statusElement = display.querySelector('.download-status');
+            on_load: async function() {
+                const statusElement = document.querySelector('.download-status');
                 const downloadButton = document.getElementById('manual-download-button');
 
-                fetch('http://localhost:3000/save-participant-data', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        subject_id: participantId,
-                        trials: currentParticipant.results.trials
-                    }),
-                })
-                .then(response => response.text())
-                .then(message => {
+                // Prepare the data to save
+                const imageSelectionData = {
+                    current_participant_data: {
+                        [participantId]: currentParticipant.results.trials
+                    }
+                };
+
+                const likertData = {
+                    current_participant_data: {
+                        [participantId]: {
+                            subject_id: participantId,
+                            final_image: finalSelectedModel?.chosen_image || "N/A",
+                            overall: currentParticipant.results.likert_responses.overall,
+                            color: currentParticipant.results.likert_responses.color,
+                            content: currentParticipant.results.likert_responses.content,
+                            objects_visualized: currentParticipant.results.likert_responses.objects_visualized,
+                            objects_not_seen: currentParticipant.results.likert_responses.objects_not_seen,
+                            detailed_feedback: currentParticipant.results.detailed_feedback || ""
+                        }
+                    }
+                };
+
+                try {
+                    // Save `image_selection.json`
+                    await fetch('http://localhost:3000/save-participant-data', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(imageSelectionData),
+                    });
+
+                    // Save `likert_responses.json`
+                    await fetch('http://localhost:3000/save-likert-data', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(likertData),
+                    });
+
                     // Update the status message
-                    statusElement.textContent = 'Your data has been saved.';
-                })
-                .catch(error => {
-                    // Show error message
+                    statusElement.textContent = 'Your data has been saved successfully.';
+                    statusElement.style.color = 'green';
+                } catch (error) {
+                    console.error('Error saving data:', error);
+
+                    // Update the status message
                     statusElement.textContent = 'There was an error saving your data. Please use the button below to download your data.';
                     statusElement.style.color = 'red';
-                    statusElement.style.fontSize = '26px'; // Corrected font size
-                    console.error('Error saving data:', error);
 
                     // Show the manual download button
                     downloadButton.style.display = 'inline-block';
 
-                    // Add click event to download both files manually
+                    // Add click event to download the combined backup file
                     downloadButton.addEventListener('click', function() {
-                        // Prepare the image_selection.json data
-                        const imageSelectionData = {
-                            subject_id: participantId,
-                            trials: currentParticipant.results.trials
+                        // Combine image selection and Likert data into one JSON object
+                        const backupData = {
+                            participant_id: participantId,
+                            image_selection: imageSelectionData.current_participant_data[participantId],
+                            likert_responses: likertData.current_participant_data[participantId]
                         };
-                        const imageSelectionDataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(imageSelectionData, null, 2));
-                        const imageSelectionAnchor = document.createElement('a');
-                        imageSelectionAnchor.setAttribute('href', imageSelectionDataStr);
-                        imageSelectionAnchor.setAttribute('download', `image_selection_${participantId}.json`);
-                        document.body.appendChild(imageSelectionAnchor);
-                        imageSelectionAnchor.click();
-                        document.body.removeChild(imageSelectionAnchor);
 
-                        // Prepare the likert_responses.json data
-                        const likertData = {
-                            current_participant_data: {
-                                [participantId]: {
-                                    subject_id: participantId,
-                                    final_image: `${finalSelectedModel.chosen_image}`,
-                                    responses: currentParticipant.results.likert_responses || {}
-                                }
-                            }
-                        };
-                        const likertDataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(likertData, null, 2));
-                        const likertDataAnchor = document.createElement('a');
-                        likertDataAnchor.setAttribute('href', likertDataStr);
-                        likertDataAnchor.setAttribute('download', `likert_responses_${participantId}.json`);
-                        document.body.appendChild(likertDataAnchor);
-                        likertDataAnchor.click();
-                        document.body.removeChild(likertDataAnchor);
+                        // Create a downloadable JSON file
+                        const backupDataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+                        const backupDataAnchor = document.createElement('a');
+                        backupDataAnchor.setAttribute('href', backupDataStr);
+                        backupDataAnchor.setAttribute('download', `backup_download_participant_${participantId}.json`);
+                        document.body.appendChild(backupDataAnchor);
+                        backupDataAnchor.click();
+                        document.body.removeChild(backupDataAnchor);
                     });
-                });
+                }
             }
         };
 
