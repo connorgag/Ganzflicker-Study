@@ -3,19 +3,22 @@
 }
 
 .image-container {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
+    gap: 10px; /* Reduce spacing between images */
     margin-bottom: 20px;
+    width: 100%; /* Ensure the container spans the full width */
+    box-sizing: border-box; /* Include padding and borders in width calculations */
 }
 
 .image-option {
     text-align: center;
-    width: 33%;
     cursor: pointer;
-    padding: 10px;
+    padding: 5px; /* Reduce padding to allow more space for the image */
     border: 3px solid transparent;
     border-radius: 5px;
     transition: all 0.3s;
+    box-sizing: border-box; /* Include padding and borders in width calculations */
 }
 
 .image-option:hover {
@@ -24,8 +27,9 @@
 }
 
 .image-option img {
-    max-width: 100%;
-    height: auto;
+    width: 100%; /* Make the image fill its container */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: contain; /* Ensure the image fits within its container */
     margin-bottom: 10px;
 }
 
@@ -35,66 +39,54 @@
 }
 
 .instruction-text {
-    font-size: 18px;
-    margin-bottom: 30px;
-    line-height: 1.5;
+    font-size: 16px; /* Reduce font size */
+    margin-bottom: 10px; /* Reduce space below the text */
+    line-height: 1.4; /* Slightly reduce line height */
 }
 
 .final-selection-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
+    gap: 5px; /* Reduce spacing between images */
+    margin-bottom: 10px; /* Reduce space below the container */
+    width: 100%; /* Ensure the container spans the full width */
+    box-sizing: border-box; /* Include padding and borders in width calculations */
 }
 
 .final-option {
     text-align: center;
-    width: 30%;
-    margin-bottom: 20px;
     cursor: pointer;
-    padding: 10px;
-    border: 3px solid transparent;
-    border-radius: 5px;
+    padding: 5px; /* Reduce padding around the image */
+    border: 2px solid transparent; /* Keep the border invisible */
+    border-radius: 5px; /* Optional: Add rounded corners */
     transition: all 0.3s;
+    box-sizing: border-box; /* Include padding and borders in width calculations */
+    margin: 5px; /* Reduce margin around each option */
 }
 
 .final-option:hover {
-    border-color: #28a745;
-    background-color: rgba(40, 167, 69, 0.1);
+    border-color: transparent; /* Keep the border invisible on hover */
+    background-color: rgba(40, 167, 69, 0.1); /* Add a subtle background highlight on hover */
 }
 
 .final-option img {
-    max-width: 60%;
-    height: auto;
-    margin-bottom: 10px;
+    width: 100%; /* Make the image fill its container */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: contain; /* Ensure the image fits within its container */
+    margin: 0; /* Remove margin inside the image */
 }
 
 .button-container {
     display: flex;
     justify-content: center;
-    gap: 20px; /* Adds space between the buttons */
-    margin-top: 20px; /* Adds space above the buttons */
-}
-
-.start-over-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.start-over-button:hover {
-    background-color: #0056b3;
+    gap: 10px; /* Reduce space between buttons */
+    margin-top: 10px; /* Reduce space above the buttons */
 }
 
 .model-label {
     font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 5px;
+    font-size: 14px; /* Reduce font size */
+    margin-bottom: 2px; /* Reduce space between the label and the image */
 }
 
 .loading-screen {
@@ -126,4 +118,22 @@
     color: red; /* Red color for emphasis */
     margin-top: 20px; /* Add some spacing above */
     text-align: center; /* Center the text */
+}
+
+.download-button {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.download-button:hover {
+    background-color: #45a049;
 }

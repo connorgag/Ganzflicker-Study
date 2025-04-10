@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-image-button-response@1.1.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script> <!-- Added plugin -->
     <link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="style.css">
     <style>
@@ -152,7 +153,8 @@
                     "aphantasia_images": aphantasiaImages,
                     "phantasia_images": phantasiaImages,
                     "aphantasia_ids": aphantasiaIds,
-                    "phantasia_ids": phantasiaIds
+                    "phantasia_ids": phantasiaIds,
+                    "participant_ids": configData.participant_ids || []
                 };
 
                 console.log("Metadata initialized:", metadata);
@@ -266,15 +268,24 @@
                 return "placeholder.jpeg";
             }
 
-            if (descriptionType === "participant") {
+            // Treat "own_description" as "participant"
+            if (descriptionType === "participant" || descriptionType === "own_description") {
                 return `participant_data/participant_${participantId}/participant_${participantId}_${model}.jpeg`;
-            } else if (descriptionType === "aphantasia" && metadata.aphantasia_images[aphantasiaParticipant.id] && metadata.aphantasia_images[aphantasiaParticipant.id][model]) {
-                return metadata.aphantasia_images[aphantasiaParticipant.id][model];
-            } else if (descriptionType === "phantasia" && metadata.phantasia_images[phantasiaParticipant.id] && metadata.phantasia_images[phantasiaParticipant.id][model]) {
-                return metadata.phantasia_images[phantasiaParticipant.id][model];
+            } 
+            // Treat "aphantasia_description" as "aphantasia"
+            else if (descriptionType === "aphantasia" || descriptionType === "aphantasia_description") {
+                if (metadata.aphantasia_images[aphantasiaParticipant.id] && metadata.aphantasia_images[aphantasiaParticipant.id][model]) {
+                    return metadata.aphantasia_images[aphantasiaParticipant.id][model];
+                }
+            } 
+            // Treat "phantasia_description" as "phantasia"
+            else if (descriptionType === "phantasia" || descriptionType === "phantasia_description") {
+                if (metadata.phantasia_images[phantasiaParticipant.id] && metadata.phantasia_images[phantasiaParticipant.id][model]) {
+                    return metadata.phantasia_images[phantasiaParticipant.id][model];
+                }
             }
 
-            console.warn(`Could not find image path for ${descriptionType}, ID: ${aphantasiaParticipant?.id || phantasiaParticipant?.id}, Model: ${model}`);
+            console.error(`Could not find image path for ${descriptionType}, ID: ${aphantasiaParticipant?.id || phantasiaParticipant?.id}, Model: ${model}`);
             return "placeholder.jpeg"; // Fallback
         }
 
@@ -303,25 +314,118 @@
             }
         };
 
-        // Create participant ID input screen
         const participantIdTrial = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: `
-                <h1>Please enter your Participant ID:</h1>
-                <input type="text" id="participant-id-input">
-                <button id="start-button">Start Study</button>
-            `,
+            stimulus: function() {
+                return `
+                    <h1>Please enter your Participant ID:</h1>
+                    <input type="text" id="participant-id-input">
+                    <button id="start-button">Start Study</button>
+                    <p id="error-message" class="error"></p>
+                    <div id="valid-ids-container" style="display: none;">
+                        <p><strong>Valid Participant IDs:</strong></p>
+                        <div id="valid-ids-list" style="margin: 20px auto; max-width: 80%; overflow-y: auto; max-height: 50vh;"></div>
+                    </div>
+                `;
+            },
             choices: 'NO_KEYS',
             on_load: function() {
                 document.querySelector('#start-button').addEventListener('click', function() {
-                    const inputElement = document.querySelector('#participant-id-input');
-                    if (inputElement && inputElement.value.trim() !== '') {
-                        participantId = inputElement.value.trim();
-                        jsPsych.finishTrial();
-                    } else {
-                        alert('Please enter a valid Participant ID.');
+                    validateAndProceed();
+                });
+                
+                // Also allow Enter key to submit
+                document.querySelector('#participant-id-input').addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        validateAndProceed();
                     }
                 });
+                
+                function validateAndProceed() {
+                    const inputElement = document.querySelector('#participant-id-input');
+                    const errorElement = document.querySelector('#error-message');
+                    const validIdsContainer = document.querySelector('#valid-ids-container');
+                    const validIdsList = document.querySelector('#valid-ids-list');
+                    
+                    if (!inputElement) return;
+                    
+                    const enteredId = inputElement.value.trim();
+                    
+                    if (enteredId === '') {
+                        errorElement.textContent = 'Please enter a Participant ID.';
+                        return;
+                    }
+                    
+                    // Check if the entered ID is in the list of valid IDs
+                    if (metadata && metadata.participant_ids && metadata.participant_ids.includes(enteredId)) {
+                        participantId = enteredId;
+                        jsPsych.finishTrial();
+                    } else {
+                        // Show error and list valid IDs
+                        errorElement.textContent = 'Invalid Participant ID. Please use one from the list below:';
+                        errorElement.style.color = 'red';
+                        errorElement.style.fontSize = '20px';
+                        errorElement.style.fontWeight = 'bold';
+                        
+                        // Display the valid IDs
+                        validIdsContainer.style.display = 'block';
+                        validIdsList.innerHTML = '';
+                        
+                        if (metadata && metadata.participant_ids && metadata.participant_ids.length > 0) {
+                            // Create a responsive grid for the IDs
+                            const idGrid = document.createElement('div');
+                            idGrid.style.display = 'grid';
+                            
+                            // Determine grid columns based on number of IDs
+                            const numIds = metadata.participant_ids.length;
+                            let columns;
+                            
+                            if (numIds <= 5) {
+                                columns = 1; // Single column for few IDs
+                            } else if (numIds <= 20) {
+                                columns = 3; // 3 columns for moderate number
+                            } else if (numIds <= 50) {
+                                columns = 4; // 4 columns for many IDs
+                            } else {
+                                columns = 5; // 5 columns for very many IDs
+                            }
+                            
+                            idGrid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+                            idGrid.style.gap = '10px';
+                            idGrid.style.justifyItems = 'center';
+                            
+                            metadata.participant_ids.forEach(id => {
+                                const idElement = document.createElement('div');
+                                idElement.textContent = id;
+                                idElement.style.fontSize = '18px';
+                                idElement.style.padding = '5px 10px';
+                                idElement.style.fontWeight = 'bold';
+                                idElement.style.border = '1px solid #ccc';
+                                idElement.style.borderRadius = '5px';
+                                idElement.style.backgroundColor = '#f8f8f8';
+                                idElement.style.width = '80px';
+                                idElement.style.textAlign = 'center';
+                                
+                                // Make ID clickable to auto-fill input
+                                idElement.style.cursor = 'pointer';
+                                idElement.addEventListener('click', function() {
+                                    inputElement.value = id;
+                                    // Highlight the input to show it's been updated
+                                    inputElement.style.backgroundColor = '#ffffcc';
+                                    setTimeout(() => {
+                                        inputElement.style.backgroundColor = '';
+                                    }, 500);
+                                });
+                                
+                                idGrid.appendChild(idElement);
+                            });
+                            
+                            validIdsList.appendChild(idGrid);
+                        } else {
+                            validIdsList.innerHTML = '<div style="font-size: 18px;">No valid IDs found. Please contact the researcher.</div>';
+                        }
+                    }
+                }
             }
         };
 
@@ -594,7 +698,7 @@
                             </div>
                         `).join('')}
                     </div>
-                    <button class="next-button" id="final-next-button">Complete Study</button>
+                    <button class="next-button" id="final-next-button">Next</button>
                 `;
             },
             choices: [],
@@ -712,6 +816,67 @@
             }
         };
 
+        const finalWinnerRatingTrial = {
+            type: jsPsychSurveyLikert,
+            preamble: function() {
+                // Use getImagePath to dynamically get the correct path for the final winner image
+                const winnerImagePath = getImagePath(finalSelectedModel.description, finalSelectedModel.model);
+                return `
+                    <h2>Final Winner Image</h2>
+                    <p class="instruction-text">
+                        Below is the image you selected as the best representation of your Ganzflicker experience.
+                        Please rate the image on the following dimensions.
+                    </p>
+                    <div style="text-align: center;">
+                        <img src="${winnerImagePath}" alt="Final Winner Image" style="max-width: 40%; height: auto; border: 2px solid #ccc; border-radius: 5px;">
+                    </div>
+                `;
+            },
+            questions: [
+                {prompt: "Overall resemblance to your Ganzflicker experience", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true},
+                {prompt: "Resemblance in terms of color", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true},
+                {prompt: "Resemblance in terms of content", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true},
+                {prompt: "All the objects in the image were accurately visualized", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true},
+                {prompt: "There were objects in the image that you did not see", labels: ["0 (Not at all)", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10 (Almost identical)"], required: true}
+            ],
+            scale_width: 600, // Adjust the width of the scale
+            on_finish: function(data) {
+                // Prepare the data to save
+                const likertData = {
+                    current_participant_data: {
+                        [participantId]: {
+                            subject_id: participantId,
+                            final_image: `${finalSelectedModel.chosen_image}`,
+                            responses: data.response
+                        }
+                    }
+                };
+
+                // Save the data to the server
+                fetch('http://localhost:3000/save-likert-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(likertData),
+                })
+                .then(response => response.text())
+                .then(message => {
+                    console.log("Likert data saved successfully:", message);
+                })
+                .catch(error => {
+                    console.error("Error saving Likert data:", error);
+
+                    // Allow manual download if saving fails
+                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(likertData, null, 2));
+                    const downloadAnchor = document.createElement('a');
+                    downloadAnchor.setAttribute('href', dataStr);
+                    downloadAnchor.setAttribute('download', `likert_responses_${participantId}.json`);
+                    document.body.appendChild(downloadAnchor);
+                    downloadAnchor.click();
+                    document.body.removeChild(downloadAnchor);
+                });
+            }
+        };
+
         const completionTrial = {
             type: jsPsychHtmlButtonResponse,
             stimulus: `
@@ -721,8 +886,7 @@
                 </p>
                 <p class="download-status">Your data is being saved...</p>
                 <div class="button-container">
-                    <button class="start-over-button" onclick="window.location.href='${window.location.href}'">Start Over</button>
-                    <button id="manual-download-button" class="start-over-button" style="display: none;">Download Data</button>
+                    <button id="manual-download-button" class="download-button" style="display: none;">Download Data</button>
                 </div>
             `,
             choices: [], // No default button choices
@@ -735,7 +899,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        subject_id: participantId, 
+                        subject_id: participantId,
                         trials: currentParticipant.results.trials
                     }),
                 })
@@ -754,18 +918,38 @@
                     // Show the manual download button
                     downloadButton.style.display = 'inline-block';
 
-                    // Add click event to download the data manually
+                    // Add click event to download both files manually
                     downloadButton.addEventListener('click', function() {
-                        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+                        // Prepare the image_selection.json data
+                        const imageSelectionData = {
                             subject_id: participantId,
                             trials: currentParticipant.results.trials
-                        }, null, 2));
-                        const downloadAnchor = document.createElement('a');
-                        downloadAnchor.setAttribute('href', dataStr);
-                        downloadAnchor.setAttribute('download', `participant_${participantId}_data.json`);
-                        document.body.appendChild(downloadAnchor);
-                        downloadAnchor.click();
-                        document.body.removeChild(downloadAnchor);
+                        };
+                        const imageSelectionDataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(imageSelectionData, null, 2));
+                        const imageSelectionAnchor = document.createElement('a');
+                        imageSelectionAnchor.setAttribute('href', imageSelectionDataStr);
+                        imageSelectionAnchor.setAttribute('download', `image_selection_${participantId}.json`);
+                        document.body.appendChild(imageSelectionAnchor);
+                        imageSelectionAnchor.click();
+                        document.body.removeChild(imageSelectionAnchor);
+
+                        // Prepare the likert_responses.json data
+                        const likertData = {
+                            current_participant_data: {
+                                [participantId]: {
+                                    subject_id: participantId,
+                                    final_image: `${finalSelectedModel.chosen_image}`,
+                                    responses: currentParticipant.results.likert_responses || {}
+                                }
+                            }
+                        };
+                        const likertDataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(likertData, null, 2));
+                        const likertDataAnchor = document.createElement('a');
+                        likertDataAnchor.setAttribute('href', likertDataStr);
+                        likertDataAnchor.setAttribute('download', `likert_responses_${participantId}.json`);
+                        document.body.appendChild(likertDataAnchor);
+                        likertDataAnchor.click();
+                        document.body.removeChild(likertDataAnchor);
                     });
                 });
             }
@@ -794,6 +978,7 @@
 
             timeline.push(
                 finalSelectionTrial, 
+                finalWinnerRatingTrial, // Add the new trial here
                 exitFullscreenTrial, // Exit fullscreen before showing completion
                 completionTrial
             );
