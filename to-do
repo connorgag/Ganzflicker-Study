@@ -18,19 +18,21 @@ To-do
 	[+] reaction_time: time spent on the screen before advancing (not super crucial)
 	[+] trial_type: to indicate whether a it is a regular trial where they choose theirs vs 		   distractor images or the final trial where we show them the matrix of winner images; For the winner trial, some of these columns are irrelevant (eg, target, distractor, 		   trial_model, and etc.) let's populate those cells with NAs
 	[+] winner_image: name of the image they picked in the final round
-[] Add a new screen after the final round where we will display the winner image and give them several likert scale questions (like the ones we have in questionnaires.html) to rate the pictures resemblance to their Ganzflicker experiences on several dimensions on a scale from 0 (not at all) to 10 (almost identical): (Force them to make choices before they are allowed to advance)
-	[] overall resemblance
-	[] color
-	[] content
-	[] all the objects were accurately visualized
-	[] there were objects in the image they did not see
-	[] .... I'll think more about this
-[] Add a new screen for an open-ended question:
-	[] Can you tell us more about how generated images differed/resembled your Ganzflicker 		experience. Be as detailed as possible
+[+] Add a new screen after the final round where we will display the winner image and give them several likert scale questions (like the ones we have in questionnaires.html) to rate the pictures resemblance to their Ganzflicker experiences on several dimensions on a scale from 0 (not at all) to 10 (almost identical): (Force them to make choices before they are allowed to advance)
+	[+] overall resemblance
+	[+] color
+	[+] content
+	[+] all the objects were accurately visualized
+	[+] there were objects in the image they did not see
+	[+] .... I'll think more about this
+[+] Add a new screen for an open-ended question:
+	[+] Can you tell us more about how generated images differed/resembled your Ganzflicker 		experience. Be as detailed as possible
 [+] Last page with thank you and confetti! :)
 [+] Make study fullscreen
 [] make sure size of pictures changes proportionally to the screen size
-[] remove "start over" at the end of experiment
+[+] remove "start over" at the end of experiment
 [+] add irq and osivq
 [+] save questionnaire data locally
 [+] create Ganzflicker psychopy
+[] increase image sizes
+[] rename results files that are being saved

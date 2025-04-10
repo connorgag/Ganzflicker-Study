@@ -13,14 +13,13 @@
     },
     "001": {
       "subject_id": "001",
-      "final_image": "3199_dalle",
-      "responses": {
-        "Q0": 8,
-        "Q1": 8,
-        "Q2": 8,
-        "Q3": 8,
-        "Q4": 8
-      }
+      "final_image": "participant_001_claude",
+      "overall": "8",
+      "color": "9",
+      "content": "5",
+      "objects_visualized": "8",
+      "objects_not_seen": "2",
+      "detailed_feedback": "dsdskjdasoas"
     }
   }
 }
