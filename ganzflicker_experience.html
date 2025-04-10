@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ganzflicker Experience Questionnaire</title>
+  <script src="https://unpkg.com/jspsych@7.3.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-multi-select@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.2"></script>
+  <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .jspsych-content {
+      max-width: 800px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    p {
+      margin-bottom: 15px;
+    }
+    .jspsych-btn {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+    }
+    .multi-select-option {
+      display: block;
+      margin: 10px 0;
+    }
+    .text-input {
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      resize: vertical;
+    }
+    .required {
+      color: red;
+    }
+    .required-note {
+      color: red;
+      font-size: 14px;
+      margin-top: 15px;
+      font-style: italic;
+    }
+    .error-message {
+      color: red;
+      font-weight: bold;
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid red;
+      border-radius: 5px;
+      background-color: #ffe6e6;
+      display: none;
+    }
+    .question-container {
+      margin-bottom: 25px;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .option {
+      margin: 8px 0;
+    }
+    .highlight-error {
+      border: 2px solid red !important;
+      background-color: #fff0f0 !important;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // Initialize jsPsych
+// Initialize jsPsych
+// Replace the current on_finish function and CSV conversion with this fixed version:
+
+const jsPsych = initJsPsych({
+  on_finish: function() {
+    // Get all data
+    const allData = jsPsych.data.get().values();
+    
+    // Create a single row of data for the participant
+    const participantData = {
+      participant_id: participantId,
+      firstRandomizedTrial: firstTrialType,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Helper function to find first matching item
+    function findFirst(array, criteria) {
+      for (let item of array) {
+        let match = true;
+        for (let key in criteria) {
+          if (item[key] !== criteria[key]) {
+            match = false;
+            break;
+          }
+        }
+        if (match) return item;
+      }
+      return null;
+    }
+    
+    // Add visual experiences data
+    const visualExpData = findFirst(allData, {trial_type: 'survey-multi-select'});
+    if (visualExpData && visualExpData.response && visualExpData.response.visual_experiences) {
+      participantData.saw_visuals = !visualExpData.response.visual_experiences.includes("No");
+      participantData.visual_experiences = JSON.stringify(visualExpData.response.visual_experiences);
+    } else {
+      participantData.saw_visuals = "NA";
+      participantData.visual_experiences = "NA";
+    }
+    
+    // Add text description data
+    // Find all survey-text trials and look for one with visual_description
+    const textDescData = allData.find(item => 
+      item.trial_type === 'survey-text' && 
+      item.response && 
+      item.response.visual_description
+    );
+    if (textDescData && textDescData.response) {
+      participantData.visual_description = textDescData.response.visual_description;
+    } else {
+      participantData.visual_description = "NA";
+    }
+    
+    // Add visual details data
+    // Find html-button-response that contains visual form data
+    const visualDetails = allData.find(item => 
+      item.trial_type === 'html-button-response' && 
+      item.time_to_emerge_visual
+    );
+    if (visualDetails) {
+      participantData.time_to_emerge_visual = visualDetails.time_to_emerge_visual || "NA";
+      participantData.frequency_visual = visualDetails.frequency_visual || "NA";
+      participantData.intensity_visual = visualDetails.intensity_visual || "NA";
+      participantData.duration_visual = visualDetails.duration_visual || "NA";
+      participantData.location_visual = visualDetails.location_visual || "NA";
+    } else {
+      participantData.time_to_emerge_visual = "NA";
+      participantData.frequency_visual = "NA";
+      participantData.intensity_visual = "NA";
+      participantData.duration_visual = "NA";
+      participantData.location_visual = "NA";
+    }
+    
+    // Add auditory experiences data - find second survey-multi-select
+    let auditoryExpData = null;
+    let foundFirst = false;
+    for (let item of allData) {
+      if (item.trial_type === 'survey-multi-select') {
+        if (!foundFirst) {
+          foundFirst = true;
+          continue;
+        }
+        auditoryExpData = item;
+        break;
+      }
+    }
+    
+    if (auditoryExpData && auditoryExpData.response && auditoryExpData.response.auditory_experiences) {
+      participantData.heard_sounds = !auditoryExpData.response.auditory_experiences.includes("Nothing other than white noise");
+      participantData.auditory_experiences = JSON.stringify(auditoryExpData.response.auditory_experiences);
+    } else {
+      participantData.heard_sounds = "NA";
+      participantData.auditory_experiences = "NA";
+    }
+    
+    // Add auditory description data
+    const auditoryDescData = allData.find(item => 
+      item.trial_type === 'survey-text' && 
+      item.response && 
+      item.response.auditory_description
+    );
+    if (auditoryDescData && auditoryDescData.response) {
+      participantData.auditory_description = auditoryDescData.response.auditory_description;
+    } else {
+      participantData.auditory_description = "NA";
+    }
+    
+    // Add auditory details data
+    const auditoryDetails = allData.find(item => 
+      item.trial_type === 'html-button-response' && 
+      item.frequency_auditory
+    );
+    if (auditoryDetails) {
+      participantData.frequency_auditory = auditoryDetails.frequency_auditory || "NA";
+      participantData.intensity_auditory = auditoryDetails.intensity_auditory || "NA";
+      participantData.duration_auditory = auditoryDetails.duration_auditory || "NA";
+      participantData.time_to_emerge_auditory = auditoryDetails.time_to_emerge_auditory || "NA";
+    } else {
+      participantData.frequency_auditory = "NA";
+      participantData.intensity_auditory = "NA";
+      participantData.duration_auditory = "NA";
+      participantData.time_to_emerge_auditory = "NA";
+    }
+    
+    // Add experience data (look for consciousness variables)
+    const experienceData = allData.find(item => 
+      item.trial_type === 'html-button-response' && 
+      item.hasOwnProperty('consciousness_changes')
+    );
+    if (experienceData) {
+      participantData.emotional_experience = experienceData.emotional_experience || "NA";
+      participantData.consciousness_changes = JSON.stringify(experienceData.consciousness_changes || []);
+      participantData.consciousness_description = experienceData.consciousness_description || "NA";
+    } else {
+      participantData.emotional_experience = "NA";
+      participantData.consciousness_changes = "NA";
+      participantData.consciousness_description = "NA";
+    }
+    
+    // Add imagery vividness data
+    const imageryData = allData.find(item => 
+      item.trial_type === 'survey-likert'
+    );
+    if (imageryData && imageryData.response) {
+      // +1 to convert from 0-based to 1-based scale
+      participantData.visual_imagery_vividness = (imageryData.response.visual_imagery_vividness !== undefined) ? 
+        (parseInt(imageryData.response.visual_imagery_vividness) + 1) : "NA";
+      participantData.verbal_imagery_vividness = (imageryData.response.verbal_imagery_vividness !== undefined) ?
+        (parseInt(imageryData.response.verbal_imagery_vividness) + 1) : "NA";
+    } else {
+      participantData.visual_imagery_vividness = "NA";
+      participantData.verbal_imagery_vividness = "NA";
+    }
+    
+    // Convert single row to CSV
+    const csvContent = objectToCSV(participantData);
+    
+    // Download CSV file
+    downloadCSV(csvContent, 'ganzflicker_data_' + participantId);
+    
+    // Also keep the full data available for debugging
+    downloadObjectAsJson(JSON.stringify(allData), 'ganzflicker_full_data_' + participantId);
+  },
+  override_safe_mode: true
+});
+
+// Helper function to convert a single object to CSV
+function objectToCSV(obj) {
+  // Get all keys as columns
+  const columns = Object.keys(obj);
+  
+  // Create header row
+  const headerRow = columns.join(',');
+  
+  // Create data row
+  const dataRow = columns.map(col => {
+    let value = obj[col];
+    
+    // Handle undefined/null values
+    if (value === undefined || value === null) {
+      return "NA";
+    }
+    
+    // Convert to string if not already
+    if (typeof value !== 'string') {
+      value = String(value);
+    }
+    
+    // Handle special characters for CSV
+    value = value.replace(/"/g, '""'); // Escape quotes
+    value = value.replace(/\n/g, ' '); // Replace newlines with spaces
+    
+    // Wrap in quotes if contains comma or quote
+    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+      value = `"${value}"`;
+    }
+    
+    return value;
+  }).join(',');
+  
+  // Combine header and data
+  return headerRow + '\n' + dataRow;
+}
+
+// Keep the original JSON download function for backup/debugging
+function downloadObjectAsJson(exportObj, exportName) {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(exportObj);
+  const downloadAnchorNode = document.createElement('a');
+  downloadAnchorNode.setAttribute("href", dataStr);
+  downloadAnchorNode.setAttribute("download", exportName + ".json");
+  document.body.appendChild(downloadAnchorNode);
+  downloadAnchorNode.click();
+  downloadAnchorNode.remove();
+}
+
+// Helper function to download CSV
+function downloadCSV(csv, filename) {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  
+  // Create a download link
+  const url = URL.createObjectURL(blob);
+  link.setAttribute("href", url);
+  link.setAttribute("download", filename + ".csv");
+  
+  // Append to body, click, and remove
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+    // Override survey-text plugin to handle validation without alerts
+    const originalSurveyTextPlugin = jsPsychSurveyText.trial;
+    jsPsychSurveyText.trial = function(display_element, trial) {
+      // Call the original plugin function
+      originalSurveyTextPlugin.call(this, display_element, trial);
+      
+      // Get the form and submit button
+      const form = display_element.querySelector('form');
+      const submitButton = display_element.querySelector('.jspsych-survey-text-next');
+      
+      // Add error message container at the top of the form
+      const errorContainer = document.createElement('div');
+      errorContainer.className = 'error-message';
+      errorContainer.textContent = 'Please answer all required questions.';
+      form.insertBefore(errorContainer, form.firstChild);
+      
+      // Add validation logic to the form submission
+      form.addEventListener('submit', function(e) {
+        // Hide any previous error messages
+        errorContainer.style.display = 'none';
+        
+        // Remove any previous error highlighting
+        form.querySelectorAll('.highlight-error').forEach(el => {
+          el.classList.remove('highlight-error');
+        });
+        
+        // Check for required but unanswered questions
+        let hasErrors = false;
+        for (let i = 0; i < trial.questions.length; i++) {
+          if (trial.questions[i].required) {
+            const questionInput = form.querySelector('#jspsych-survey-text-' + i);
+            
+            if (questionInput.value.trim() === '') {
+              // Highlight the question input
+              questionInput.classList.add('highlight-error');
+              
+              // Find the question container and highlight it
+              const questionContainer = questionInput.closest('.jspsych-survey-text-question');
+              if (questionContainer) {
+                questionContainer.classList.add('highlight-error');
+              }
+              
+              hasErrors = true;
+            }
+          }
+        }
+        
+        // Prevent form submission if there are errors
+        if (hasErrors) {
+          e.preventDefault();
+          errorContainer.style.display = 'block';
+          // Scroll to error
+          errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return false;
+        }
+      });
+    };
+    
+    // Override survey-likert plugin to handle validation without alerts
+    const originalSurveyLikertPlugin = jsPsychSurveyLikert.trial;
+    jsPsychSurveyLikert.trial = function(display_element, trial) {
+      // Call the original plugin function
+      originalSurveyLikertPlugin.call(this, display_element, trial);
+      
+      // Get the form and submit button
+      const form = display_element.querySelector('form');
+      const submitButton = display_element.querySelector('.jspsych-survey-likert-next');
+      
+      // Add error message container at the top of the form
+      const errorContainer = document.createElement('div');
+      errorContainer.className = 'error-message';
+      errorContainer.textContent = 'Please answer all required questions.';
+      form.insertBefore(errorContainer, form.firstChild);
+      
+      // Add validation logic to the form submission
+      form.addEventListener('submit', function(e) {
+        // Hide any previous error messages
+        errorContainer.style.display = 'none';
+        
+        // Remove any previous error highlighting
+        form.querySelectorAll('.highlight-error').forEach(el => {
+          el.classList.remove('highlight-error');
+        });
+        
+        // Check for required but unanswered questions
+        let hasErrors = false;
+        for (let i = 0; i < trial.questions.length; i++) {
+          if (trial.questions[i].required) {
+            const questionRadios = form.querySelectorAll('input[name="Q' + i + '"]:checked');
+            const questionContainer = form.querySelector('#jspsych-survey-likert-' + i);
+            
+            if (questionRadios.length === 0) {
+              // Highlight the question container
+              if (questionContainer) {
+                questionContainer.classList.add('highlight-error');
+              }
+              
+              hasErrors = true;
+            }
+          }
+        }
+        
+        // Prevent form submission if there are errors
+        if (hasErrors) {
+          e.preventDefault();
+          errorContainer.style.display = 'block';
+          // Scroll to error
+          errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return false;
+        }
+      });
+    };
+    
+    // Global variables to track flow control
+
+    // For the :has() selector which might not be supported in all browsers
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!CSS.supports('selector(:has(*))')) {
+        // Fallback for browsers that don't support :has()
+        window.findParentQuestion = function(element) {
+          let current = element;
+          while (current && !current.classList.contains('question-container')) {
+            current = current.parentElement;
+          }
+          return current;
+        };
+      }
+    });
+    
+    // Variable to track which trial was presented first
+    let firstTrialType = "";
+    
+    // Variables to track conditional flow
+    let sawVisuals = true;
+    let heardSounds = true;
+
+    // Timeline arrays
+    const timeline = [];
+    let participantId = '';
+
+    // Enter fullscreen mode
+    const fullscreen = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: true,
+      message: '<p>The experiment will switch to full screen mode when you press the button below</p>',
+      button_label: 'Continue to fullscreen'
+    };
+    timeline.push(fullscreen);
+    // Screen 1: Participant ID input
+    const participantIdTrial = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+        <h1>Please enter your Participant ID:</h1>
+        <input type="text" id="participant-id-input" style="font-size: 20px; padding: 5px;">
+        <button id="start-button" style="font-size: 20px;">Start Study</button>
+      `,
+      choices: "NO_KEYS",
+      on_load: function() {
+        document.querySelector('#start-button').addEventListener('click', function() {
+          const input = document.querySelector('#participant-id-input');
+          if (input && input.value.trim() !== '') {
+            participantId = input.value.trim();
+            jsPsych.data.addProperties({ participant_id: participantId });
+            jsPsych.finishTrial();
+          } else {
+            alert('Please enter a valid Participant ID.');
+          }
+        });
+      }
+    };
+    timeline.push(participantIdTrial);
+
+    // Screen 2: Introduction
+    const introTrial = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <div style="text-align: center;">
+          <p>It will take approximately 10 minutes to fill out this questionnaire.</p>
+          <p>Please give yourself time to answer all questions as precisely and honestly as possible.</p>
+          <p>There are no right or wrong answers.</p>
+          <p class="required-note">Questions marked with an asterisk (*) are required.</p>
+        </div>
+      `,
+      choices: ['Continue']
+    };
+    timeline.push(introTrial);
+
+    // Screen 3: Visual experiences question
+    const visualExperiencesTrial = {
+      type: jsPsychSurveyMultiSelect,
+      questions: [
+        {
+          prompt: "Did you see anything in the Ganzflicker? If not, confirm by answering \"no\" and then skip to the next section. *",
+          options: [
+            "No", 
+            "Distortions (e.g., screen warping or rotating)", 
+            "Simple shapes or patterns (e.g., ball of light, lines, grids, spiderwebs, geometric shapes)", 
+            "Colors other than red and black", 
+            "Complex objects (e.g., animals, faces, buildings)", 
+            "Complex environments (e.g., cityscapes, forests)"
+          ],
+          name: 'visual_experiences',
+          required: true
+        }
+      ],
+      button_label: 'Continue',
+      on_finish: function(data) {
+        // Check if "No" was selected
+        if (data.response && data.response.visual_experiences && 
+            data.response.visual_experiences.includes("No")) {
+          sawVisuals = false;
+        } else {
+          sawVisuals = true;
+        }
+      }
+    };
+    timeline.push(visualExperiencesTrial);
+
+// VISUAL EXPERIENCE SECTION - Fixed randomization implementation
+    
+    // Define the drawing instructions trial
+    const drawingInstructionsTrial = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <h1>Please draw as much as you can remember about what you saw in the Ganzflicker.</h1>
+        <p>Be as accurate as you can when drawing your experiences.</p>
+        <p>Don't worry about your drawing skills, we are not evaluating the drawings for artistic quality.</p>
+      `,
+      choices: ['Continue']
+    };
+
+    // Define the text description trial
+    const textDescriptionTrial = {
+      type: jsPsychSurveyText,
+      questions: [
+        {
+          prompt: "Please describe as much as you can remember about what you saw in the Ganzflicker: *",
+          placeholder: "Type your description here...",
+          rows: 10,
+          columns: 80,
+          name: 'visual_description',
+          required: true
+        }
+      ],
+      button_label: 'Continue'
+    };
+
+// Update the on_finish function in visualDetailsQuestions to make sure data is captured correctly
+const visualDetailsQuestions = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: function() {
+    let html = `
+      <form id="visual-details-form">
+        <div class="error-message" id="visual-form-error">Please answer all questions before continuing.</div>
+        
+        <div class="question-container">
+          <p><strong>About how long did it take before images started to emerge? *</strong></p>
+          <div class="option"><input type="radio" name="time_to_emerge_visual" value="They began to emerge immediately" required> They began to emerge immediately</div>
+          <div class="option"><input type="radio" name="time_to_emerge_visual" value="A few seconds"> A few seconds</div>
+          <div class="option"><input type="radio" name="time_to_emerge_visual" value="1-2 minutes"> 1-2 minutes</div>
+          <div class="option"><input type="radio" name="time_to_emerge_visual" value="4-5 minutes"> 4-5 minutes</div>
+        </div>
+        
+        <div class="question-container">
+          <p><strong>About how frequently did you experience images? *</strong></p>
+          <div class="option"><input type="radio" name="frequency_visual" value="1 or 2 times in the whole experience" required> 1 or 2 times in the whole experience</div>
+          <div class="option"><input type="radio" name="frequency_visual" value="Infrequently"> Infrequently</div>
+          <div class="option"><input type="radio" name="frequency_visual" value="Frequently"> Frequently</div>
+          <div class="option"><input type="radio" name="frequency_visual" value="Constantly"> Constantly</div>
+        </div>
+        
+        <div class="question-container">
+          <p><strong>If you saw images, how intense were they? *</strong></p>
+          <div class="option"><input type="radio" name="intensity_visual" value="Weak, faint, or insubstantial" required> Weak, faint, or insubstantial</div>
+          <div class="option"><input type="radio" name="intensity_visual" value="Clear, but not vivid"> Clear, but not vivid</div>
+          <div class="option"><input type="radio" name="intensity_visual" value="Clear and moderately vivid"> Clear and moderately vivid</div>
+          <div class="option"><input type="radio" name="intensity_visual" value="Clear, vivid, and/or bright"> Clear, vivid, and/or bright</div>
+          <div class="option"><input type="radio" name="intensity_visual" value="Very vivid, almost real, or popping out of the screen"> Very vivid, almost real, or popping out of the screen</div>
+        </div>
+        
+        <div class="question-container">
+          <p><strong>If you saw images, how long did a single image last? *</strong></p>
+          <div class="option"><input type="radio" name="duration_visual" value="Brief moment or flash" required> Brief moment or flash</div>
+          <div class="option"><input type="radio" name="duration_visual" value="1-2 seconds"> 1-2 seconds</div>
+          <div class="option"><input type="radio" name="duration_visual" value="Persisting several seconds"> Persisting several seconds</div>
+          <div class="option"><input type="radio" name="duration_visual" value="Constant, morphing from one image to the next"> Constant, morphing from one image to the next</div>
+        </div>
+        
+        <div class="question-container">
+          <p><strong>If you saw images, where did they tend to appear on the screen? *</strong></p>
+          <div class="option"><input type="radio" name="location_visual" value="In the center" required> In the center</div>
+          <div class="option"><input type="radio" name="location_visual" value="In the periphery"> In the periphery</div>
+          <div class="option"><input type="radio" name="location_visual" value="All over the screen"> All over the screen</div>
+        </div>
+      </form>
+    `;
+    return html;
+  },
+  choices: ['Continue'],
+  on_load: function() {
+    // Add validation before continuing
+    document.querySelector('.jspsych-btn').addEventListener('click', function(e) {
+      const form = document.getElementById('visual-details-form');
+      const errorMsg = document.getElementById('visual-form-error');
+      
+      // Check if all required questions are answered
+      const questions = [
+        'time_to_emerge_visual',
+        'frequency_visual',
+        'intensity_visual',
+        'duration_visual',
+        'location_visual'
+      ];
+      
+      let hasError = false;
+      
+      // Reset previous errors
+      document.querySelectorAll('.highlight-error').forEach(el => {
+        el.classList.remove('highlight-error');
+      });
+      errorMsg.style.display = 'none';
+      
+      questions.forEach(q => {
+        const answered = !!document.querySelector(`input[name="${q}"]:checked`);
+        if (!answered) {
+          // Find the container (handling lack of :has support in some browsers)
+          let container;
+          if (CSS.supports('selector(:has(*))')) {
+            container = document.querySelector(`.question-container:has(input[name="${q}"])`);
+          } else {
+            // Manual fallback
+            const inputs = document.querySelectorAll(`input[name="${q}"]`);
+            if (inputs.length > 0) {
+              container = window.findParentQuestion(inputs[0]);
+            }
+          }
+          
+          if (container) container.classList.add('highlight-error');
+          hasError = true;
+        }
+      });
+      
+      if (hasError) {
+        e.stopPropagation();
+        errorMsg.style.display = 'block';
+        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return false;
+      }
+    }, true);
+  },
+  on_finish: function(data) {
+    // Collect form data - Fixed version with additional console logging
+    try {
+      const formData = {
+        time_to_emerge_visual: document.querySelector('input[name="time_to_emerge_visual"]:checked')?.value,
+        frequency_visual: document.querySelector('input[name="frequency_visual"]:checked')?.value,
+        intensity_visual: document.querySelector('input[name="intensity_visual"]:checked')?.value,
+        duration_visual: document.querySelector('input[name="duration_visual"]:checked')?.value,
+        location_visual: document.querySelector('input[name="location_visual"]:checked')?.value
+      };
+      
+      console.log("Visual details form data:", formData);
+      
+      // Make sure we're setting each property individually
+      data.time_to_emerge_visual = formData.time_to_emerge_visual;
+      data.frequency_visual = formData.frequency_visual;
+      data.intensity_visual = formData.intensity_visual;
+      data.duration_visual = formData.duration_visual;
+      data.location_visual = formData.location_visual;
+      
+      // Also set a property to make this trial easily identifiable
+      data.is_visual_details = true;
+      
+      // Backup the data to a global variable to ensure we can access it later
+      window.visualDetailsData = formData;
+      
+      console.log("Updated trial data:", data);
+    } catch (e) {
+      console.error("Error collecting visual details form data:", e);
+    }
+  }
+};
+
+    // IMPORTANT CHANGE: Create trials array and shuffle it at initialization time
+    // Create an array with the two trials we want to randomize
+    const visualExperienceTrials = [drawingInstructionsTrial, textDescriptionTrial];
+    
+    // Use jsPsych's built-in randomization to shuffle the array
+    // This ensures the randomization happens when the code runs, not during timeline execution
+    const shuffledTrials = jsPsych.randomization.shuffle(visualExperienceTrials);
+    
+    // Now add the shuffled trials to the timeline
+    // First, add the first randomized trial (could be drawing or text)
+    const firstRandomizedTrial = {
+      timeline: [shuffledTrials[0]],
+      conditional_function: function() {
+        return sawVisuals;
+      }
+    };
+    timeline.push(firstRandomizedTrial);
+    
+    // Then add the second randomized trial (the other one)
+    const secondRandomizedTrial = {
+      timeline: [shuffledTrials[1]],
+      conditional_function: function() {
+        return sawVisuals;
+      }
+    };
+    timeline.push(secondRandomizedTrial);
+    
+    // Add the details questions after the randomized trials (always last)
+    const visualDetailsTimeline = {
+      timeline: [visualDetailsQuestions],
+      conditional_function: function() {
+        return sawVisuals;
+      }
+    };
+    timeline.push(visualDetailsTimeline);
+
+    // Screen 7: Auditory experiences question
+    const auditoryExperiencesTrial = {
+      type: jsPsychSurveyMultiSelect,
+      questions: [
+        {
+          prompt: "Did you hear anything other than white noise (only if you listened to white noise during the experience)? If your answer is \"nothing\", please confirm by checking the box and then skip to section 4. *",
+          options: [
+            "Nothing other than white noise",
+            "Indistinct, simple sounds (e.g., incoherent voices or whispering, the sea/ocean, jet engines, birds)",
+            "Clear, simple sounds (e.g., a coherent and clear voice, a distinct melody)",
+            "Complex sounds (e.g., several voices, music with multiple parts like a chorus/orchestra/band)"
+          ],
+          name: 'auditory_experiences',
+          required: true
+        }
+      ],
+      button_label: 'Continue',
+      on_finish: function(data) {
+        // Check if "Nothing other than white noise" was selected
+        if (data.response && data.response.auditory_experiences && 
+            data.response.auditory_experiences.includes("Nothing other than white noise")) {
+          heardSounds = false;
+        } else {
+          heardSounds = true;
+        }
+      }
+    };
+    timeline.push(auditoryExperiencesTrial);
+
+    // AUDITORY EXPERIENCE SECTION - Only shown if "Nothing" was NOT selected
+    
+    // Conditional timeline for auditory experience details
+    const auditoryExperienceTimeline = {
+      timeline: [
+        // Additional auditory questions (frequency, intensity, etc.)
+        {
+          type: jsPsychHtmlButtonResponse,
+          stimulus: function() {
+            let html = `
+              <form id="auditory-details-form">
+                <div class="error-message" id="auditory-form-error">Please answer all questions before continuing.</div>
+                
+                <div class="question-container">
+                  <p><strong>How frequently did you hear something other than white noise? *</strong></p>
+                  <div class="option"><input type="radio" name="frequency_auditory" value="Never" required> Never</div>
+                  <div class="option"><input type="radio" name="frequency_auditory" value="1-2 times"> 1-2 times</div>
+                  <div class="option"><input type="radio" name="frequency_auditory" value="A few infrequent sounds"> A few infrequent sounds</div>
+                  <div class="option"><input type="radio" name="frequency_auditory" value="Frequently"> Frequently</div>
+                  <div class="option"><input type="radio" name="frequency_auditory" value="Constantly"> Constantly</div>
+                </div>
+                
+                <div class="question-container">
+                  <p><strong>If you heard imagined sounds, how intense were they? *</strong></p>
+                  <div class="option"><input type="radio" name="intensity_auditory" value="Weak, faint, or insubstantial" required> Weak, faint, or insubstantial</div>
+                  <div class="option"><input type="radio" name="intensity_auditory" value="Clear, but not vivid"> Clear, but not vivid</div>
+                  <div class="option"><input type="radio" name="intensity_auditory" value="Clear and moderately vivid"> Clear and moderately vivid</div>
+                  <div class="option"><input type="radio" name="intensity_auditory" value="Clear, vivid, and/or loud"> Clear, vivid, and/or loud</div>
+                  <div class="option"><input type="radio" name="intensity_auditory" value="Very vivid, sounded real, or coming from different locations"> Very vivid, sounded real, or coming from different locations</div>
+                </div>
+                
+                <div class="question-container">
+                  <p><strong>If you heard imagined sounds, how long did a single sound last? *</strong></p>
+                  <div class="option"><input type="radio" name="duration_auditory" value="Brief moment" required> Brief moment</div>
+                  <div class="option"><input type="radio" name="duration_auditory" value="1-2 seconds"> 1-2 seconds</div>
+                  <div class="option"><input type="radio" name="duration_auditory" value="Persisting several seconds"> Persisting several seconds</div>
+                  <div class="option"><input type="radio" name="duration_auditory" value="Constant, morphing from one sound to the next"> Constant, morphing from one sound to the next</div>
+                </div>
+                
+                <div class="question-container">
+                  <p><strong>About how long did it take before sounds started to emerge? *</strong></p>
+                  <div class="option"><input type="radio" name="time_to_emerge_auditory" value="They began to emerge immediately" required> They began to emerge immediately</div>
+                  <div class="option"><input type="radio" name="time_to_emerge_auditory" value="A few seconds"> A few seconds</div>
+                  <div class="option"><input type="radio" name="time_to_emerge_auditory" value="1-2 minutes"> 1-2 minutes</div>
+                  <div class="option"><input type="radio" name="time_to_emerge_auditory" value="5-7 minutes"> 5-7 minutes</div>
+                </div>
+              </form>
+            `;
+            return html;
+          },
+          choices: ['Continue'],
+          on_load: function() {
+            // Add validation before continuing
+            document.querySelector('.jspsych-btn').addEventListener('click', function(e) {
+              const form = document.getElementById('auditory-details-form');
+              const errorMsg = document.getElementById('auditory-form-error');
+              
+              // Check if all required questions are answered
+              const questions = [
+                'frequency_auditory',
+                'intensity_auditory',
+                'duration_auditory',
+                'time_to_emerge_auditory'
+              ];
+              
+              let hasError = false;
+              
+              // Reset previous errors
+              document.querySelectorAll('.highlight-error').forEach(el => {
+                el.classList.remove('highlight-error');
+              });
+              errorMsg.style.display = 'none';
+              
+              questions.forEach(q => {
+                const answered = !!document.querySelector(`input[name="${q}"]:checked`);
+                if (!answered) {
+                  // Find the container (handling lack of :has support in some browsers)
+                  let container;
+                  if (CSS.supports('selector(:has(*))')) {
+                    container = document.querySelector(`.question-container:has(input[name="${q}"])`);
+                  } else {
+                    // Manual fallback
+                    const inputs = document.querySelectorAll(`input[name="${q}"]`);
+                    if (inputs.length > 0) {
+                      container = window.findParentQuestion(inputs[0]);
+                    }
+                  }
+                  
+                  if (container) container.classList.add('highlight-error');
+                  hasError = true;
+                }
+              });
+              
+              if (hasError) {
+                e.stopPropagation();
+                errorMsg.style.display = 'block';
+                errorMsg.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return false;
+              }
+            }, true);
+          },
+          on_finish: function(data) {
+            // Collect form data
+            const formData = {
+              frequency_auditory: document.querySelector('input[name="frequency_auditory"]:checked')?.value,
+              intensity_auditory: document.querySelector('input[name="intensity_auditory"]:checked')?.value,
+              duration_auditory: document.querySelector('input[name="duration_auditory"]:checked')?.value,
+              time_to_emerge_auditory: document.querySelector('input[name="time_to_emerge_auditory"]:checked')?.value
+            };
+            
+            // Save to trial data
+            Object.assign(data, formData);
+          }
+        },
+        
+        // Screen 8: Text description of auditory experiences
+        {
+          type: jsPsychSurveyText,
+          questions: [
+            {
+              prompt: "Please describe as much as you can remember about what you heard during the Ganzflicker: *",
+              placeholder: "Type your description here...",
+              rows: 10,
+              columns: 80,
+              name: 'auditory_description',
+              required: true
+            }
+          ],
+          button_label: 'Continue'
+        }
+      ],
+      conditional_function: function() {
+        return heardSounds; // Only show this timeline if heardSounds is true
+      }
+    };
+    timeline.push(auditoryExperienceTimeline);
+
+    // Screen 9: Experience questions
+// Update the on_finish function in experienceTrial to ensure data is captured correctly
+const experienceTrial = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <div class="survey-questions">
+      <div class="survey-question">
+        <p><strong>How did you find the whole experience emotionally? *</strong></p>
+        <div class="multi-select-option">
+          <input type="radio" id="enjoyable" name="emotional_experience" value="Enjoyable, didn't want it to stop" required>
+          <label for="enjoyable">Enjoyable, didn't want it to stop</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="radio" id="somewhat_enjoyable" name="emotional_experience" value="Somewhat enjoyable, but easy to stop">
+          <label for="somewhat_enjoyable">Somewhat enjoyable, but easy to stop</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="radio" id="neutral" name="emotional_experience" value="No feeling about it one way or the other">
+          <label for="neutral">No feeling about it one way or the other</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="radio" id="somewhat_unpleasant" name="emotional_experience" value="Somewhat unpleasant, but didn't mind going on">
+          <label for="somewhat_unpleasant">Somewhat unpleasant, but didn't mind going on</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="radio" id="unpleasant" name="emotional_experience" value="Unpleasant, wanted it to stop">
+          <label for="unpleasant">Unpleasant, wanted it to stop</label>
+        </div>
+      </div>
+      
+      <div class="survey-question" style="margin-top: 30px;">
+        <p><strong>How did your normal state of consciousness change during the experience? * </strong>(Choose all that apply)</p>
+        <div class="multi-select-option">
+          <input type="checkbox" id="no_change" name="consciousness_change" value="No change, fully alert in the here and now">
+          <label for="no_change">No change, fully alert in the here and now</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="checkbox" id="relaxed" name="consciousness_change" value="Became relaxed or sleepy">
+          <label for="relaxed">Became relaxed or sleepy</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="checkbox" id="dreamlike" name="consciousness_change" value="As if in a dreamlike state">
+          <label for="dreamlike">As if in a dreamlike state</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="checkbox" id="transported" name="consciousness_change" value="Felt transported to another place">
+          <label for="transported">Felt transported to another place</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="checkbox" id="lost_time" name="consciousness_change" value="Lost a sense of time">
+          <label for="lost_time">Lost a sense of time</label>
+        </div>
+        <div class="multi-select-option">
+          <input type="checkbox" id="lost_space" name="consciousness_change" value="Lost a sense of space">
+          <label for="lost_space">Lost a sense of space</label>
+        </div>
+      </div>
+      
+      <div class="survey-question" style="margin-top: 30px;">
+        <p><strong>If you felt a change in your state of consciousness, please describe how you felt in more detail: *</strong></p>
+        <textarea id="consciousness_description" name="consciousness_description" class="text-input" rows="5" placeholder="Type your description here..."></textarea>
+      </div>
+    </div>
+  `,
+  choices: ['Continue'],
+  validate_responses: true,
+  on_load: function() {
+    // Create error message div
+    const formDiv = document.querySelector('.survey-questions');
+    if (!formDiv) return; // Safety check
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.id = 'form-error-message';
+    errorDiv.textContent = "Please complete all required fields before continuing.";
+    formDiv.insertBefore(errorDiv, formDiv.firstChild);
+    
+    // Ensure form validation happens before allowing to continue
+    const button = document.querySelector('.jspsych-btn');
+    if (!button) return; // Safety check
+    
+    button.addEventListener('click', function(e) {
+      let hasError = false;
+      
+      // Clear previous errors
+      const errorMessage = document.getElementById('form-error-message');
+      if (errorMessage) errorMessage.style.display = 'none';
+      
+      document.querySelectorAll('.highlight-error').forEach(el => {
+        el.classList.remove('highlight-error');
+      });
+      
+      // Check emotional experience
+      const emotionalSection = document.querySelector('.survey-question:nth-child(1)');
+      const emotional_experience = document.querySelector('input[name="emotional_experience"]:checked');
+      if (!emotional_experience && emotionalSection) {
+        emotionalSection.classList.add('highlight-error');
+        hasError = true;
+      }
+      
+      // Check consciousness change checkboxes
+      const consciousnessSection = document.querySelector('.survey-question:nth-child(2)');
+      const consciousness_checkboxes = document.querySelectorAll('input[name="consciousness_change"]:checked');
+      if (consciousness_checkboxes.length === 0 && consciousnessSection) {
+        consciousnessSection.classList.add('highlight-error');
+        hasError = true;
+      }
+      
+      // Check description
+      const consciousness_description = document.getElementById('consciousness_description');
+      if (consciousness_description && consciousness_description.value.trim() === '') {
+        consciousness_description.classList.add('highlight-error');
+        hasError = true;
+      }
+      
+      if (hasError && errorMessage) {
+        e.stopPropagation();
+        e.preventDefault();
+        errorMessage.style.display = 'block';
+        // Scroll to error message
+        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+    }, true);
+  },
+  on_finish: function(data) {
+    try {
+      // Process form data
+      const emotional_experience = document.querySelector('input[name="emotional_experience"]:checked');
+      
+      // Process checkbox data for consciousness change
+      const checkboxes = document.querySelectorAll('input[name="consciousness_change"]:checked');
+      const consciousness_changes = Array.from(checkboxes).map(cb => cb.value);
+      
+      // Get consciousness description
+      const consciousness_description = document.getElementById('consciousness_description');
+      
+      // Set properties individually
+      data.emotional_experience = emotional_experience ? emotional_experience.value : "NA";
+      data.consciousness_changes = consciousness_changes;
+      data.consciousness_description = consciousness_description ? consciousness_description.value : "NA";
+      
+      // Add a marker property to easily identify this trial
+      data.is_experience_data = true;
+      
+      // Store in global variable as backup
+      window.experienceData = {
+        emotional_experience: data.emotional_experience,
+        consciousness_changes: data.consciousness_changes,
+        consciousness_description: data.consciousness_description
+      };
+      
+      console.log("Experience data collected:", data);
+    } catch (e) {
+      console.error("Error processing experience form data:", e);
+    }
+  }
+};
+    timeline.push(experienceTrial);
+
+    // Screen 10: Likert scales for imagery vividness
+    const likertTrial = {
+      type: jsPsychSurveyLikert,
+      questions: [
+        {
+          prompt: "How would you describe your general VISUAL imagery vividness on a scale from 0-10? *",
+          labels: ['0<br>(No imagery)', '1', '2', '3', '4', '5<br>(Moderate)', '6', '7', '8', '9', '10<br>(Extremely vivid)'],
+          name: 'visual_imagery_vividness',
+          required: true
+        },
+        {
+          prompt: "How would you describe your general VERBAL imagery vividness on a scale from 0-10? *",
+          labels: ['0<br>(No imagery)', '1', '2', '3', '4', '5<br>(Moderate)', '6', '7', '8', '9', '10<br>(Extremely vivid)'],
+          name: 'verbal_imagery_vividness',
+          required: true
+        }
+      ],
+      randomize_question_order: false,
+      button_label: 'Continue'
+    };
+    timeline.push(likertTrial);
+
+    // Screen 11: Thank you
+    const thankYouTrial = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <h1>Thank you!</h1>
+        <p>We hope you enjoyed your experience.</p>
+        <p>Wait for the researcher, they should be back in a second.</p>
+      `,
+      choices: ['Finish and Save Data']
+    };
+    timeline.push(thankYouTrial);
+
+    // Exit fullscreen mode
+    const exitFullscreen = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: false,
+      delay_after: 0
+    };
+    timeline.push(exitFullscreen);
+
+    // Start the experiment
+    jsPsych.run(timeline);
+  </script>
+</body>
+</html>
