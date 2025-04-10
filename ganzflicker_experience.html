@@ -82,7 +82,6 @@
   <script>
     // Initialize jsPsych
 // Initialize jsPsych
-// Replace the current on_finish function and CSV conversion with this fixed version:
 
 const jsPsych = initJsPsych({
   on_finish: function() {
@@ -138,7 +137,7 @@ const jsPsych = initJsPsych({
     // Find html-button-response that contains visual form data
     const visualDetails = allData.find(item => 
       item.trial_type === 'html-button-response' && 
-      item.time_to_emerge_visual
+      item.is_visual_details
     );
     if (visualDetails) {
       participantData.time_to_emerge_visual = visualDetails.time_to_emerge_visual || "NA";
@@ -191,7 +190,7 @@ const jsPsych = initJsPsych({
     // Add auditory details data
     const auditoryDetails = allData.find(item => 
       item.trial_type === 'html-button-response' && 
-      item.frequency_auditory
+      item.is_auditory_details
     );
     if (auditoryDetails) {
       participantData.frequency_auditory = auditoryDetails.frequency_auditory || "NA";
@@ -208,7 +207,7 @@ const jsPsych = initJsPsych({
     // Add experience data (look for consciousness variables)
     const experienceData = allData.find(item => 
       item.trial_type === 'html-button-response' && 
-      item.hasOwnProperty('consciousness_changes')
+      item.is_experience_data
     );
     if (experienceData) {
       participantData.emotional_experience = experienceData.emotional_experience || "NA";
@@ -239,7 +238,7 @@ const jsPsych = initJsPsych({
     const csvContent = objectToCSV(participantData);
     
     // Download CSV file
-    downloadCSV(csvContent, 'ganzflicker_data_' + participantId);
+    downloadCSV(csvContent, participantId + 'ganzflicker_experience_');
     
     // Also keep the full data available for debugging
     downloadObjectAsJson(JSON.stringify(allData), 'ganzflicker_full_data_' + participantId);
@@ -559,6 +558,15 @@ function downloadCSV(csv, filename) {
       button_label: 'Continue'
     };
 
+    // Create an array with the two trials we want to randomize
+    const visualExperienceTrials = [drawingInstructionsTrial, textDescriptionTrial];
+    // Use jsPsych's built-in randomization to shuffle the array
+    const shuffledTrials = jsPsych.randomization.shuffle(visualExperienceTrials);
+
+    // Track which one comes first
+    firstTrialType = (shuffledTrials[0] === drawingInstructionsTrial) ? "drawing" : "verbal";
+
+
 // Update the on_finish function in visualDetailsQuestions to make sure data is captured correctly
 const visualDetailsQuestions = {
   type: jsPsychHtmlButtonResponse,
@@ -612,12 +620,10 @@ const visualDetailsQuestions = {
   },
   choices: ['Continue'],
   on_load: function() {
-    // Add validation before continuing
     document.querySelector('.jspsych-btn').addEventListener('click', function(e) {
       const form = document.getElementById('visual-details-form');
       const errorMsg = document.getElementById('visual-form-error');
-      
-      // Check if all required questions are answered
+
       const questions = [
         'time_to_emerge_visual',
         'frequency_visual',
@@ -625,83 +631,51 @@ const visualDetailsQuestions = {
         'duration_visual',
         'location_visual'
       ];
-      
+
       let hasError = false;
-      
-      // Reset previous errors
-      document.querySelectorAll('.highlight-error').forEach(el => {
-        el.classList.remove('highlight-error');
-      });
+
+      document.querySelectorAll('.highlight-error').forEach(el => el.classList.remove('highlight-error'));
       errorMsg.style.display = 'none';
-      
+
       questions.forEach(q => {
         const answered = !!document.querySelector(`input[name="${q}"]:checked`);
         if (!answered) {
-          // Find the container (handling lack of :has support in some browsers)
           let container;
           if (CSS.supports('selector(:has(*))')) {
             container = document.querySelector(`.question-container:has(input[name="${q}"])`);
           } else {
-            // Manual fallback
             const inputs = document.querySelectorAll(`input[name="${q}"]`);
             if (inputs.length > 0) {
               container = window.findParentQuestion(inputs[0]);
             }
           }
-          
           if (container) container.classList.add('highlight-error');
           hasError = true;
         }
       });
-      
+
       if (hasError) {
         e.stopPropagation();
         errorMsg.style.display = 'block';
         errorMsg.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return false;
       }
-    }, true);
-  },
-  on_finish: function(data) {
-    // Collect form data - Fixed version with additional console logging
-    try {
-      const formData = {
+
+      // ✅ Extract and save data
+      const data = {
         time_to_emerge_visual: document.querySelector('input[name="time_to_emerge_visual"]:checked')?.value,
         frequency_visual: document.querySelector('input[name="frequency_visual"]:checked')?.value,
         intensity_visual: document.querySelector('input[name="intensity_visual"]:checked')?.value,
         duration_visual: document.querySelector('input[name="duration_visual"]:checked')?.value,
-        location_visual: document.querySelector('input[name="location_visual"]:checked')?.value
+        location_visual: document.querySelector('input[name="location_visual"]:checked')?.value,
+        is_visual_details: true
       };
-      
-      console.log("Visual details form data:", formData);
-      
-      // Make sure we're setting each property individually
-      data.time_to_emerge_visual = formData.time_to_emerge_visual;
-      data.frequency_visual = formData.frequency_visual;
-      data.intensity_visual = formData.intensity_visual;
-      data.duration_visual = formData.duration_visual;
-      data.location_visual = formData.location_visual;
-      
-      // Also set a property to make this trial easily identifiable
-      data.is_visual_details = true;
-      
-      // Backup the data to a global variable to ensure we can access it later
-      window.visualDetailsData = formData;
-      
-      console.log("Updated trial data:", data);
-    } catch (e) {
-      console.error("Error collecting visual details form data:", e);
-    }
-  }
-};
 
-    // IMPORTANT CHANGE: Create trials array and shuffle it at initialization time
-    // Create an array with the two trials we want to randomize
-    const visualExperienceTrials = [drawingInstructionsTrial, textDescriptionTrial];
-    
-    // Use jsPsych's built-in randomization to shuffle the array
-    // This ensures the randomization happens when the code runs, not during timeline execution
-    const shuffledTrials = jsPsych.randomization.shuffle(visualExperienceTrials);
+      console.log("Visual details saved:", data);
+      jsPsych.finishTrial(data);
+    }, true);
+  },
+};
     
     // Now add the shuffled trials to the timeline
     // First, add the first randomized trial (could be drawing or text)
@@ -811,68 +785,61 @@ const visualDetailsQuestions = {
             return html;
           },
           choices: ['Continue'],
+          // Inside the auditory experience timeline's auditory details trial:
           on_load: function() {
-            // Add validation before continuing
             document.querySelector('.jspsych-btn').addEventListener('click', function(e) {
               const form = document.getElementById('auditory-details-form');
               const errorMsg = document.getElementById('auditory-form-error');
-              
-              // Check if all required questions are answered
+
               const questions = [
                 'frequency_auditory',
                 'intensity_auditory',
                 'duration_auditory',
                 'time_to_emerge_auditory'
               ];
-              
+
               let hasError = false;
-              
-              // Reset previous errors
-              document.querySelectorAll('.highlight-error').forEach(el => {
-                el.classList.remove('highlight-error');
-              });
+
+              document.querySelectorAll('.highlight-error').forEach(el => el.classList.remove('highlight-error'));
               errorMsg.style.display = 'none';
-              
+
               questions.forEach(q => {
                 const answered = !!document.querySelector(`input[name="${q}"]:checked`);
                 if (!answered) {
-                  // Find the container (handling lack of :has support in some browsers)
                   let container;
                   if (CSS.supports('selector(:has(*))')) {
                     container = document.querySelector(`.question-container:has(input[name="${q}"])`);
                   } else {
-                    // Manual fallback
                     const inputs = document.querySelectorAll(`input[name="${q}"]`);
                     if (inputs.length > 0) {
                       container = window.findParentQuestion(inputs[0]);
                     }
                   }
-                  
                   if (container) container.classList.add('highlight-error');
                   hasError = true;
                 }
               });
-              
+
               if (hasError) {
                 e.stopPropagation();
                 errorMsg.style.display = 'block';
                 errorMsg.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 return false;
               }
+
+              // ✅ Extract and save data
+              const data = {
+                frequency_auditory: document.querySelector('input[name="frequency_auditory"]:checked')?.value,
+                intensity_auditory: document.querySelector('input[name="intensity_auditory"]:checked')?.value,
+                duration_auditory: document.querySelector('input[name="duration_auditory"]:checked')?.value,
+                time_to_emerge_auditory: document.querySelector('input[name="time_to_emerge_auditory"]:checked')?.value,
+                is_auditory_details: true
+              };
+
+              console.log("Auditory details saved:", data);
+              jsPsych.finishTrial(data);
             }, true);
           },
-          on_finish: function(data) {
-            // Collect form data
-            const formData = {
-              frequency_auditory: document.querySelector('input[name="frequency_auditory"]:checked')?.value,
-              intensity_auditory: document.querySelector('input[name="intensity_auditory"]:checked')?.value,
-              duration_auditory: document.querySelector('input[name="duration_auditory"]:checked')?.value,
-              time_to_emerge_auditory: document.querySelector('input[name="time_to_emerge_auditory"]:checked')?.value
-            };
-            
-            // Save to trial data
-            Object.assign(data, formData);
-          }
         },
         
         // Screen 8: Text description of auditory experiences
@@ -964,96 +931,55 @@ const experienceTrial = {
   choices: ['Continue'],
   validate_responses: true,
   on_load: function() {
-    // Create error message div
     const formDiv = document.querySelector('.survey-questions');
-    if (!formDiv) return; // Safety check
-    
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     errorDiv.id = 'form-error-message';
     errorDiv.textContent = "Please complete all required fields before continuing.";
     formDiv.insertBefore(errorDiv, formDiv.firstChild);
-    
-    // Ensure form validation happens before allowing to continue
+
     const button = document.querySelector('.jspsych-btn');
-    if (!button) return; // Safety check
-    
     button.addEventListener('click', function(e) {
       let hasError = false;
-      
-      // Clear previous errors
-      const errorMessage = document.getElementById('form-error-message');
-      if (errorMessage) errorMessage.style.display = 'none';
-      
-      document.querySelectorAll('.highlight-error').forEach(el => {
-        el.classList.remove('highlight-error');
-      });
-      
-      // Check emotional experience
-      const emotionalSection = document.querySelector('.survey-question:nth-child(1)');
-      const emotional_experience = document.querySelector('input[name="emotional_experience"]:checked');
-      if (!emotional_experience && emotionalSection) {
-        emotionalSection.classList.add('highlight-error');
+      errorDiv.style.display = 'none';
+      document.querySelectorAll('.highlight-error').forEach(el => el.classList.remove('highlight-error'));
+
+      const emotional = document.querySelector('input[name="emotional_experience"]:checked');
+      if (!emotional) {
+        document.querySelector('.survey-question:nth-child(1)').classList.add('highlight-error');
         hasError = true;
       }
-      
-      // Check consciousness change checkboxes
-      const consciousnessSection = document.querySelector('.survey-question:nth-child(2)');
-      const consciousness_checkboxes = document.querySelectorAll('input[name="consciousness_change"]:checked');
-      if (consciousness_checkboxes.length === 0 && consciousnessSection) {
-        consciousnessSection.classList.add('highlight-error');
+
+      const consciousness = document.querySelectorAll('input[name="consciousness_change"]:checked');
+      if (consciousness.length === 0) {
+        document.querySelector('.survey-question:nth-child(2)').classList.add('highlight-error');
         hasError = true;
       }
-      
-      // Check description
-      const consciousness_description = document.getElementById('consciousness_description');
-      if (consciousness_description && consciousness_description.value.trim() === '') {
-        consciousness_description.classList.add('highlight-error');
+
+      const description = document.getElementById('consciousness_description');
+      if (!description || description.value.trim() === '') {
+        description?.classList.add('highlight-error');
         hasError = true;
       }
-      
-      if (hasError && errorMessage) {
+
+      if (hasError) {
         e.stopPropagation();
-        e.preventDefault();
-        errorMessage.style.display = 'block';
-        // Scroll to error message
-        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        errorDiv.style.display = 'block';
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return false;
       }
+
+      const data = {
+        emotional_experience: emotional?.value || "NA",
+        consciousness_changes: Array.from(consciousness).map(cb => cb.value),
+        consciousness_description: description?.value.trim() || "NA",
+        is_experience_data: true
+      };
+
+      console.log("Experience data saved:", data);
+      jsPsych.finishTrial(data);
     }, true);
   },
-  on_finish: function(data) {
-    try {
-      // Process form data
-      const emotional_experience = document.querySelector('input[name="emotional_experience"]:checked');
-      
-      // Process checkbox data for consciousness change
-      const checkboxes = document.querySelectorAll('input[name="consciousness_change"]:checked');
-      const consciousness_changes = Array.from(checkboxes).map(cb => cb.value);
-      
-      // Get consciousness description
-      const consciousness_description = document.getElementById('consciousness_description');
-      
-      // Set properties individually
-      data.emotional_experience = emotional_experience ? emotional_experience.value : "NA";
-      data.consciousness_changes = consciousness_changes;
-      data.consciousness_description = consciousness_description ? consciousness_description.value : "NA";
-      
-      // Add a marker property to easily identify this trial
-      data.is_experience_data = true;
-      
-      // Store in global variable as backup
-      window.experienceData = {
-        emotional_experience: data.emotional_experience,
-        consciousness_changes: data.consciousness_changes,
-        consciousness_description: data.consciousness_description
-      };
-      
-      console.log("Experience data collected:", data);
-    } catch (e) {
-      console.error("Error processing experience form data:", e);
-    }
-  }
 };
     timeline.push(experienceTrial);
 
