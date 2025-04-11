@@ -1091,20 +1091,36 @@
                     }
                 };
 
+                // Log the data being sent for debugging
+                console.log('Image Selection Data:', JSON.stringify(imageSelectionData, null, 2));
+                console.log('Likert Data:', JSON.stringify(likertData, null, 2));
+
                 try {
                     // Save `image_selection.json`
-                    await fetch('http://localhost:3000/save-participant-data', {
+                    const imageSelectionResponse = await fetch('http://localhost:3000/save-participant-data', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(imageSelectionData),
                     });
 
+                    if (!imageSelectionResponse.ok) {
+                        const errorText = await imageSelectionResponse.text();
+                        console.error('Error saving image selection data:', errorText);
+                        throw new Error(`Image selection save failed: ${errorText}`);
+                    }
+
                     // Save `likert_responses.json`
-                    await fetch('http://localhost:3000/save-likert-data', {
+                    const likertResponse = await fetch('http://localhost:3000/save-likert-data', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(likertData),
                     });
+
+                    if (!likertResponse.ok) {
+                        const errorText = await likertResponse.text();
+                        console.error('Error saving likert data:', errorText);
+                        throw new Error(`Likert data save failed: ${errorText}`);
+                    }
 
                     // Update the status message
                     statusElement.textContent = 'Your data has been saved successfully.';

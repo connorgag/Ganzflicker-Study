@@ -3,3 +3,5 @@
 private_folder/
 private_folder/.Rhistory
 node_modules/
+results/image_debrief.json
+results/image_selection.json
