@@ -9,6 +9,16 @@
       "objects_visualized": "6",
       "objects_not_seen": "6",
       "detailed_feedback": "r"
+    },
+    "001": {
+      "subject_id": "001",
+      "final_image": "participant_001_stable",
+      "overall": "8",
+      "color": "7",
+      "content": "5",
+      "objects_visualized": "7",
+      "objects_not_seen": "4",
+      "detailed_feedback": "test"
     }
   }
 }

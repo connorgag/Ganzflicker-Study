@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "prestart": "python ../collect_ids.py",
+    "prestart": "python3 ../collect_ids.py",
     "start": "node server.js",
     "poststart": "sleep 2 && open http://localhost:3000"
   },
