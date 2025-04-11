@@ -897,8 +897,8 @@
                         }
                     </style>
                     <p class="instruction-text">
-                        Below is the image you selected as the best representation of your Ganzflicker experience.
-                        Please rate the image on the following dimensions.
+                        Below is the image you selected as the best visualization of your Ganzflicker experience.
+                        Please rate how much this image resembles your hallucinations in terms of the following dimensions:
                     </p>
                     <div style="text-align: center; margin-bottom: 30px;">
                         <img src="${winnerImagePath}" alt="Final Winner Image" style="max-width: 40%; height: auto; border: 2px solid #ccc; border-radius: 5px;">
@@ -907,24 +907,7 @@
                     <div id="custom-likert-form" style="width: 100%; max-width: 800px; margin: 0 auto;">
                         <!-- Likert item 1 -->
                         <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">Overall visual resemblance to your Ganzflicker experience</p>
-                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
-                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
-                                <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
-                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-1-${num}" name="likert-1" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-1-${num}" style="font-size: 12px;">${num}</label>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Likert item 2 -->
-                        <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">Resemblance in terms of color</p>
+                            <p style="margin-bottom: 8px; font-weight: bold;">Color similarity</p>
                             <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
                                 <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
                                 <div style="display: flex; justify-content: space-between; flex: 1;">
@@ -941,7 +924,7 @@
                         
                         <!-- Likert item 3 -->
                         <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">Resemblance in terms of content</p>
+                            <p style="margin-bottom: 8px; font-weight: bold;">Shape similarity</p>
                             <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
                                 <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
                                 <div style="display: flex; justify-content: space-between; flex: 1;">
@@ -958,7 +941,7 @@
                         
                         <!-- Likert item 4 -->
                         <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">All the objects in the image were accurately visualized</p>
+                            <p style="margin-bottom: 8px; font-weight: bold;">Content similarity</p>
                             <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
                                 <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
                                 <div style="display: flex; justify-content: space-between; flex: 1;">
@@ -973,16 +956,16 @@
                             </div>
                         </div>
                         
-                        <!-- Likert item 5 -->
+                        <!-- Likert item 4 -->
                         <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">There were objects in the image that you did not see</p>
+                            <p style="margin-bottom: 8px; font-weight: bold;">Overall visual similarity</p>
                             <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
                                 <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
                                 <div style="display: flex; justify-content: space-between; flex: 1;">
                                     ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
                                         <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-5-${num}" name="likert-5" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-5-${num}" style="font-size: 12px;">${num}</label>
+                                            <input type="radio" id="likert-1-${num}" name="likert-1" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-1-${num}" style="font-size: 12px;">${num}</label>
                                         </div>
                                     `).join('')}
                                 </div>
