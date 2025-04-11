@@ -1008,6 +1008,15 @@
             choices: [],
             trial_duration: null,
             on_load: function() {
+                const errorContainer = document.createElement('div');
+                errorContainer.id = 'error-container';
+                errorContainer.style.color = 'red';
+                errorContainer.style.marginTop = '10px';
+                errorContainer.style.fontWeight = 'bold';
+                errorContainer.style.textAlign = 'center';
+                const continueButton = document.getElementById('submit-custom-form');
+                continueButton.parentNode.insertBefore(errorContainer, continueButton);
+
                 document.getElementById('submit-custom-form').addEventListener('click', function() {
                     // Collect the data
                     const responses = {
@@ -1020,14 +1029,17 @@
                     
                     const detailedFeedback = document.getElementById('detailed-feedback')?.value || '';
                     
+                    // Clear previous error messages
+                    errorContainer.textContent = '';
+
                     // Check if all required fields are filled
                     if (Object.values(responses).some(value => value === undefined)) {
-                        alert('Please complete all rating scales before continuing.');
+                        errorContainer.textContent = 'Please complete all rating scales before continuing.';
                         return;
                     }
                     // Check if the detailed feedback is empty
                     if (detailedFeedback === '') {
-                        alert('Please provide detailed feedback before continuing.');
+                        errorContainer.textContent = 'Please provide detailed feedback before continuing.';
                         return;
                     }
                     // Save the responses and feedback
