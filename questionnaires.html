@@ -68,105 +68,83 @@ function reshapeDataAndReturnCSV() {
   const allData = jsPsych.data.get().filterCustom(trial => {
     return ["survey-likert", "survey-multi-choice", "survey-multi-select", "survey-text"].includes(trial.trial_type);
   }).values();
+
   const reshapedData = [];
+
   allData.forEach(trial => {
     Object.keys(trial.response).forEach(key => {
       const index = parseInt(key.replace('Q', ''), 10);
+
+      let itemId = 'N/A';
+      if (trial.item_ids) {
+        itemId = trial.item_ids[index] ?? 'N/A';
+      }
+
       reshapedData.push({
         participant_id: trial.participant_id || participantId,
         trial_index: trial.trial_index,
         time_elapsed: trial.time_elapsed,
         internal_node_id: trial.internal_node_id,
         response: trial.response[key],
-        item_id: trial.item_ids ? trial.item_ids[index] : 'N/A',
+        item_id: itemId,
         item: trial.items ? trial.items[index] : 'N/A',
         category: trial.categories ? trial.categories[index] : 'N/A',
         questionnaire: trial.questionnaires ? trial.questionnaires[index] : 'N/A'
       });
     });
   });
+
   return Papa.unparse(reshapedData);
 }
 
 const introduction = {
   type: jsPsychHtmlButtonResponse,
-  stimulus: '<p><b>Welcome to the last part of the study!</b></p><p>In this section, you will be presented with a series of statements. Please indicate your level of agreement or disagreement with each one <b>on a scale from 1 (strongly disagree) to 5 (strongly agree)</b>.</p>',
+  stimulus: '<p><b>Welcome to the last part of the study!</b></p><p>In this section, you will be presented with two statements. Please rate each one thoughtfully.</b>.</p>',
   choices: ['Continue'],
   on_start: function() {
-    jsPsych.setProgressBar(0);
   }
 };
 timeline.push(introduction);
 
-// Shuffle the osivq array
-shuffleArray(osivq);
+const likertInstructions = "Please rate your general visual and verbal imagery vividness on a scale from 0 (no imagery) to 10 (extremely vivid).";
 
-function generateOsivqTrial(itemsChunk) {
-  return {
-    type: jsPsychSurveyLikert,
-    questions: itemsChunk.map(item => ({
-      prompt: item.item,
-      labels: ['1', '2', '3', '4', '5'],
-      required: true
-    })),
-    on_finish: function(data) {
-      data.item_ids = itemsChunk.map(i => i.item_id);
-      data.items = itemsChunk.map(i => i.item);
-      data.categories = itemsChunk.map(i => i.category);
-      data.questionnaires = itemsChunk.map(i => i.questionnaire);
-      let curr = jsPsych.getProgressBarCompleted();
-      jsPsych.setProgressBar(curr + (1/23));
-    }
-  };
-}
-
-for (let i = 0; i < osivq.length; i += 6) {
-  let itemsChunk = osivq.slice(i, i + 6);
-  timeline.push(generateOsivqTrial(itemsChunk));
-}
-
-// Shuffle the irq array
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+const likertQuestions = [
+  {
+    item_id: "visual_likert",
+    item: "How would you describe your general VISUAL imagery vividness on a scale from 0–10?",
+    category: "vividness",
+    questionnaire: "imagery_self_rating"
+  },
+  {
+    item_id: "verbal_likert",
+    item: "How would you describe your general VERBAL imagery vividness on a scale from 0–10?",
+    category: "vividness",
+    questionnaire: "imagery_self_rating"
   }
-}
+];
 
-shuffleArray(irq);
-
-function generateIrqTrial(itemsChunk) {
-  return {
-    type: jsPsychSurveyLikert,
-    questions: itemsChunk.map(item => ({
-      prompt: item.item,
-      labels: ['1', '2', '3', '4', '5'],
-      required: true
-    })),
-    on_finish: function(data) {
-      data.item_ids = itemsChunk.map(i => i.item_id);
-      data.items = itemsChunk.map(i => i.item);
-      data.categories = itemsChunk.map(i => i.category);
-      data.questionnaires = itemsChunk.map(i => i.questionnaire);
-
-      let curr = jsPsych.getProgressBarCompleted();
-      jsPsych.setProgressBar(curr + (1/23));
-    }
-  };
-}
-
-for (let i = 0; i < irq.length; i += 5) {
-  let itemsChunk = irq.slice(i, i + 5);
-  timeline.push(generateIrqTrial(itemsChunk));
-}
+const likertTrial = {
+  type: jsPsychSurveyLikert,
+  preamble: `<div class="vviq-instructions">${likertInstructions}</div>`,
+  questions: likertQuestions.map(item => ({
+    prompt: item.item,
+    labels: ['0<br>(No imagery)', '1', '2', '3', '4', '5<br>(Moderate)', '6', '7', '8', '9', '10<br>(Extremely vivid)'],
+    required: true
+  })),
+  on_finish: function(data) {
+    data.item_ids = likertQuestions.map(i => i.item_id);
+    data.items = likertQuestions.map(i => i.item);
+    data.categories = likertQuestions.map(i => i.category);
+    data.questionnaires = likertQuestions.map(i => i.questionnaire);
+  }
+};
+timeline.push(likertTrial);
 
 const introduction_vviq = {
   type: jsPsychHtmlButtonResponse,
-  stimulus: '<p><b>Please read the instructions before moving to the next page.<br><br></b>Visual imagery refers to the ability to visualize, that is, the ability to form mental pictures, or to “see in the minds\’ eye.”<br><br>The aim of this test is to determine the vividness of your visual imagery. The items of the test will possibly bring certain images to your mind.<br><br>You are asked to rate the vividness of each image by reference to the 5-point scale given below: No image at all/ Vague and dim/ Moderately clear and vivid/ Reasonably clear and vivid/ Perfectly clear & vivid as if I was actually seeing it.<br><brclear and vivid/ Perfectly clear & vivid as if I was actually seeing it.<br><br>After reading each item, close your eyes for a moment, try to visualize the item, and then open your eyes and rate the item.</p>',
+  stimulus: '<p><b>Please read the instructions before moving to the next page.</b><br><br>Visual imagery refers to the ability to visualize, that is, the ability to form mental pictures, or to "see in the mind\'s eye."<br><br>The aim of this test is to determine the vividness of your visual imagery. The items of the test will possibly bring certain images to your mind.<br><br>You are asked to rate the vividness of each image by reference to the 5-point scale given below: No image at all / Vague and dim / Moderately clear and vivid / Reasonably clear and vivid / Perfectly clear & vivid as if I was actually seeing it.<br><br>After reading each item, close your eyes for a moment, try to visualize the item, and then open your eyes and rate the item.</p>',
   choices: ['Continue'],
   on_start: function() {
-    let curr = jsPsych.getProgressBarCompleted();
-    jsPsych.setProgressBar(curr + (1/23));
   }
 };
 timeline.push(introduction_vviq);
@@ -200,8 +178,6 @@ for (let i = 0; i < vviq.length; i += 4) {
       data.items = itemsChunk.map(i => i.item);
       data.categories = itemsChunk.map(i => i.category);
       data.questionnaires = itemsChunk.map(i => i.questionnaire);
-      let curr = jsPsych.getProgressBarCompleted();
-      jsPsych.setProgressBar(curr + (1/23));
     }
   });
 }
@@ -263,10 +239,7 @@ timeline.push({
 timeline.push({ type: jsPsychFullscreen, fullscreen_mode: false });
 
 const jsPsych = initJsPsych({
-  timeline: timeline,
-  show_progress_bar: true,
-  auto_update_progress_bar: false,
-  message_progress_bar: 'Progress on Part III'
+  timeline: timeline
 });
 
 jsPsych.run(timeline);
