@@ -1,0 +1,29 @@
+participant_id,trial_index,time_elapsed,internal_node_id,response,item_id,item,category,questionnaire
+004,3,58186,0.0-3.0,8,visual_likert,How would you describe your general VISUAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+004,3,58186,0.0-3.0,7,verbal_likert,How would you describe your general VERBAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+004,5,167268,0.0-5.0,Realistic and reasonably vivid,vviq-1,"The exact contour of face, head, shoulders, and body",visual,vviq
+004,5,167268,0.0-5.0,Realistic and reasonably vivid,vviq-2,"Characteristic poses of head, attitudes of body, etc.",visual,vviq
+004,5,167268,0.0-5.0,Moderately realistic and vivid,vviq-3,"The precise carriage, length of step, etc. in walking",visual,vviq
+004,5,167268,0.0-5.0,Realistic and reasonably vivid,vviq-4,The different colors worn in some familiar clothes,visual,vviq
+004,6,204571,0.0-6.0,Realistic and reasonably vivid,vviq-5,The sun is rising above the horizon into a hazy sky.,visual,vviq
+004,6,204571,0.0-6.0,Realistic and reasonably vivid,vviq-6,The sky clears and surrounds the sun with blueness.,visual,vviq
+004,6,204571,0.0-6.0,Realistic and reasonably vivid,vviq-7,"Clouds. A storm blows up, with flashes of lightening.",visual,vviq
+004,6,204571,0.0-6.0,Realistic and reasonably vivid,vviq-8,A rainbow appears.,visual,vviq
+004,7,245708,0.0-7.0,"Perfectly realistic, as vivid as real seeing",vviq-9,The overall appearance of the shop from the opposite side of the road,visual,vviq
+004,7,245708,0.0-7.0,Realistic and reasonably vivid,vviq-10,"A window display including colors, shape, and details of individual items for sale",visual,vviq
+004,7,245708,0.0-7.0,Realistic and reasonably vivid,vviq-11,"You are near the entrance. The color, shape, and details of the door",visual,vviq
+004,7,245708,0.0-7.0,Realistic and reasonably vivid,vviq-12,You enter the shop and go to the counter. The counter assistant serves you. Money changes hands.,visual,vviq
+004,8,329692,0.0-8.0,Realistic and reasonably vivid,vviq-13,The contours of the landscape,visual,vviq
+004,8,329692,0.0-8.0,Moderately realistic and vivid,vviq-14,The color and shape of the trees,visual,vviq
+004,8,329692,0.0-8.0,Realistic and reasonably vivid,vviq-15,The color and shape of the lake,visual,vviq
+004,8,329692,0.0-8.0,Realistic and reasonably vivid,vviq-16,A strong wind blows on the tree and on the lake causing waves.,visual,vviq
+004,10,351070,0.0-10.0-0.0,No,N/A,N/A,N/A,N/A
+004,10,351070,0.0-10.0-0.0,Woman,N/A,N/A,N/A,N/A
+004,10,351070,0.0-10.0-0.0,Right,N/A,N/A,N/A,N/A
+004,10,351070,0.0-10.0-0.0,Yes,N/A,N/A,N/A,N/A
+004,10,351070,0.0-10.0-0.0,Yes,N/A,N/A,N/A,N/A
+004,10,351070,0.0-10.0-0.0,High School,N/A,N/A,N/A,N/A
+004,11,355049,0.0-10.0-1.0,No,N/A,N/A,N/A,N/A
+004,12,432169,0.0-10.0-2.0,20,N/A,N/A,N/A,N/A
+004,12,432169,0.0-10.0-2.0,How pupil size and movement corresponds to hallucinations.,N/A,N/A,N/A,N/A
+004,12,432169,0.0-10.0-2.0,"It is mildly spooky.  But, it's not scary once you get immersed.  I think the white noise can catch one by surprise and add to the spooky feeling.",N/A,N/A,N/A,N/A
