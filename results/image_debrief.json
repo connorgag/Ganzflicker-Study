@@ -8,6 +8,15 @@
       "content": "4",
       "overall": "2",
       "detailed_feedback": "The background was a lot darker and I wouldn't see all of these images at once.  The background was a dark red mixed with black, not gray/white.  I also didn't see that blue grid.  The white diamond pattern is spot-on. The wave of blue/green is very similar to what I saw. The wheel is also good.  I felt like I saw it spinning in the experiment.  I also feel like it's missing static (or a static look).  It's also missing a circle of staticky green surrounded by staticky red."
+    },
+    "005": {
+      "subject_id": "005",
+      "final_image": "participant_005_gpt4",
+      "color": "2",
+      "shape": "4",
+      "content": "3",
+      "overall": "3",
+      "detailed_feedback": "What I saw before was more blurry between the shapes and lines"
     }
   }
 }
