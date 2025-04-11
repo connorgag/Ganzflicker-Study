@@ -911,7 +911,24 @@
                             <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
                                 <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
                                 <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
+                                    ${[0,1,2,3,4,5].map(num => `
+                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
+                                            <input type="radio" id="likert-1-${num}" name="likert-1" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-1-${num}" style="font-size: 12px;">${num}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Likert item 2 -->
+                        <div class="likert-item" style="margin-bottom: 25px;">
+                            <p style="margin-bottom: 8px; font-weight: bold;">Shape similarity</p>
+                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
+                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
+                                <div style="display: flex; justify-content: space-between; flex: 1;">
+                                    ${[0,1,2,3,4,5].map(num => `
                                         <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
                                             <input type="radio" id="likert-2-${num}" name="likert-2" value="${num}" style="margin-bottom: 5px;">
                                             <label for="likert-2-${num}" style="font-size: 12px;">${num}</label>
@@ -924,31 +941,14 @@
                         
                         <!-- Likert item 3 -->
                         <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">Shape similarity</p>
-                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
-                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
-                                <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
-                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-3-${num}" name="likert-3" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-3-${num}" style="font-size: 12px;">${num}</label>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Likert item 4 -->
-                        <div class="likert-item" style="margin-bottom: 25px;">
                             <p style="margin-bottom: 8px; font-weight: bold;">Content similarity</p>
                             <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
                                 <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
                                 <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
+                                    ${[0,1,2,3,4,5].map(num => `
                                         <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-4-${num}" name="likert-4" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-4-${num}" style="font-size: 12px;">${num}</label>
+                                            <input type="radio" id="likert-3-${num}" name="likert-3" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-3-${num}" style="font-size: 12px;">${num}</label>
                                         </div>
                                     `).join('')}
                                 </div>
@@ -962,10 +962,10 @@
                             <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
                                 <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
                                 <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5,6,7,8,9,10].map(num => `
+                                    ${[0,1,2,3,4,5].map(num => `
                                         <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-1-${num}" name="likert-1" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-1-${num}" style="font-size: 12px;">${num}</label>
+                                            <input type="radio" id="likert-4-${num}" name="likert-4" value="${num}" style="margin-bottom: 5px;">
+                                            <label for="likert-4-${num}" style="font-size: 12px;">${num}</label>
                                         </div>
                                     `).join('')}
                                 </div>
@@ -1003,11 +1003,10 @@
                 document.getElementById('submit-custom-form').addEventListener('click', function() {
                     // Collect the data
                     const responses = {
-                        overall: document.querySelector('input[name="likert-1"]:checked')?.value,
-                        color: document.querySelector('input[name="likert-2"]:checked')?.value,
+                        color: document.querySelector('input[name="likert-1"]:checked')?.value,
+                        shape: document.querySelector('input[name="likert-2"]:checked')?.value,
                         content: document.querySelector('input[name="likert-3"]:checked')?.value,
-                        objects_visualized: document.querySelector('input[name="likert-4"]:checked')?.value,
-                        objects_not_seen: document.querySelector('input[name="likert-5"]:checked')?.value
+                        overall: document.querySelector('input[name="likert-4"]:checked')?.value,
                     };
                     
                     const detailedFeedback = document.getElementById('detailed-feedback')?.value || '';
@@ -1064,11 +1063,10 @@
                         [participantId]: {
                             subject_id: participantId,
                             final_image: finalSelectedModel?.chosen_image || "N/A",
-                            overall: currentParticipant.results.likert_responses.overall,
                             color: currentParticipant.results.likert_responses.color,
+                            shape: currentParticipant.results.likert_responses.shape,
                             content: currentParticipant.results.likert_responses.content,
-                            objects_visualized: currentParticipant.results.likert_responses.objects_visualized,
-                            objects_not_seen: currentParticipant.results.likert_responses.objects_not_seen,
+                            overall: currentParticipant.results.likert_responses.overall,
                             detailed_feedback: currentParticipant.results.detailed_feedback || ""
                         }
                     }
