@@ -762,7 +762,7 @@
                     <div class="final-selection-container">
                         ${metadata.available_models.map((model, index) => `
                             <div class="final-option" data-model="${model}" data-position="${positions[model]}">
-                                <div class="model-label">${model.toUpperCase()}</div>
+                            <!-- <div class="model-label">${model.toUpperCase()}</div> -->
                                 <img src="${selectedImages[model].path}" alt="${model} selected image">
                             </div>
                         `).join('')}
