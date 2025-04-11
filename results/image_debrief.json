@@ -26,6 +26,15 @@
       "content": "4",
       "overall": "2",
       "detailed_feedback": "This was similar in the sense that it was a clear grid shape that I saw, and it is different in the sense that I saw more black on the screen than red. I didn't see any blue lines either. Also there is a gradient in the top right that I did not experience during the Ganzflicker. "
+    },
+    "007": {
+      "subject_id": "007",
+      "final_image": "participant_007_gpto",
+      "color": "4",
+      "shape": "4",
+      "content": "5",
+      "overall": "4",
+      "detailed_feedback": "I don't quite remember the color of the honeycomb pattern but I don't think it was black. Also, the diamonds were not making a checkerboard pattern and it was more like rows of diamonds against a background."
     }
   }
 }
