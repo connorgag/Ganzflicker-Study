@@ -219,21 +219,6 @@ const jsPsych = initJsPsych({
       participantData.consciousness_description = "NA";
     }
     
-    // Add imagery vividness data
-    const imageryData = allData.find(item => 
-      item.trial_type === 'survey-likert'
-    );
-    if (imageryData && imageryData.response) {
-      // +1 to convert from 0-based to 1-based scale
-      participantData.visual_imagery_vividness = (imageryData.response.visual_imagery_vividness !== undefined) ? 
-        (parseInt(imageryData.response.visual_imagery_vividness) + 1) : "NA";
-      participantData.verbal_imagery_vividness = (imageryData.response.verbal_imagery_vividness !== undefined) ?
-        (parseInt(imageryData.response.verbal_imagery_vividness) + 1) : "NA";
-    } else {
-      participantData.visual_imagery_vividness = "NA";
-      participantData.verbal_imagery_vividness = "NA";
-    }
-    
     // Convert single row to CSV
     const csvContent = objectToCSV(participantData);
     
@@ -982,28 +967,6 @@ const experienceTrial = {
   },
 };
     timeline.push(experienceTrial);
-
-    // Screen 10: Likert scales for imagery vividness
-    const likertTrial = {
-      type: jsPsychSurveyLikert,
-      questions: [
-        {
-          prompt: "How would you describe your general VISUAL imagery vividness on a scale from 0-10? *",
-          labels: ['0<br>(No imagery)', '1', '2', '3', '4', '5<br>(Moderate)', '6', '7', '8', '9', '10<br>(Extremely vivid)'],
-          name: 'visual_imagery_vividness',
-          required: true
-        },
-        {
-          prompt: "How would you describe your general VERBAL imagery vividness on a scale from 0-10? *",
-          labels: ['0<br>(No imagery)', '1', '2', '3', '4', '5<br>(Moderate)', '6', '7', '8', '9', '10<br>(Extremely vivid)'],
-          name: 'verbal_imagery_vividness',
-          required: true
-        }
-      ],
-      randomize_question_order: false,
-      button_label: 'Continue'
-    };
-    timeline.push(likertTrial);
 
     // Screen 11: Thank you
     const thankYouTrial = {
