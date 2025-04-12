@@ -29,10 +29,10 @@ To-do
 	[+] Can you tell us more about how generated images differed/resembled your Ganzflicker 		experience. Be as detailed as possible
 [+] Last page with thank you and confetti! :)
 [+] Make study fullscreen
-[] make sure size of pictures changes proportionally to the screen size
+[+] make sure size of pictures changes proportionally to the screen size
 [+] remove "start over" at the end of experiment
 [+] add irq and osivq
 [+] save questionnaire data locally
 [+] create Ganzflicker psychopy
-[] increase image sizes
-[] rename results files that are being saved
+[+] increase image sizes
+[+] rename results files that are being saved
