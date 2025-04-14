@@ -35,6 +35,15 @@
       "content": "5",
       "overall": "4",
       "detailed_feedback": "I don't quite remember the color of the honeycomb pattern but I don't think it was black. Also, the diamonds were not making a checkerboard pattern and it was more like rows of diamonds against a background."
+    },
+    "008": {
+      "subject_id": "008",
+      "final_image": "participant_008_gpt4",
+      "color": "2",
+      "shape": "4",
+      "content": "2",
+      "overall": "3",
+      "detailed_feedback": "I feel like it's pretty difficult for images to resemble the experience just because there were three main parts of my experience, and also the tunnel spiderweb thing was more of a grayish thing that happened concurrently to the red/black flashing. It also went to a point instead of seeing a circle at the end."
     }
   }
 }
