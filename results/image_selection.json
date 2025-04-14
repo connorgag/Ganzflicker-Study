@@ -534,6 +534,113 @@
         "chosen_image": "participant_008_gpt4",
         "datetime": "2025-04-14T18:03:16.197Z"
       }
+    ],
+    "009": [
+      {
+        "subject_id": "009",
+        "trial_type": "normal",
+        "model": "claude",
+        "aphantasia_image": "32_claude",
+        "phantasia_image": "2784_claude",
+        "target": "009_claude",
+        "choice": "own",
+        "reaction_time": 15.76,
+        "image_choice_location": "right",
+        "accuracy": 1,
+        "chosen_model": "na",
+        "chosen_image": "participant_009_claude",
+        "datetime": "2025-04-14T19:24:35.607Z"
+      },
+      {
+        "subject_id": "009",
+        "trial_type": "normal",
+        "model": "gemini",
+        "aphantasia_image": "32_gemini",
+        "phantasia_image": "2784_gemini",
+        "target": "009_gemini",
+        "choice": "aphantasia",
+        "reaction_time": 5.49,
+        "image_choice_location": "right",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "32_gemini",
+        "datetime": "2025-04-14T19:24:41.101Z"
+      },
+      {
+        "subject_id": "009",
+        "trial_type": "normal",
+        "model": "dalle",
+        "aphantasia_image": "32_dalle",
+        "phantasia_image": "2784_dalle",
+        "target": "009_dalle",
+        "choice": "own",
+        "reaction_time": 12.19,
+        "image_choice_location": "left",
+        "accuracy": 1,
+        "chosen_model": "na",
+        "chosen_image": "participant_009_dalle",
+        "datetime": "2025-04-14T19:24:53.297Z"
+      },
+      {
+        "subject_id": "009",
+        "trial_type": "normal",
+        "model": "gpto",
+        "aphantasia_image": "32_gpto",
+        "phantasia_image": "2784_gpto",
+        "target": "009_gpto",
+        "choice": "aphantasia",
+        "reaction_time": 5.3,
+        "image_choice_location": "left",
+        "accuracy": 0,
+        "chosen_model": "na",
+        "chosen_image": "32_gpto",
+        "datetime": "2025-04-14T19:24:58.596Z"
+      },
+      {
+        "subject_id": "009",
+        "trial_type": "normal",
+        "model": "stable",
+        "aphantasia_image": "32_stable",
+        "phantasia_image": "2784_stable",
+        "target": "009_stable",
+        "choice": "own",
+        "reaction_time": 3.83,
+        "image_choice_location": "middle",
+        "accuracy": 1,
+        "chosen_model": "na",
+        "chosen_image": "participant_009_stable",
+        "datetime": "2025-04-14T19:25:02.429Z"
+      },
+      {
+        "subject_id": "009",
+        "trial_type": "normal",
+        "model": "gpt4.5",
+        "aphantasia_image": "32_gpt4.5",
+        "phantasia_image": "2784_gpt4.5",
+        "target": "009_gpt4.5",
+        "choice": "own",
+        "reaction_time": 4.03,
+        "image_choice_location": "left",
+        "accuracy": 1,
+        "chosen_model": "na",
+        "chosen_image": "participant_009_gpt4",
+        "datetime": "2025-04-14T19:25:06.456Z"
+      },
+      {
+        "subject_id": "009",
+        "trial_type": "final",
+        "model": "na",
+        "aphantasia_image": "na",
+        "phantasia_image": "na",
+        "target": "na",
+        "choice": "own",
+        "reaction_time": 22.12,
+        "image_choice_location": "top_right",
+        "accuracy": 1,
+        "chosen_model": "stable",
+        "chosen_image": "participant_009_stable",
+        "datetime": "2025-04-14T19:25:28.579Z"
+      }
     ]
   }
 }
