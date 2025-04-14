@@ -1,0 +1,113 @@
+participant_id,trial_index,time_elapsed,internal_node_id,response,item_id,item,category,questionnaire
+6,3,253823,0.0-3.0,3,visual_likert,How would you describe your general VISUAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+6,3,253823,0.0-3.0,3,verbal_likert,How would you describe your general VERBAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+6,5,281074,0.0-5.0,Moderately realistic and vivid,vviq-1,"The exact contour of face, head, shoulders, and body",visual,vviq
+6,5,281074,0.0-5.0,Dim and vague image,vviq-2,"Characteristic poses of head, attitudes of body, etc.",visual,vviq
+6,5,281074,0.0-5.0,Dim and vague image,vviq-3,"The precise carriage, length of step, etc. in walking",visual,vviq
+6,5,281074,0.0-5.0,Dim and vague image,vviq-4,The different colors worn in some familiar clothes,visual,vviq
+6,6,292142,0.0-6.0,Moderately realistic and vivid,vviq-5,The sun is rising above the horizon into a hazy sky.,visual,vviq
+6,6,292142,0.0-6.0,Dim and vague image,vviq-6,The sky clears and surrounds the sun with blueness.,visual,vviq
+6,6,292142,0.0-6.0,Moderately realistic and vivid,vviq-7,"Clouds. A storm blows up, with flashes of lightening.",visual,vviq
+6,6,292142,0.0-6.0,Dim and vague image,vviq-8,A rainbow appears.,visual,vviq
+6,7,304309,0.0-7.0,Dim and vague image,vviq-9,The overall appearance of the shop from the opposite side of the road,visual,vviq
+6,7,304309,0.0-7.0,Dim and vague image,vviq-10,"A window display including colors, shape, and details of individual items for sale",visual,vviq
+6,7,304309,0.0-7.0,Dim and vague image,vviq-11,"You are near the entrance. The color, shape, and details of the door",visual,vviq
+6,7,304309,0.0-7.0,Moderately realistic and vivid,vviq-12,You enter the shop and go to the counter. The counter assistant serves you. Money changes hands.,visual,vviq
+6,8,312788,0.0-8.0,Dim and vague image,vviq-13,The contours of the landscape,visual,vviq
+6,8,312788,0.0-8.0,Dim and vague image,vviq-14,The color and shape of the trees,visual,vviq
+6,8,312788,0.0-8.0,Dim and vague image,vviq-15,The color and shape of the lake,visual,vviq
+6,8,312788,0.0-8.0,Dim and vague image,vviq-16,A strong wind blows on the tree and on the lake causing waves.,visual,vviq
+6,10,328834,0.0-10.0-0.0,No,,,,
+6,10,328834,0.0-10.0-0.0,Woman,,,,
+6,10,328834,0.0-10.0-0.0,Right,,,,
+6,10,328834,0.0-10.0-0.0,Yes,,,,
+6,10,328834,0.0-10.0-0.0,Yes,,,,
+6,10,328834,0.0-10.0-0.0,High School,,,,
+6,11,331200,0.0-10.0-1.0,No,,,,
+6,12,359044,0.0-10.0-2.0,21,,,,
+6,12,359044,0.0-10.0-2.0,seeing factors involved in visual hallucination? There might be different experimental groups..? ,,,,
+6,12,359044,0.0-10.0-2.0,Very cool!,,,,
+5,3,440713,0.0-3.0,7,visual_likert,How would you describe your general VISUAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+5,3,440713,0.0-3.0,3,verbal_likert,How would you describe your general VERBAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+5,5,482496,0.0-5.0,Realistic and reasonably vivid,vviq-1,"The exact contour of face, head, shoulders, and body",visual,vviq
+5,5,482496,0.0-5.0,Realistic and reasonably vivid,vviq-2,"Characteristic poses of head, attitudes of body, etc.",visual,vviq
+5,5,482496,0.0-5.0,"Perfectly realistic, as vivid as real seeing",vviq-3,"The precise carriage, length of step, etc. in walking",visual,vviq
+5,5,482496,0.0-5.0,Realistic and reasonably vivid,vviq-4,The different colors worn in some familiar clothes,visual,vviq
+5,6,503371,0.0-6.0,Realistic and reasonably vivid,vviq-5,The sun is rising above the horizon into a hazy sky.,visual,vviq
+5,6,503371,0.0-6.0,Realistic and reasonably vivid,vviq-6,The sky clears and surrounds the sun with blueness.,visual,vviq
+5,6,503371,0.0-6.0,Moderately realistic and vivid,vviq-7,"Clouds. A storm blows up, with flashes of lightening.",visual,vviq
+5,6,503371,0.0-6.0,Realistic and reasonably vivid,vviq-8,A rainbow appears.,visual,vviq
+5,7,534292,0.0-7.0,Moderately realistic and vivid,vviq-9,The overall appearance of the shop from the opposite side of the road,visual,vviq
+5,7,534292,0.0-7.0,Moderately realistic and vivid,vviq-10,"A window display including colors, shape, and details of individual items for sale",visual,vviq
+5,7,534292,0.0-7.0,Dim and vague image,vviq-11,"You are near the entrance. The color, shape, and details of the door",visual,vviq
+5,7,534292,0.0-7.0,Realistic and reasonably vivid,vviq-12,You enter the shop and go to the counter. The counter assistant serves you. Money changes hands.,visual,vviq
+5,8,557069,0.0-8.0,Realistic and reasonably vivid,vviq-13,The contours of the landscape,visual,vviq
+5,8,557069,0.0-8.0,Realistic and reasonably vivid,vviq-14,The color and shape of the trees,visual,vviq
+5,8,557069,0.0-8.0,Realistic and reasonably vivid,vviq-15,The color and shape of the lake,visual,vviq
+5,8,557069,0.0-8.0,Realistic and reasonably vivid,vviq-16,A strong wind blows on the tree and on the lake causing waves.,visual,vviq
+5,10,572117,0.0-10.0-0.0,No,,,,
+5,10,572117,0.0-10.0-0.0,Woman,,,,
+5,10,572117,0.0-10.0-0.0,Right,,,,
+5,10,572117,0.0-10.0-0.0,Yes,,,,
+5,10,572117,0.0-10.0-0.0,No,,,,
+5,10,572117,0.0-10.0-0.0,High School,,,,
+5,11,574921,0.0-10.0-1.0,No,,,,
+5,12,600884,0.0-10.0-2.0,21,,,,
+5,12,600884,0.0-10.0-2.0,Strength of mental imagery and the types of hallucination one sees?,,,,
+5,12,600884,0.0-10.0-2.0,,,,,
+4,3,58186,0.0-3.0,8,visual_likert,How would you describe your general VISUAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+4,3,58186,0.0-3.0,7,verbal_likert,How would you describe your general VERBAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+4,5,167268,0.0-5.0,Realistic and reasonably vivid,vviq-1,"The exact contour of face, head, shoulders, and body",visual,vviq
+4,5,167268,0.0-5.0,Realistic and reasonably vivid,vviq-2,"Characteristic poses of head, attitudes of body, etc.",visual,vviq
+4,5,167268,0.0-5.0,Moderately realistic and vivid,vviq-3,"The precise carriage, length of step, etc. in walking",visual,vviq
+4,5,167268,0.0-5.0,Realistic and reasonably vivid,vviq-4,The different colors worn in some familiar clothes,visual,vviq
+4,6,204571,0.0-6.0,Realistic and reasonably vivid,vviq-5,The sun is rising above the horizon into a hazy sky.,visual,vviq
+4,6,204571,0.0-6.0,Realistic and reasonably vivid,vviq-6,The sky clears and surrounds the sun with blueness.,visual,vviq
+4,6,204571,0.0-6.0,Realistic and reasonably vivid,vviq-7,"Clouds. A storm blows up, with flashes of lightening.",visual,vviq
+4,6,204571,0.0-6.0,Realistic and reasonably vivid,vviq-8,A rainbow appears.,visual,vviq
+4,7,245708,0.0-7.0,"Perfectly realistic, as vivid as real seeing",vviq-9,The overall appearance of the shop from the opposite side of the road,visual,vviq
+4,7,245708,0.0-7.0,Realistic and reasonably vivid,vviq-10,"A window display including colors, shape, and details of individual items for sale",visual,vviq
+4,7,245708,0.0-7.0,Realistic and reasonably vivid,vviq-11,"You are near the entrance. The color, shape, and details of the door",visual,vviq
+4,7,245708,0.0-7.0,Realistic and reasonably vivid,vviq-12,You enter the shop and go to the counter. The counter assistant serves you. Money changes hands.,visual,vviq
+4,8,329692,0.0-8.0,Realistic and reasonably vivid,vviq-13,The contours of the landscape,visual,vviq
+4,8,329692,0.0-8.0,Moderately realistic and vivid,vviq-14,The color and shape of the trees,visual,vviq
+4,8,329692,0.0-8.0,Realistic and reasonably vivid,vviq-15,The color and shape of the lake,visual,vviq
+4,8,329692,0.0-8.0,Realistic and reasonably vivid,vviq-16,A strong wind blows on the tree and on the lake causing waves.,visual,vviq
+4,10,351070,0.0-10.0-0.0,No,,,,
+4,10,351070,0.0-10.0-0.0,Woman,,,,
+4,10,351070,0.0-10.0-0.0,Right,,,,
+4,10,351070,0.0-10.0-0.0,Yes,,,,
+4,10,351070,0.0-10.0-0.0,Yes,,,,
+4,10,351070,0.0-10.0-0.0,High School,,,,
+4,11,355049,0.0-10.0-1.0,No,,,,
+4,12,432169,0.0-10.0-2.0,20,,,,
+4,12,432169,0.0-10.0-2.0,How pupil size and movement corresponds to hallucinations.,,,,
+4,12,432169,0.0-10.0-2.0,"It is mildly spooky.  But, it's not scary once you get immersed.  I think the white noise can catch one by surprise and add to the spooky feeling.",,,,
+7,3,44158,0.0-3.0,7,visual_likert,How would you describe your general VISUAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+7,3,44158,0.0-3.0,7,verbal_likert,How would you describe your general VERBAL imagery vividness on a scale from 0–10?,vividness,imagery_self_rating
+7,5,80963,0.0-5.0,Realistic and reasonably vivid,vviq-1,"The exact contour of face, head, shoulders, and body",visual,vviq
+7,5,80963,0.0-5.0,Realistic and reasonably vivid,vviq-2,"Characteristic poses of head, attitudes of body, etc.",visual,vviq
+7,5,80963,0.0-5.0,Moderately realistic and vivid,vviq-3,"The precise carriage, length of step, etc. in walking",visual,vviq
+7,5,80963,0.0-5.0,Realistic and reasonably vivid,vviq-4,The different colors worn in some familiar clothes,visual,vviq
+7,6,105219,0.0-6.0,Realistic and reasonably vivid,vviq-5,The sun is rising above the horizon into a hazy sky.,visual,vviq
+7,6,105219,0.0-6.0,Realistic and reasonably vivid,vviq-6,The sky clears and surrounds the sun with blueness.,visual,vviq
+7,6,105219,0.0-6.0,Realistic and reasonably vivid,vviq-7,"Clouds. A storm blows up, with flashes of lightening.",visual,vviq
+7,6,105219,0.0-6.0,Realistic and reasonably vivid,vviq-8,A rainbow appears.,visual,vviq
+7,7,125179,0.0-7.0,Realistic and reasonably vivid,vviq-9,The overall appearance of the shop from the opposite side of the road,visual,vviq
+7,7,125179,0.0-7.0,Realistic and reasonably vivid,vviq-10,"A window display including colors, shape, and details of individual items for sale",visual,vviq
+7,7,125179,0.0-7.0,Realistic and reasonably vivid,vviq-11,"You are near the entrance. The color, shape, and details of the door",visual,vviq
+7,7,125179,0.0-7.0,Realistic and reasonably vivid,vviq-12,You enter the shop and go to the counter. The counter assistant serves you. Money changes hands.,visual,vviq
+7,8,148222,0.0-8.0,Moderately realistic and vivid,vviq-13,The contours of the landscape,visual,vviq
+7,8,148222,0.0-8.0,Realistic and reasonably vivid,vviq-14,The color and shape of the trees,visual,vviq
+7,8,148222,0.0-8.0,Realistic and reasonably vivid,vviq-15,The color and shape of the lake,visual,vviq
+7,8,148222,0.0-8.0,Realistic and reasonably vivid,vviq-16,A strong wind blows on the tree and on the lake causing waves.,visual,vviq
+7,10,162778,0.0-10.0-0.0,No,,,,
+7,10,162778,0.0-10.0-0.0,Woman,,,,
+7,10,162778,0.0-10.0-0.0,Right,,,,
+7,10,162778,0.0-10.0-0.0,Yes,,,,
+7,10,162778,0.0-10.0-0.0,Yes,,,,
+7,10,162778,0.0-10.0-0.0,High School,,,,
+7,11,167430,0.0-10.0-1.0,No,,,,
+7,12,220151,0.0-10.0-2.0,21,,,,
+7,12,220151,0.0-10.0-2.0,How the visual effects of the Ganzfeld flicker are different for people with different levels of mental imagery vividness,,,,
+7,12,220151,0.0-10.0-2.0,,,,,
