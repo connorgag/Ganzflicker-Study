@@ -62,6 +62,15 @@
       "content": "4",
       "overall": "3",
       "detailed_feedback": "This visualization shows the room spinning around the head of the participant, which is what I felt happening to me. Although the room was red, black, and grey with little white stars when I did it, I think that this visualization is otherwise pretty accurate as to the sensation that I felt and experienced while sitting there. "
+    },
+    "011": {
+      "subject_id": "011",
+      "final_image": "participant_011_gpt4",
+      "color": "0",
+      "shape": "4",
+      "content": "4",
+      "overall": "4",
+      "detailed_feedback": "The contrast was much lower than in the image above. The shapes were blurry and the colors were most of the time just red and orange. Except when I had hallucinations of the whole screen changing to yellow, orange and white, at different times.\nThis image also does not include the face contour that I saw in one moment. I had to choose only one image, so I chose this one because it was the most common hallucination that I had."
     }
   }
 }
