@@ -80,6 +80,15 @@
       "content": "5",
       "overall": "4",
       "detailed_feedback": "the green dots appeared when I blinked, everything else while I was looking at the screen"
+    },
+    "013": {
+      "subject_id": "013",
+      "final_image": "participant_013_stable",
+      "color": "2",
+      "shape": "3",
+      "content": "4",
+      "overall": "3",
+      "detailed_feedback": "the generated images tend to be sharper and clearer, whereas my percepts were often more nebulous and dynamic"
     }
   }
 }
