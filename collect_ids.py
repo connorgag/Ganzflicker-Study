@@ -7,6 +7,7 @@ def scan_image_folders_and_update_config():
     """
     Scans the aphantasia and phantasia image folders and the participant_data folder,
     and updates the config.json file with the available participant IDs and their relative image paths.
+    Updated to handle the filename format: {id}_{model name}_{1, 2, 3, or 4}.{image type}
     """
     # Define folder paths - adjust these to match your project structure
     base_dir = Path(__file__).parent  # Gets the directory of this script
@@ -20,8 +21,9 @@ def scan_image_folders_and_update_config():
     participant_data_dir = base_dir / participant_data_folder_name
     config_file = base_dir / "config.json"
 
-    # Compile regex to extract IDs and model names from filenames
-    filename_pattern = re.compile(r'^(\d+)_([^_]+)\.(png|jpeg|jpg|webp)$')
+    # Compile regex to extract IDs, model names, and numbers from filenames
+    # New pattern: {id}_{model name}_{1, 2, 3, or 4}.{image type}
+    filename_pattern = re.compile(r'^(\d+)_([^_]+)_([1-4])\.(png|jpeg|jpg|webp)$')
 
     image_data = {
         "aphantasia_images": {},
@@ -35,7 +37,10 @@ def scan_image_folders_and_update_config():
             match = filename_pattern.match(filename)
             if match:
                 participant_id = int(match.group(1))
-                model_name = match.group(2)
+                model_base = match.group(2)
+                number = match.group(3)
+                # Combine model name and number to create the full model name
+                model_name = f"{model_base}_{number}"
                 # Store relative path
                 relative_path = f"{images_dir_name}/{aphantasia_folder_name}/{filename}"
                 if participant_id not in aphantasia_images:
@@ -52,7 +57,10 @@ def scan_image_folders_and_update_config():
             match = filename_pattern.match(filename)
             if match:
                 participant_id = int(match.group(1))
-                model_name = match.group(2)
+                model_base = match.group(2)
+                number = match.group(3)
+                # Combine model name and number to create the full model name
+                model_name = f"{model_base}_{number}"
                 # Store relative path
                 relative_path = f"{images_dir_name}/{phantasia_folder_name}/{filename}"
                 if participant_id not in phantasia_images:
@@ -88,7 +96,14 @@ def scan_image_folders_and_update_config():
     }
     
     # Make sure config has available_models before using it
-    available_models = config.get('available_models', [])
+    available_models = config.get('available_models', [
+        "claude_1", "claude_2", "claude_3", "claude_4",
+        "dalle_1", "dalle_2", "dalle_3", "dalle_4",
+        "gemini_1", "gemini_2", "gemini_3", "gemini_4",
+        "gpto_1", "gpto_2", "gpto_3", "gpto_4",
+        "stable_1", "stable_2", "stable_3", "stable_4",
+        "midjourney_1", "midjourney_2", "midjourney_3", "midjourney_4"
+    ])
     
     for image_type in image_data:
         for id in image_data[image_type]:
