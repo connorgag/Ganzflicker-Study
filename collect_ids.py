@@ -20,6 +20,16 @@ def scan_image_folders_and_update_config():
     phantasia_dir = base_dir / images_dir_name / phantasia_folder_name
     participant_data_dir = base_dir / participant_data_folder_name
     config_file = base_dir / "config.json"
+    
+    # Define available models directly in the code
+    available_models = [
+        "claude_1", "claude_2", "claude_3", "claude_4",
+        "dalle_1", "dalle_2", "dalle_3", "dalle_4",
+        "gemini_1", "gemini_2", "gemini_3", "gemini_4",
+        "gpto_1", "gpto_2", "gpto_3", "gpto_4",
+        "stable_1", "stable_2", "stable_3", "stable_4",
+        "midjourney_1", "midjourney_2", "midjourney_3", "midjourney_4"
+    ]
 
     # Compile regex to extract IDs, model names, and numbers from filenames
     # New pattern: {id}_{model name}_{1, 2, 3, or 4}.{image type}
@@ -95,15 +105,8 @@ def scan_image_folders_and_update_config():
         "phantasia_images": {}
     }
     
-    # Make sure config has available_models before using it
-    available_models = config.get('available_models', [
-        "claude_1", "claude_2", "claude_3", "claude_4",
-        "dalle_1", "dalle_2", "dalle_3", "dalle_4",
-        "gemini_1", "gemini_2", "gemini_3", "gemini_4",
-        "gpto_1", "gpto_2", "gpto_3", "gpto_4",
-        "stable_1", "stable_2", "stable_3", "stable_4",
-        "midjourney_1", "midjourney_2", "midjourney_3", "midjourney_4"
-    ])
+    # Always use the available_models defined in this script
+    config['available_models'] = available_models
     
     for image_type in image_data:
         for id in image_data[image_type]:

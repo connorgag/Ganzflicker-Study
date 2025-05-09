@@ -1,94 +1,25 @@
 {
   "current_participant_data": {
-    "004": {
-      "subject_id": "004",
-      "final_image": "participant_004_claude",
-      "color": "3",
-      "shape": "5",
-      "content": "4",
-      "overall": "2",
-      "detailed_feedback": "The background was a lot darker and I wouldn't see all of these images at once.  The background was a dark red mixed with black, not gray/white.  I also didn't see that blue grid.  The white diamond pattern is spot-on. The wave of blue/green is very similar to what I saw. The wheel is also good.  I felt like I saw it spinning in the experiment.  I also feel like it's missing static (or a static look).  It's also missing a circle of staticky green surrounded by staticky red."
-    },
-    "005": {
-      "subject_id": "005",
-      "final_image": "participant_005_gpt4",
-      "color": "2",
-      "shape": "4",
-      "content": "3",
-      "overall": "3",
-      "detailed_feedback": "What I saw before was more blurry between the shapes and lines"
-    },
-    "006": {
-      "subject_id": "006",
-      "final_image": "participant_006_gpto",
-      "color": "3",
-      "shape": "3",
-      "content": "4",
-      "overall": "2",
-      "detailed_feedback": "This was similar in the sense that it was a clear grid shape that I saw, and it is different in the sense that I saw more black on the screen than red. I didn't see any blue lines either. Also there is a gradient in the top right that I did not experience during the Ganzflicker. "
-    },
-    "007": {
-      "subject_id": "007",
-      "final_image": "participant_007_gpto",
-      "color": "4",
-      "shape": "4",
-      "content": "5",
-      "overall": "4",
-      "detailed_feedback": "I don't quite remember the color of the honeycomb pattern but I don't think it was black. Also, the diamonds were not making a checkerboard pattern and it was more like rows of diamonds against a background."
-    },
-    "008": {
-      "subject_id": "008",
-      "final_image": "participant_008_gpt4",
-      "color": "2",
-      "shape": "4",
-      "content": "2",
-      "overall": "3",
-      "detailed_feedback": "I feel like it's pretty difficult for images to resemble the experience just because there were three main parts of my experience, and also the tunnel spiderweb thing was more of a grayish thing that happened concurrently to the red/black flashing. It also went to a point instead of seeing a circle at the end."
-    },
-    "009": {
-      "subject_id": "009",
-      "final_image": "participant_009_stable",
-      "color": "4",
-      "shape": "3",
-      "content": "2",
-      "overall": "4",
-      "detailed_feedback": "It was square like this with a sort of halo effect, but it wasn't just one, it was a a grid like effect that expands. There was also red in it with black and white"
-    },
-    "010": {
-      "subject_id": "010",
-      "final_image": "participant_010_gpto",
-      "color": "0",
-      "shape": "4",
-      "content": "4",
-      "overall": "3",
-      "detailed_feedback": "This visualization shows the room spinning around the head of the participant, which is what I felt happening to me. Although the room was red, black, and grey with little white stars when I did it, I think that this visualization is otherwise pretty accurate as to the sensation that I felt and experienced while sitting there. "
-    },
-    "011": {
-      "subject_id": "011",
-      "final_image": "participant_011_gpt4",
-      "color": "0",
-      "shape": "4",
-      "content": "4",
-      "overall": "4",
-      "detailed_feedback": "The contrast was much lower than in the image above. The shapes were blurry and the colors were most of the time just red and orange. Except when I had hallucinations of the whole screen changing to yellow, orange and white, at different times.\nThis image also does not include the face contour that I saw in one moment. I had to choose only one image, so I chose this one because it was the most common hallucination that I had."
-    },
-    "012": {
-      "subject_id": "012",
-      "final_image": "participant_012_gemini",
-      "color": "4",
-      "shape": "4",
-      "content": "5",
-      "overall": "4",
-      "detailed_feedback": "the green dots appeared when I blinked, everything else while I was looking at the screen"
-    },
-    "013": {
-      "subject_id": "013",
-      "final_image": "participant_013_stable",
-      "color": "2",
-      "shape": "3",
-      "content": "4",
-      "overall": "3",
-      "detailed_feedback": "the generated images tend to be sharper and clearer, whereas my percepts were often more nebulous and dynamic"
+    "001": {
+      "subject_id": "001",
+      "final_image_1": "143_midjourney_1",
+      "color_1": "5",
+      "shape_1": "5",
+      "content_1": "5",
+      "overall_1": "5",
+      "detailed_feedback_1": "a",
+      "final_image_2": "143_gemini_1",
+      "color_2": "10",
+      "shape_2": "10",
+      "content_2": "10",
+      "overall_2": "10",
+      "detailed_feedback_2": "w",
+      "final_image_3": "3502_gpto_2",
+      "color_3": "10",
+      "shape_3": "10",
+      "content_3": "10",
+      "overall_3": "10",
+      "detailed_feedback_3": "m"
     }
   }
 }

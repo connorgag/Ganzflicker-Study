@@ -10,1166 +10,778 @@
     <script src="https://unpkg.com/@jspsych/plugin-image-button-response@1.1.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script> <!-- Added plugin -->
+    <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="style.css">
     <style>
-        /* Added styles for the next button */
-        .next-button {
+        /* General body font size increase for ~40-50% larger text on most screens */
+        body {
+            font-size: 1.4em; /* Base increase */
+            line-height: 1.6;
+        }
+
+        /* Welcome screen specific text size overrides to revert to original size */
+        #welcome-screen-wrapper {
+            font-size: calc(1em / 1.4); /* Counteract the body's 1.4em scaling for this section */
+        }
+        #welcome-screen-wrapper h1 {
+            font-size: 2em; /* Original h1 relative size (e.g., 32px if base was 16px) */
+            /* text-align: center; is in the HTML */
+        }
+        #welcome-screen-wrapper .instruction-text {
+            font-size: 16px; /* Original explicit size from style.css for .instruction-text */
+            line-height: 1.4; /* Original line-height */
+            /* text-align: center; is in the HTML */
+        }
+
+
+        /* General Button Styles - Increased Size */
+        .next-button, .submit-button {
             display: none;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 24px; /* Increased */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+        }
+        .next-button:hover, .submit-button:hover {
+            background-color: #45a049;
+        }
+        /* Default selected image style */
+        .selected-image {
+            border-width: 15px !important;
+            border-style: solid !important;
+            border-color: #388E3C !important;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.9) !important;
+            transform: scale(1.05);
+            transition: transform 0.2s ease-out, border-color 0.2s ease-out, border-width 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+            flex-shrink: 0;
+            /* Font size will be inherited from body (1.4em) or specific parent */
+        }
+
+        /* Original instruction-text style block (primarily for reference, specific overrides follow) */
+        /* This rule is less specific than the .instruction-text from "style.css" section below for general screens */
+        .instruction-text {
+            font-size: 1.8em;  /* This was an attempt to make it 1.5x of 1.2em, relative to new body. */
+                               /* For general screens, the 24px rule below will likely take precedence. */
+                               /* For welcome screen, #welcome-screen-wrapper .instruction-text takes precedence. */
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        /* General container styles */
+        .image-display-area {
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .image-container, .final-selection-container {
+            display: flex; /* This is the first definition for .final-selection-container */
+            flex-wrap: nowrap;
+            justify-content: center; /* This should center flex items if display:flex is active */
+            align-items: center;
+            gap: 15px;
+            max-width: 1200px; /* Shared max-width */
+            max-height: 65vh;
+            /* margin-left: auto; margin-right: auto; -- Added to the more specific rule for .final-selection-container (grid) */
+        }
+
+        .image-option, .final-option {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 0;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 5px;
+            transition: border-color 0.2s ease-out;
+            cursor: pointer;
+        }
+        .image-option:hover, .final-option:hover {
+             border-color: #ddd;
+        }
+        .image-option:has(> img.selected-image),
+        .final-option:has(> img.selected-image) {
+             border-color: transparent !important;
+        }
+
+        .image-option img, .final-option img {
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            object-fit: contain;
+            border: none;
+            border-radius: 6px;
+            transition: transform 0.2s ease-out;
+        }
+
+        .round-2-image-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            max-width: 1300px;
+            max-height: 70vh;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 40px;
+        }
+        .round-2-image-option {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 5px;
+            transition: border-color 0.2s ease-out;
+            cursor: pointer;
+        }
+         .round-2-image-option:hover {
+             border-color: #ccc;
+        }
+        .round-2-image-option:has(> img.selected-image) {
+             border-color: transparent !important;
+        }
+
+        .round-2-image-option img {
+            max-width: 100%;
+            max-height: 40vh;
+            height: auto;
+            object-fit: contain;
+            border: none;
+            border-radius: 6px;
+            transition: transform 0.2s ease-out;
+        }
+
+        /* Styles for Round 3 (single image with Likert) */
+        .round-3-image-display {
+            text-align: center;
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+        .round-3-image-display img {
+            max-width: 40%; /* CHANGED from 25% back to 40% as per user request */
+            height: auto;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+        #custom-likert-form {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            flex-shrink: 0;
+        }
+        .likert-item {
+            margin-bottom: 25px;
+        }
+        .likert-item p {
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.1em; /* Relative to parent, which is body (1.4em) */
+        }
+        .likert-scale {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .likert-scale span {
+            width: auto;
+            padding: 0 10px;
+            text-align: center;
+            font-size: 0.9em; /* Relative to parent (body 1.4em) */
+            color: #555;
+        }
+        .likert-options-container {
+            display: flex;
+            justify-content: space-around;
+            flex: 1;
+        }
+        .likert-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 3px;
+        }
+        .likert-option input[type="radio"] {
+            margin-bottom: 5px;
+            transform: scale(1.2);
+        }
+        .likert-option label {
+            font-size: 0.9em; /* Relative to parent (body 1.4em) */
+            color: #333;
+        }
+        .detailed-feedback-area {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em; /* Relative to parent (body 1.4em) */
+            margin-top: 5px;
+        }
+        .feedback-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.1em; /* Relative to parent (body 1.4em) */
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+            flex-shrink: 0;
+        }
+        .jspsych-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        #jspsych-target {
+            width: 100%;
+        }
+
+        /* Styles from what was originally style.css - these apply general text size increases */
+        .jspsych-content {
+            max-width: 2200px;
+        }
+
+        .image-container { /* This rule for .image-container (Round 1) uses display: grid */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%; /* Takes full width of its parent */
+            box-sizing: border-box;
+            /* It also inherits max-width: 1200px and margin auto from the shared rule if parent allows centering */
+        }
+
+
+        .image-option {
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            border: 3px solid transparent;
+            border-radius: 5px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .image-option:hover {
+            border-color: #007bff;
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        .image-option img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .image-caption {
+            font-size: 21px; /* Increased */
+            color: #555;
+        }
+
+        /* This .instruction-text is for general screens (not welcome screen) */
+        .instruction-text {
+            font-size: 24px; /* Increased (approx 1.5 * 16px) */
+            margin-bottom: 10px;
+            line-height: 1.6; /* Adjusted */
+        }
+
+        .final-selection-container { /* This rule for .final-selection-container (Round 4) uses display: grid */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 0px; 
+            margin-bottom: 20px; 
+            width: 100%; /* Takes full width of its parent, up to max-width */
+            box-sizing: border-box; 
+            /* Inherits max-width: 1200px from the earlier shared rule */
+            margin-left: auto;   /* ADDED for centering the grid container */
+            margin-right: auto;  /* ADDED for centering the grid container */
+        }
+
+
+        .final-option {
+            text-align: center;
+            cursor: pointer;
+            padding: 5px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            margin: 5px;
+        }
+
+        .final-option:hover {
+            border-color: transparent;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+
+        .final-option img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .button-container { /* Merged rule, ensure display:flex is desired over text-align:center */
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px; /* Overrides earlier 20px */
+        }
+
+        .model-label {
+            font-weight: bold;
+            font-size: 21px; /* Increased */
+            margin-bottom: 2px;
+        }
+
+        .loading-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            /* Text inside will be scaled by body font-size */
+        }
+
+        .loading-spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .download-status.error {
+            font-size: 30px; /* Increased */
+            font-weight: bold;
+            color: red;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .download-button {
+            display: inline-block;
             margin: 20px auto;
             padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
-            font-size: 16px;
+            font-size: 24px; /* Increased */
             cursor: pointer;
             transition: background-color 0.3s;
+            text-align: center;
         }
-        .next-button:hover {
+
+        .download-button:hover {
             background-color: #45a049;
         }
-        .selected-image {
-            border: 3px solid #4CAF50;
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
-        }
-        .error {
-            color: red;
-        }
+
     </style>
 </head>
 <body>
     <div id="jspsych-target"></div>
 
     <script>
+        // --- Debug Configuration ---
+        let DEBUG_SKIP_TO_ROUND = null; // Set to null for normal run, or 2, 3, 4 to skip
+
+        // --- Global Variables ---
+        let participantId;
         let metadata;
-        function getCurrentDateTime() {
-            return new Date().toISOString();
-        }
-
-        // Function to load JSON data from a file
-        async function loadJSON(file) {
-            const response = await fetch(file);
-            return await response.json();
-        }
-
-        // Function to load CSV data and parse it
-        async function loadCSV(file) {
-            const response = await fetch(file);
-            const csvText = await response.text();
-            return parseCSV(csvText);
-        }
-        function parseCSV(csvText) {
-            const rows = [];
-            let inQuotes = false;
-            let currentField = '';
-            let currentRow = [];
-            let i = 0;
-
-            const pushField = () => {
-                currentRow.push(currentField);
-                currentField = '';
-            };
-
-            while (i < csvText.length) {
-                const char = csvText[i];
-                const nextChar = csvText[i + 1];
-
-                if (char === '"') {
-                if (inQuotes && nextChar === '"') {
-                    // Escaped quote
-                    currentField += '"';
-                    i++;
-                } else {
-                    inQuotes = !inQuotes;
-                }
-                } else if (char === ',' && !inQuotes) {
-                pushField();
-                } else if ((char === '\n' || char === '\r') && !inQuotes) {
-                if (char === '\r' && nextChar === '\n') i++; // Handle \r\n
-                pushField();
-                if (currentRow.length > 1 || rows.length === 0) {
-                    rows.push(currentRow);
-                }
-                currentRow = [];
-                } else {
-                currentField += char;
-                }
-                i++;
-            }
-
-            // Push last field and row if needed
-            if (currentField.length > 0 || currentRow.length > 0) {
-                pushField();
-                rows.push(currentRow);
-            }
-
-            const headers = rows[0];
-            const data = rows.slice(1).map(row => {
-                const obj = {};
-                headers.forEach((header, idx) => {
-                obj[header] = row[idx] ?? ''; // Handle missing fields
-                });
-                return obj;
-            });
-
-            return data;
-        }
-
-        // Function to get available ids from a folder using the pre-generated JSON
-        async function getAvailableIds(folderPrefix) {
-            try {
-                // Load the pre-generated available_ids.json file
-                const availableIds = await loadJSON('available_ids.json');
-
-                if (folderPrefix === 'aphantasia') {
-                    return availableIds.aphantasia_ids;
-                } else if (folderPrefix === 'phantasia') {
-                    return availableIds.phantasia_ids;
-                } else {
-                    console.error(`Unknown folder prefix: ${folderPrefix}`);
-                    return [];
-                }
-            } catch (error) {
-                console.error(`Error getting IDs for ${folderPrefix}:`, error);
-                return [];
-            }
-        }
-
-        async function initializeMetadata() {
-            try {
-                const configData = await loadJSON('config.json');
-
-                // Randomize the order of available models
-                const availableModels = shuffleArray(configData.available_models || []);
-
-                const hallucinationsData = await loadCSV('hallucinations.csv');
-                const aphantasiaImages = configData.image_paths?.aphantasia_images || {};
-                const phantasiaImages = configData.image_paths?.phantasia_images || {};
-                const aphantasiaIds = configData.aphantasia_ids || Object.keys(aphantasiaImages).map(Number);
-                const phantasiaIds = configData.phantasia_ids || Object.keys(phantasiaImages).map(Number);
-
-                metadata = {
-                    available_models: availableModels,
-                    hallucinations_data: hallucinationsData,
-                    aphantasia_images: aphantasiaImages,
-                    phantasia_images: phantasiaImages,
-                    aphantasia_ids: aphantasiaIds,
-                    phantasia_ids: phantasiaIds,
-                    participant_ids: configData.participant_ids || []
-                };
-
-                console.log("Metadata initialized:", metadata);
-                await startExperiment();
-
-            } catch (error) {
-                console.error("Error loading metadata:", error);
-                document.querySelector('#jspsych-target').innerHTML = '<p style="color: red;">Error loading study data. Please refresh the page or contact the researcher.</p>';
-            }
-        }
-
-        // Function to save participant data
-        async function saveParticipantData(participantId, trials) {
-            const requestBody = {
-                current_participant_data: {
-                    [participantId]: trials
-                }
-            };
-
-            try {
-                const response = await fetch('http://localhost:3000/save-participant-data', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestBody)
-                });
-
-                if (!response.ok) {
-                    console.error('Failed to save participant data:', await response.text());
-                } else {
-                    console.log('Participant data saved successfully.');
-                }
-            } catch (error) {
-                console.error('Error saving participant data:', error);
-            }
-        }
-
-        // Function to save image debrief data
-        async function saveImageDebriefData(participantId, debriefData) {
-            const requestBody = {
-                current_participant_data: {
-                    [participantId]: debriefData
-                }
-            };
-
-            try {
-                const response = await fetch('http://localhost:3000/save-likert-data', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestBody)
-                });
-
-                if (!response.ok) {
-                    console.error('Failed to save image debrief data:', await response.text());
-                } else {
-                    console.log('Image debrief data saved successfully.');
-                }
-            } catch (error) {
-                console.error('Error saving image debrief data:', error);
-            }
-        }
-
-        // Initialize jsPsych
-        const jsPsych = initJsPsych({
-            on_finish: function(data) {
-                // The data saving is now handled in the completionTrial's on_load function
-                console.log('Study completed!');
-                // console.log('Final data:', JSON.stringify(jsPsych.data.get().values()));
-            }
-        });
-
-        // Study parameters
-        let currentParticipant = {
-            results: {},
-            description: "" // Added placeholder for participant description
-        };
+        let currentParticipant = { results: { trials: [] } };
         let aphantasiaParticipant;
         let phantasiaParticipant;
-        let selectedImages = {};
-        let finalSelectedModel = null;
+        let firstRoundChoicesByModel = {};
+        let firstRoundSelections_all = [];
+        let secondRoundSelections = [];
+        let thirdRoundDebriefData = {};
 
-        // Function to get random item from an array
-        function getRandomItem(array) {
-            return array[Math.floor(Math.random() * array.length)];
-        }
-
-        // Function to shuffle an array
-        function shuffleArray(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        // --- Utility Functions ---
+        function getCurrentDateTime() { return new Date().toISOString(); }
+        async function loadJSON(file) { const r = await fetch(file); if (!r.ok) throw new Error(`Failed to load ${file}`); return await r.json(); }
+        async function loadCSV(file) { const r = await fetch(file); if (!r.ok) throw new Error(`Failed to load ${file}`); return parseCSV(await r.text()); }
+        function parseCSV(csvText) {
+            const rows = []; let peintre = false; let champActuel = ''; let ligneActuelle = []; let i = 0;
+            const pushField = () => { ligneActuelle.push(champActuel); champActuel = ''; };
+            while (i < csvText.length) {
+                const char = csvText[i]; const nextChar = csvText[i + 1];
+                if (char === '"') { if (peintre && nextChar === '"') { champActuel += '"'; i++; } else { peintre = !peintre; } }
+                else if (char === ',' && !peintre) { pushField(); }
+                else if ((char === '\n' || char === '\r') && !peintre) {
+                    if (char === '\r' && nextChar === '\n') i++; pushField();
+                    if (ligneActuelle.length > 1 || ligneActuelle.some(f => f.trim() !== '') || rows.length === 0) { rows.push(ligneActuelle); }
+                    ligneActuelle = [];
+                } else { champActuel += char; }
+                i++;
             }
-            return newArray;
+            if (champActuel.length > 0 || ligneActuelle.some(f => f.trim() !== '')) { pushField(); rows.push(ligneActuelle); }
+            if (rows.length === 0 || rows[0].every(header => header.trim() === '')) return [];
+            const headers = rows[0];
+            return rows.slice(1).map(row => { const obj = {}; headers.forEach((header, idx) => { obj[header] = row[idx] ?? ''; }); return obj; });
+        }
+        function shuffleArray(array) { const n = [...array]; for (let i = n.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [n[i],n[j]]=[n[j],n[i]];} return n;}
+        function getRandomItem(array) { if (!array || array.length === 0) return undefined; return array[Math.floor(Math.random() * array.length)]; }
+        function findParticipantById(id) { if (!metadata || !metadata.hallucinations_data) return undefined; return metadata.hallucinations_data.find(p => p.id.toString() === id.toString()); }
+        function getImageBaseName(sourceType, model, id) { return `${id}_${model}`; }
+        function getImagePath(sourceType, model, pId = participantId, apId = aphantasiaParticipant?.id, phId = phantasiaParticipant?.id) {
+            if (!metadata) { console.error("Metadata not initialized for getImagePath"); return "images/placeholder.jpeg"; }
+            pId = pId || participantId || "unknown_participant"; apId = apId || aphantasiaParticipant?.id || "unknown_aphant"; phId = phId || phantasiaParticipant?.id || "unknown_phant";
+            let idToUse, imagePath;
+            if (sourceType === "participant") { idToUse = pId; imagePath = `participant_data/participant_${idToUse}/participant_${idToUse}_${model}.jpeg`; }
+            else if (sourceType === "aphantasia") { idToUse = apId; if (metadata.aphantasia_images && metadata.aphantasia_images[idToUse] && metadata.aphantasia_images[idToUse][model]) imagePath = metadata.aphantasia_images[idToUse][model]; }
+            else if (sourceType === "phantasia") { idToUse = phId; if (metadata.phantasia_images && metadata.phantasia_images[idToUse] && metadata.phantasia_images[idToUse][model]) imagePath = metadata.phantasia_images[idToUse][model]; }
+            if (!imagePath) { console.error(`Could not find image path for ${sourceType}, ID: ${idToUse}, Model: ${model}. Placeholder.`); return "images/placeholder.jpeg"; }
+            return imagePath;
         }
 
-        // Function to find participant data by ID
-        function findParticipantById(id) {
-            return metadata.hallucinations_data.find(p => p.id === id.toString());
+        // --- Mock Data Generation ---
+        function generateMockFirstRoundSelections(numModels) {
+            const mockSelections = []; const models = metadata.available_models.slice(0, numModels);
+            if (!participantId || !aphantasiaParticipant || !phantasiaParticipant) { console.error("DEBUG: Cannot mock R1 data, participant details missing."); return []; }
+            for (let i = 0; i < models.length; i++) {
+                const model = models[i]; const sourceTypes = ["own", "aphantasia", "phantasia"]; const sourceType = sourceTypes[i % 3];
+                let id = (sourceType === "own") ? participantId : (sourceType === "aphantasia" ? aphantasiaParticipant.id : phantasiaParticipant.id);
+                mockSelections.push({ path: getImagePath(sourceType === "own" ? "participant" : sourceType, model), imageBaseName: `${id}_${model}`, originalModel: model, sourceType: sourceType, datetime_round1: getCurrentDateTime(), rt_round1: Math.random()*1000+500 });
+            }
+            console.log("DEBUG: Mock R1 selections:", mockSelections); return shuffleArray(mockSelections);
+        }
+        function generateMockSecondRoundSelections(sourceArray, numSelections = 3) {
+            if (!sourceArray || sourceArray.length === 0) { console.error("DEBUG: Source for mock R2 empty."); return []; }
+            const selections = shuffleArray([...sourceArray]).slice(0, Math.min(numSelections, sourceArray.length)).map(img => ({ ...img, datetime_round2: getCurrentDateTime(), rt_round2: Math.random()*1500+700 }));
+            console.log("DEBUG: Mock R2 selections:", selections); return selections;
+        }
+        function generateMockThirdRoundDebrief(imagesToRate) {
+            const debrief = { subject_id: participantId }; if (!imagesToRate || imagesToRate.length === 0) { console.error("DEBUG: No images for mock R3 debrief."); return debrief; }
+            imagesToRate.forEach((img, index) => { const i = index + 1; debrief[`final_image_${i}`] = img.imageBaseName; ['color', 'shape', 'content', 'overall'].forEach(dim => debrief[`${dim}_${i}`] = Math.floor(Math.random()*11).toString()); debrief[`detailed_feedback_${i}`] = `Mock detailed feedback for image ${img.imageBaseName}. This was automatically generated for testing.`; });
+            console.log("DEBUG: Mock R3 debrief:", debrief); return debrief;
         }
 
-        // Function to initialize study data for a new participant
-        function initializeStudyData() {
-            // Select one random aphantasia ID
-            const aphantasiaId = getRandomItem(metadata.aphantasia_ids);
-            aphantasiaParticipant = findParticipantById(aphantasiaId);
-
-            // If not found, create a fallback
-            if (!aphantasiaParticipant) {
-                aphantasiaParticipant = {
-                    id: aphantasiaId,
-                    "Please describe as much as you can remember about what you saw in the Ganzflicker:":
-                    "Participant data not found. This is a fallback description for aphantasia participant."
+        // --- Initialization ---
+        async function initializeMetadata() {
+            try {
+                const config = await loadJSON('config.json');
+                metadata = {
+                    available_models: shuffleArray(config.available_models || []),
+                    hallucinations_data: await loadCSV('hallucinations.csv'),
+                    aphantasia_images: config.image_paths?.aphantasia_images || {},
+                    phantasia_images: config.image_paths?.phantasia_images || {},
+                    aphantasia_ids: config.aphantasia_ids || Object.keys(config.image_paths?.aphantasia_images || {}).map(String),
+                    phantasia_ids: config.phantasia_ids || Object.keys(config.image_paths?.phantasia_images || {}).map(String),
+                    participant_ids: config.participant_ids || []
                 };
-            }
-
-            // Select one random phantasia ID
-            const phantasiaId = getRandomItem(metadata.phantasia_ids);
-            phantasiaParticipant = findParticipantById(phantasiaId);
-
-            // If not found, create a fallback
-            if (!phantasiaParticipant) {
-                phantasiaParticipant = {
-                    id: phantasiaId,
-                    "Please describe as much as you can remember about what you saw in the Ganzflicker:":
-                    "Participant data not found. This is a fallback description for phantasia participant."
-                };
-            }
-
-            // Initialize results structure for the current participant
-            currentParticipant.results = {
-                subject_id: participantId,
-                aphantasia_id: aphantasiaId,
-                phantasia_id: phantasiaId,
-                aphantasia_description: aphantasiaParticipant["Please describe as much as you can remember about what you saw in the Ganzflicker:"],
-                phantasia_description: phantasiaParticipant["Please describe as much as you can remember about what you saw in the Ganzflicker:"],
-                trials: [], // New array to store all trial results in the new format
-                user_choices: {} // Keep the old format for compatibility
-            };
-
-            console.log("Study initialized for participant:", participantId);
-            console.log("Aphantasia ID:", aphantasiaId, "Description:", currentParticipant.results.aphantasia_description);
-            console.log("Phantasia ID:", phantasiaId, "Description:", currentParticipant.results.phantasia_description);
+                console.log("Metadata initialized."); await startExperiment();
+            } catch (error) { console.error("Error loading metadata:", error); document.querySelector('#jspsych-target').innerHTML = `<p class="error">Error loading study configuration files. Please check the console for details and ensure 'config.json', 'hallucinations.csv', and image paths are correct. You may need to refresh the page or contact the researcher.</p>`; }
+        }
+        function initializeStudyDataForParticipant() {
+            aphantasiaParticipant = findParticipantById(getRandomItem(metadata.aphantasia_ids)) || { id: "default_aphant_id", "Please describe as much as you can remember about what you saw in the Ganzflicker:": "Aphantasia description not found."};
+            phantasiaParticipant = findParticipantById(getRandomItem(metadata.phantasia_ids)) || { id: "default_phant_id", "Please describe as much as you can remember about what you saw in the Ganzflicker:": "Phantasia description not found."};
+            const selfData = findParticipantById(participantId);
+            currentParticipant.results.subject_id = participantId;
+            currentParticipant.results.aphantasia_id = aphantasiaParticipant.id.toString();
+            currentParticipant.results.phantasia_id = phantasiaParticipant.id.toString();
+            currentParticipant.description = selfData ? selfData["Please describe as much as you can remember about what you saw in the Ganzflicker:"] : "Participant's own description not found in hallucinations.csv.";
+            thirdRoundDebriefData = { subject_id: participantId };
+            console.log(`Study initialized for P: ${participantId}, A: ${aphantasiaParticipant.id}, Ph: ${phantasiaParticipant.id}`);
         }
 
-        // Function to get image base name without extension 
-        function getImageBaseName(descriptionType, model) {
-            if (descriptionType === "participant") {
-                return `${participantId}_${model}`;
-            } else if (descriptionType === "aphantasia") {
-                return `${aphantasiaParticipant.id}_${model}`;
-            } else if (descriptionType === "phantasia") {
-                return `${phantasiaParticipant.id}_${model}`;
-            }
-            return "placeholder";
-        }
+        // --- jsPsych Instance ---
+        const jsPsych = initJsPsych({ on_finish: () => console.log('jsPsych.on_finish: Study timeline completed.') });
 
-        // Function to get image path for display
-        function getImagePath(descriptionType, model) {
-            if (!aphantasiaParticipant || !phantasiaParticipant || !metadata) {
-                console.error("Data not yet initialized!");
-                return "placeholder.jpeg";
-            }
-
-            // Treat "own_description" as "participant"
-            if (descriptionType === "participant" || descriptionType === "own_description") {
-                return `participant_data/participant_${participantId}/participant_${participantId}_${model}.jpeg`;
-            } 
-            // Treat "aphantasia_description" as "aphantasia"
-            else if (descriptionType === "aphantasia" || descriptionType === "aphantasia_description") {
-                if (metadata.aphantasia_images[aphantasiaParticipant.id] && metadata.aphantasia_images[aphantasiaParticipant.id][model]) {
-                    return metadata.aphantasia_images[aphantasiaParticipant.id][model];
-                }
-            } 
-            // Treat "phantasia_description" as "phantasia"
-            else if (descriptionType === "phantasia" || descriptionType === "phantasia_description") {
-                if (metadata.phantasia_images[phantasiaParticipant.id] && metadata.phantasia_images[phantasiaParticipant.id][model]) {
-                    return metadata.phantasia_images[phantasiaParticipant.id][model];
-                }
-            }
-
-            console.error(`Could not find image path for ${descriptionType}, ID: ${aphantasiaParticipant?.id || phantasiaParticipant?.id}, Model: ${model}`);
-            return "placeholder.jpeg"; // Fallback
-        }
-
-        // Updated preload section to directly use the determined image paths
-        const preloadTrial = {
-            type: jsPsychPreload,
-            images: function() {
-                const imagesToPreload = [];
-                if (aphantasiaParticipant && phantasiaParticipant && metadata && metadata.available_models) {
-                    metadata.available_models.forEach(model => {
-                        imagesToPreload.push(getImagePath("participant", model));
-                        imagesToPreload.push(getImagePath("aphantasia", model));
-                        imagesToPreload.push(getImagePath("phantasia", model));
-                    });
-                }
-                return imagesToPreload;
-            },
-            auto_preload: true,
-            message: "Loading study images...",
-            show_progress_bar: true,
-            on_load: function() {
-                console.log("Images preloaded successfully!");
-            },
-            on_error: function(file) {
-                console.error(`Error preloading image: ${file}`);
-            }
-        };
-
+        // --- Trial Definitions ---
         const participantIdTrial = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: function() {
-                return `
+            stimulus: () => `
+                <div style="max-width: 700px; margin: auto; text-align: center;">
                     <h1>Please enter your Participant ID:</h1>
-                    <input type="text" id="participant-id-input">
-                    <button id="start-button">Start Study</button>
-                    <p id="error-message" class="error"></p>
-                    <div id="valid-ids-container" style="display: none;">
-                        <p><strong>Valid Participant IDs:</strong></p>
-                        <div id="valid-ids-list" style="margin: 20px auto; max-width: 80%; overflow-y: auto; max-height: 50vh;"></div>
+                    <input type="text" id="participant-id-input" style="font-size: 1.2em; padding: 10px; margin-bottom: 15px; width: 80%; border-radius: 4px; border: 1px solid #ccc;">
+                    <button id="start-button" style="font-size: 1.1em; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Start Study</button>
+                    <p id="error-message" class="error" style="margin-top: 15px;"></p>
+                    <div id="valid-ids-container" style="display: none; margin-top: 20px;">
+                        <p style="font-weight: bold;">Valid Participant IDs:</p>
+                        <div id="valid-ids-list" style="margin: 10px auto; max-width: 90%; overflow-y: auto; max-height: 200px; border: 1px solid #eee; padding: 10px; background-color: #f9f9f9;"></div>
                     </div>
-                `;
-            },
+                </div>`,
             choices: 'NO_KEYS',
-            on_load: function() {
-                document.querySelector('#start-button').addEventListener('click', function() {
-                    validateAndProceed();
-                });
-                
-                // Also allow Enter key to submit
-                document.querySelector('#participant-id-input').addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        validateAndProceed();
-                    }
-                });
-                
-                function validateAndProceed() {
-                    const inputElement = document.querySelector('#participant-id-input');
-                    const errorElement = document.querySelector('#error-message');
-                    const validIdsContainer = document.querySelector('#valid-ids-container');
-                    const validIdsList = document.querySelector('#valid-ids-list');
-                    
-                    if (!inputElement) return;
-                    
-                    const enteredId = inputElement.value.trim();
-                    
-                    if (enteredId === '') {
-                        errorElement.textContent = 'Please enter a Participant ID.';
-                        return;
-                    }
-                    
-                    // Check if the entered ID is in the list of valid IDs
-                    if (metadata && metadata.participant_ids && metadata.participant_ids.includes(enteredId)) {
-                        participantId = enteredId;
-                        jsPsych.finishTrial();
+            on_load: () => {
+                const startBtn = document.querySelector('#start-button'), inputEl = document.querySelector('#participant-id-input');
+                const validateAndProceed = () => { 
+                    const errEl = document.querySelector('#error-message'), validIdsCont = document.querySelector('#valid-ids-container'), validIdsList = document.querySelector('#valid-ids-list');
+                    if (!inputEl || !errEl || !validIdsCont || !validIdsList) { console.error("ID trial: DOM elements missing."); return; }
+                    const enteredId = inputEl.value.trim();
+                    if (enteredId === '') { errEl.textContent = 'Please enter a Participant ID.'; return; } 
+                    if (metadata?.participant_ids?.map(String).includes(enteredId)) {
+                        participantId = enteredId; initializeStudyDataForParticipant(); jsPsych.finishTrial();
                     } else {
-                        // Show error and list valid IDs
-                        errorElement.textContent = 'Invalid Participant ID. Please use one from the list below:';
-                        errorElement.style.color = 'red';
-                        errorElement.style.fontSize = '20px';
-                        errorElement.style.fontWeight = 'bold';
-                        
-                        // Display the valid IDs
-                        validIdsContainer.style.display = 'block';
-                        validIdsList.innerHTML = '';
-                        
-                        if (metadata && metadata.participant_ids && metadata.participant_ids.length > 0) {
-                            // Create a responsive grid for the IDs
-                            const idGrid = document.createElement('div');
-                            idGrid.style.display = 'grid';
-                            
-                            // Determine grid columns based on number of IDs
-                            const numIds = metadata.participant_ids.length;
-                            let columns;
-                            
-                            if (numIds <= 5) {
-                                columns = 1; // Single column for few IDs
-                            } else if (numIds <= 20) {
-                                columns = 3; // 3 columns for moderate number
-                            } else if (numIds <= 50) {
-                                columns = 4; // 4 columns for many IDs
-                            } else {
-                                columns = 5; // 5 columns for very many IDs
-                            }
-                            
-                            idGrid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-                            idGrid.style.gap = '10px';
-                            idGrid.style.justifyItems = 'center';
-                            
+                        errEl.textContent = 'Invalid Participant ID. Please use one from the list below or contact the researcher if your ID is missing.'; validIdsCont.style.display = 'block'; validIdsList.innerHTML = ''; 
+                        if (metadata?.participant_ids?.length > 0) {
+                            const grid = document.createElement('div'); grid.style.display = 'grid'; const numIds = metadata.participant_ids.length;
+                            grid.style.gridTemplateColumns = `repeat(${numIds <= 5 ? 1 : numIds <= 20 ? 3 : numIds <= 50 ? 4 : 5}, 1fr)`;
+                            grid.style.gap = '8px'; grid.style.justifyItems = 'center';
                             metadata.participant_ids.forEach(id => {
-                                const idElement = document.createElement('div');
-                                idElement.textContent = id;
-                                idElement.style.fontSize = '18px';
-                                idElement.style.padding = '5px 10px';
-                                idElement.style.fontWeight = 'bold';
-                                idElement.style.border = '1px solid #ccc';
-                                idElement.style.borderRadius = '5px';
-                                idElement.style.backgroundColor = '#f8f8f8';
-                                idElement.style.width = '80px';
-                                idElement.style.textAlign = 'center';
-                                
-                                // Make ID clickable to auto-fill input
-                                idElement.style.cursor = 'pointer';
-                                idElement.addEventListener('click', function() {
-                                    inputElement.value = id;
-                                    // Highlight the input to show it's been updated
-                                    inputElement.style.backgroundColor = '#ffffcc';
-                                    setTimeout(() => {
-                                        inputElement.style.backgroundColor = '';
-                                    }, 500);
-                                });
-                                
-                                idGrid.appendChild(idElement);
-                            });
-                            
-                            validIdsList.appendChild(idGrid);
-                        } else {
-                            validIdsList.innerHTML = '<div style="font-size: 18px;">No valid IDs found. Please contact the researcher.</div>';
-                        }
+                                const el = document.createElement('div'); el.textContent = id;
+                                Object.assign(el.style, { fontSize: '1em', padding: '5px', border: '1px solid #ccc', borderRadius: '3px', backgroundColor: '#f8f8f8', minWidth: '60px', textAlign: 'center', cursor: 'pointer' });
+                                el.addEventListener('click', () => { inputEl.value = id; inputEl.focus(); });
+                                grid.appendChild(el);
+                            }); validIdsList.appendChild(grid);
+                        } else { validIdsList.innerHTML = `<div style="font-size: 1em;">No valid IDs found in configuration. Please contact the researcher.</div>`; } 
                     }
-                }
+                };
+                if (startBtn) startBtn.addEventListener('click', validateAndProceed);
+                if (inputEl) inputEl.addEventListener('keypress', e => { if (e.key === 'Enter') validateAndProceed(); });
             }
         };
-
-        // Create welcome screen with fullscreen functionality
-        const welcomeTrial = {
+        const welcomeTrial = { 
             type: jsPsychHtmlButtonResponse,
             stimulus: function() {
                 return `
-                    <style>
-                        .instruction-text {
-                            font-size: 1.2em;
-                            line_height: 1.4;
-                        }
-                    </style>
-                    <h1>Welcome to the Ganzflicker Study</h1>
-                    <p class="instruction-text">
-                        Your Participant ID is: <b>${participantId}</b>
-                        <br><br>
-                        In this study, you will be shown sets of images generated based on hallucination descriptions.
-                        <br><br>
-                        For each set, please select the image that best represents what you "saw" during your ganzflicker experience.
-                        <br><br>
-                        <b>The study will switch to fullscreen mode when you click "Begin Study".</b>
-                    </p>
-                `;
+                    <div id="welcome-screen-wrapper">
+                        <div style="max-width: 900px; margin: auto; text-align: center; padding: 20px;">
+                            <h1 style="text-align: center;">Welcome to the Ganzflicker Study</h1>
+                            <p class="instruction-text" style="text-align: center;">
+                                Your Participant ID is: <b>${participantId}</b>
+                                <br><br>
+                                In this study, you will be shown sets of images. Some images are generated based on descriptions of visual experiences during Ganzfeld-like stimulation.
+                                <br><br>
+                                Your task is to select images that best represent what you "saw" or experienced visually during your own Ganzflicker session.
+                                <br><br>
+                                Please make your selections carefully. You will also be asked some questions about the images you choose.
+                                <br><br>
+                                <b>The study will switch to fullscreen mode when you click "Begin Study".</b>
+                            </p>
+                        </div>
+                    </div>
+                    `;
             },
             choices: ["Begin Study"],
-            on_load: function() {
-                // Add event listener to the button to enter fullscreen before finishing the trial
-                document.querySelector('.jspsych-btn').addEventListener('click', function(e) {
-                    // Prevent default button behavior temporarily
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Request fullscreen
-                    const element = document.documentElement;
-                    if (element.requestFullscreen) {
-                        element.requestFullscreen();
-                    } else if (element.mozRequestFullScreen) {
-                        element.mozRequestFullScreen();
-                    } else if (element.webkitRequestFullscreen) {
-                        element.webkitRequestFullscreen();
-                    } else if (element.msRequestFullscreen) {
-                        element.msRequestFullscreen();
-                    }
-                    
-                    // Continue with the trial after a short delay to allow fullscreen to engage
-                    setTimeout(() => {
-                        // Initialize the study data and continue
-                        initializeStudyData();
-                        
-                        // Now finish the trial
-                        const clickEvent = new MouseEvent('click', {
-                            bubbles: true,
-                            cancelable: true,
-                            view: window
-                        });
-                        
-                        // We need to simulate a new click after the fullscreen request
-                        document.querySelector('.jspsych-btn').dispatchEvent(clickEvent);
-                    }, 500);
-                }, { once: true }); // Use once: true to prevent multiple handlers
+            on_load: () => {
+                document.querySelector('.jspsych-btn').addEventListener('click', e => {
+                    e.preventDefault(); e.stopPropagation(); const el = document.documentElement;
+                    if (el.requestFullscreen) el.requestFullscreen(); else if (el.mozRequestFullScreen) el.mozRequestFullScreen(); else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen(); else if (el.msRequestFullscreen) el.msRequestFullscreen();
+                    setTimeout(() => { const clickEv = new MouseEvent('click', {bubbles:true,cancelable:true,view:window}); document.querySelector('.jspsych-btn').dispatchEvent(clickEv);}, 500);
+                }, { once: true });
             },
-            on_finish: function() {
-                console.log("Welcome trial completed, study data initialized");
-            }
+            on_finish: () => console.log("Welcome trial completed, study entering fullscreen.") 
         };
-
-        // Create exit fullscreen trial for the end of the experiment
-        const exitFullscreenTrial = {
-            type: jsPsychFullscreen,
-            fullscreen_mode: false,
-            delay_after: 0
+        const preloadTrial = {
+            type: jsPsychPreload,
+            images: () => {
+                const images = new Set();
+                if (participantId && aphantasiaParticipant && phantasiaParticipant && metadata?.available_models) {
+                    metadata.available_models.forEach(model => { const apId = aphantasiaParticipant.id, phId = phantasiaParticipant.id; [ "participant", "aphantasia", "phantasia"].forEach(type => images.add(getImagePath(type, model, participantId, apId, phId))); });
+                } else { console.warn("Preload: Participant details or models not available when generating image list."); return ["images/placeholder.jpeg"]; } 
+                const valid = Array.from(images).filter(img => img !== "images/placeholder.jpeg");
+                if (valid.length === 0 && images.size > 0) console.warn("Preload: Only placeholder images were generated. Check image paths and IDs in config and CSV."); 
+                else if (valid.length < images.size) console.warn("Preload: Some images resolved to placeholder.jpeg. Check specific image paths and IDs."); 
+                return valid.length > 0 ? valid : (images.size > 0 ? ["images/placeholder.jpeg"] : []);
+            },
+            auto_preload: true, message: "<p>Loading study images... This may take a moment.</p>", show_progress_bar: true, continue_after_error: true, 
+            on_error: file => console.error(`Error preloading image: ${file}. The study will attempt to continue, but this image might be missing or replaced by a placeholder.`), 
+            error_message: "<p>Some images could not be loaded. You can still continue the study, but some images might be missing. Please inform the researcher about this issue.</p>" 
         };
-
-        // Create image trial for each model with updated data format
         function createModelImageTrial(model, modelIndex) {
             return {
                 type: jsPsychHtmlKeyboardResponse,
-                stimulus: function() {
-                    const imageOptions = [
-                        {
-                            type: "aphantasia",
-                            path: getImagePath("aphantasia", model),
-                            desc: currentParticipant.results.aphantasia_description
-                        },
-                        {
-                            type: "phantasia",
-                            path: getImagePath("phantasia", model),
-                            desc: currentParticipant.results.phantasia_description
-                        },
-                        {
-                            type: "participant",
-                            path: getImagePath("participant", model),
-                            desc: currentParticipant.description
-                        }
-                    ];
-
-                    // Shuffle the options
-                    const shuffledOptions = shuffleArray(imageOptions);
-
-                    // Store the positions for data recording
-                    jsPsych.data.addProperties({
-                        [`${model}_image_positions`]: shuffledOptions.map(o => o.type)
-                    });
-
-                    return `
-                        <style>
-                            .instruction-text {
-                                font-size: 1.5em;
-                                line_height: 1.2;
-                            }
-                        </style>
-                        <!-- <h2>Images Generated by ${model.toUpperCase()}</h2> -->
-                        <p class="instruction-text">Click on the image that best represents what you "saw" during the ganzflicker experience.</p>
-                        <div class="image-container">
-                            ${shuffledOptions.map((option, index) => `
-                                <div class="image-option" data-type="${option.type}" data-position="${index}" data-index="${modelIndex}">
-                                    <img src="${option.path}" alt="Image option ${index + 1}">
-                                </div>
-                            `).join('')}
-                        </div>
-                        <button class="next-button" id="next-button">Next</button>
-                    `;
+                stimulus: () => {
+                    const options = shuffleArray([ {type:"aphantasia", path:getImagePath("aphantasia",model, participantId, aphantasiaParticipant.id, phantasiaParticipant.id), id:aphantasiaParticipant.id}, {type:"phantasia",path:getImagePath("phantasia",model, participantId, aphantasiaParticipant.id, phantasiaParticipant.id),id:phantasiaParticipant.id}, {type:"participant",path:getImagePath("participant",model, participantId, aphantasiaParticipant.id, phantasiaParticipant.id),id:participantId} ]);
+                    jsPsych.data.addProperties({ [`${model}_image_positions_r1`]: options.map(o => o.type) });
+                    return `<p class="instruction-text">Click on the image that best represents what you "saw" during the ganzflicker experience.</p><div class="image-container">${options.map((opt, idx) => `<div class="image-option" data-source-type="${opt.type}" data-image-id="${opt.id}" data-model="${model}" data-path="${opt.path}" data-position-index="${idx}"><img src="${opt.path}" alt="Image option ${idx+1} for model ${model}"></div>`).join('')}</div><p id="error-message-round1-${modelIndex}" class="error" style="display:none;">Please select an image to continue.</p><button class="next-button" id="next-button-round1-${modelIndex}">Next</button>`;
                 },
-                choices: [],
-                trial_duration: null,
-                on_load: function() {
-                    // Start timing as soon as the trial loads
-                    const startTime = performance.now();
-                    let selectedElement = null;
-                    
-                    // Get the next button element
-                    const nextButton = document.getElementById('next-button');
-
-                    // Add click event to images
-                    document.querySelectorAll('.image-option').forEach(element => {
-                        element.addEventListener('click', function() {
-                            // First, remove selection class from all images
-                            document.querySelectorAll('.image-option').forEach(el => {
-                                el.querySelector('img').classList.remove('selected-image');
-                            });
-                            
-                            // Add selection class to clicked image
-                            this.querySelector('img').classList.add('selected-image');
-                            
-                            // Record the selection
-                            selectedElement = this;
-                            
-                            // Show the next button
-                            nextButton.style.display = 'block';
-                        });
-                    });
-                    
-                    // Add click event for the next button to advance to the next trial
-                    nextButton.addEventListener('click', function() {
-                        if (selectedElement) {
-                            // Record the time when the next button is clicked
-                            const endTime = performance.now();
-                            
-                            const selectedType = selectedElement.getAttribute('data-type');
-                            const position = parseInt(selectedElement.getAttribute('data-position'));
-                            const imagePath = selectedElement.querySelector('img').src;
-                            
-                            // Extract the image filename without extension
-                            const fullFilename = imagePath.split('/').pop();
-                            const imageBaseName = fullFilename.split('.')[0]; // Remove the extension
-
-                            // Convert position to location name
-                            const locationNames = ["left", "middle", "right"];
-                            const locationName = locationNames[position];
-
-                            // Convert to new choice format
-                            let choiceName;
-                            if (selectedType === "aphantasia") {
-                                choiceName = "aphantasia";
-                            } else if (selectedType === "phantasia") {
-                                choiceName = "phantasia";
-                            } else {
-                                choiceName = "own";
-                            }
-
-                            // Calculate if the choice is accurate (they chose their own description)
-                            const accuracy = selectedType === "participant" ? 1 : 0;
-
-                            // Calculate reaction time from trial load to Next button click
-                            const reactionTime = (endTime - startTime) / 1000;
-
-                            // Get current date and time
-                            const datetime = getCurrentDateTime();
-
-                            // Create the new format result entry
-                            const resultEntry = {
-                                subject_id: participantId,
-                                trial_type: "normal",
-                                model: model,
-                                aphantasia_image: getImageBaseName("aphantasia", model),
-                                phantasia_image: getImageBaseName("phantasia", model),
-                                target: getImageBaseName("participant", model),
-                                choice: choiceName,
-                                reaction_time: parseFloat(reactionTime.toFixed(2)),
-                                image_choice_location: locationName,
-                                accuracy: accuracy,
-                                chosen_model: "na",
-                                chosen_image: imageBaseName,  // Add the chosen image filename without extension
-                                datetime: datetime // Add the date and time
-                            };
-
-                            // Store the result entry in new format
-                            if (!currentParticipant.results.trials) {
-                                currentParticipant.results.trials = [];
-                            }
-                            currentParticipant.results.trials.push(resultEntry);
-
-                            // Also store the selection in the old format for compatibility
-                            let choiceCategory;
-                            if (selectedType === "aphantasia") {
-                                choiceCategory = "aphantasia_description";
-                            } else if (selectedType === "phantasia") {
-                                choiceCategory = "phantasia_description";
-                            } else {
-                                choiceCategory = "own_description";
-                            }
-                            
-                            selectedImages[model] = {
-                                path: selectedElement.querySelector('img').src,
-                                type: selectedType,
-                                choice: choiceName,
-                                image_choice_location: locationName,
-                                reaction_time: reactionTime.toFixed(2),
-                                imageBaseName: imageBaseName, // Store the image base name
-                                datetime: datetime // Add the date and time
-                            };
-
-                            // Also record for old format compatibility
-                            currentParticipant.results.user_choices[model] = {
-                                choice: choiceCategory,
-                                reaction_time: parseFloat(reactionTime.toFixed(2)),
-                                image_choice_location: locationName,
-                                chosen_image: imageBaseName, // Add the chosen image base name
-                                datetime: datetime // Add the date and time
-                            };
-
-                            // End the trial to move to the next
-                            jsPsych.finishTrial({
-                                selected_image: selectedImages[model],
-                                rt: reactionTime,
-                                datetime: datetime
-                            });
-                        }
+                choices: [], 
+                on_load: () => {
+                    const startTime = performance.now(); let selectedEl = null; const nextBtn = document.getElementById(`next-button-round1-${modelIndex}`), errEl = document.getElementById(`error-message-round1-${modelIndex}`);
+                    document.querySelectorAll('.image-option').forEach(el => el.addEventListener('click', function() { document.querySelectorAll('.image-option img').forEach(img => img.classList.remove('selected-image')); this.querySelector('img').classList.add('selected-image'); selectedEl = this; if(nextBtn) nextBtn.style.display='block'; if(errEl) errEl.style.display='none'; }));
+                    if(nextBtn) nextBtn.addEventListener('click', () => {
+                        if(selectedEl) {
+                            const rt = performance.now() - startTime, srcType = selectedEl.getAttribute('data-source-type'), imgId = selectedEl.getAttribute('data-image-id'), chModel = selectedEl.getAttribute('data-model'), imgPath = selectedEl.getAttribute('data-path'), posIdx = parseInt(selectedEl.getAttribute('data-position-index'));
+                            const choiceLoc = ["left","middle","right"][posIdx] || `pos_${posIdx}`, imgBaseName = `${imgId}_${chModel}`;
+                            const choiceDesig = (srcType === "participant") ? "own" : srcType; 
+                            const trialData = { subject_id: participantId, trial_type: "first_round", model: chModel, aphantasia_image: getImageBaseName("aphantasia", chModel, aphantasiaParticipant.id), phantasia_image: getImageBaseName("phantasia", chModel, phantasiaParticipant.id), target: getImageBaseName("participant", chModel, participantId), choice: choiceDesig, reaction_time: parseFloat((rt/1000).toFixed(3)), image_choice_location: choiceLoc, accuracy: (srcType === "participant")?1:0, chosen_model: chModel, chosen_image: imgBaseName, datetime: getCurrentDateTime() };
+                            currentParticipant.results.trials.push(trialData);
+                            firstRoundChoicesByModel[chModel] = { path:imgPath, imageBaseName:imgBaseName, originalModel:chModel, sourceType:choiceDesig, datetime_round1:trialData.datetime, rt_round1:rt };
+                            jsPsych.finishTrial(trialData);
+                        } else { if(errEl) errEl.style.display='block'; }
                     });
                 }
             };
         }
-
-        // Update the final selection trial to use the new data format
-        const finalSelectionTrial = {
-            type: jsPsychHtmlKeyboardResponse,
-            stimulus: function() {
-                // Calculate grid positions for each model
-                const positions = {};
-                metadata.available_models.forEach((model, index) => {
-                    const row = Math.floor(index / 3);
-                    const col = index % 3;
-                    positions[model] = row === 0 
-                        ? (col === 0 ? 'top_left' : (col === 1 ? 'top_middle' : 'top_right'))
-                        : (col === 0 ? 'bottom_left' : (col === 1 ? 'bottom_middle' : 'bottom_right'));
-                });
-                
-                return `
-                    <style>
-                        .instruction-text {
-                            font-size: 1.5em;
-                            line_height: 1.2;
-                        }
-                    </style>
-                    <h2>Final Selection</h2>
-                    <p class="instruction-text">
-                        From the images you chose on previous screens, select the one that is the best visualization of what you "saw" during the Ganzflicker.
-                    </p>
-                    <div class="final-selection-container">
-                        ${metadata.available_models.map((model, index) => `
-                            <div class="final-option" data-model="${model}" data-position="${positions[model]}">
-                            <!-- <div class="model-label">${model.toUpperCase()}</div> -->
-                                <img src="${selectedImages[model].path}" alt="${model} selected image">
-                            </div>
-                        `).join('')}
-                    </div>
-                    <button class="next-button" id="final-next-button">Next</button>
-                `;
-            },
-            choices: [],
-            trial_duration: null,
-            on_load: function() {
-                // Start timing as soon as the final selection screen loads
-                const startTime = performance.now();
-                let selectedElement = null;
-                
-                // Get the next button element
-                const nextButton = document.getElementById('final-next-button');
-                nextButton.style.display = 'none';
-
-                // Add click event to final options
-                document.querySelectorAll('.final-option').forEach(element => {
-                    element.addEventListener('click', function() {
-                        // First, remove selection class from all images
-                        document.querySelectorAll('.final-option img').forEach(img => {
-                            img.classList.remove('selected-image');
-                        });
-                        
-                        // Add selection class to clicked image
-                        this.querySelector('img').classList.add('selected-image');
-                        
-                        // Record the selection
-                        selectedElement = this;
-                        
-                        // Show the next button
-                        nextButton.style.display = 'block';
-                    });
-                });
-                
-                // Add click event for the next button to complete the study
-                nextButton.addEventListener('click', function() {
-                    if (selectedElement) {
-                        // Record the time when the Complete Study button is clicked
-                        const endTime = performance.now();
-                        
-                        const selectedModel = selectedElement.getAttribute('data-model');
-                        const position = selectedElement.getAttribute('data-position');
-                        const imagePath = selectedElement.querySelector('img').src;
-                        
-                        // Extract the image filename without extension
-                        const fullFilename = imagePath.split('/').pop();
-                        const imageBaseName = fullFilename.split('.')[0]; // Remove the extension
-                        
-                        // Calculate reaction time from trial load to Complete Study button click
-                        const reactionTime = (endTime - startTime) / 1000;
-
-                        // Get current date and time
-                        const datetime = getCurrentDateTime();
-
-                        // Get the choice type from the previous selection
-                        const choiceType = selectedImages[selectedModel].choice;
-                        
-                        // Calculate if the choice is accurate (they chose their own description)
-                        const accuracy = choiceType === "own" ? 1 : 0;
-
-                        // Create the final selection entry in the new format
-                        const finalResultEntry = {
-                            subject_id: participantId,
-                            trial_type: "final",
-                            model: "na",
-                            aphantasia_image: "na",
-                            phantasia_image: "na",
-                            target: "na",
-                            choice: choiceType,
-                            reaction_time: parseFloat(reactionTime.toFixed(2)),
-                            image_choice_location: position,
-                            accuracy: accuracy,
-                            chosen_model: selectedModel,
-                            chosen_image: imageBaseName, // Add the chosen image filename without extension
-                            datetime: datetime // Add the date and time
-                        };
-
-                        // Add to the trials array
-                        currentParticipant.results.trials.push(finalResultEntry);
-                        
-                        // Store in old format for compatibility
-                        let descriptionType;
-                        if (choiceType === "aphantasia") {
-                            descriptionType = "aphantasia_description";
-                        } else if (choiceType === "phantasia") {
-                            descriptionType = "phantasia_description";
-                        } else {
-                            descriptionType = "own_description";
-                        }
-
-                        // Store the final selection in old format
-                        finalSelectedModel = {
-                            model: selectedModel,
-                            reaction_time: reactionTime.toFixed(2),
-                            description: descriptionType,
-                            chosen_image: imageBaseName, // Add the chosen image filename without extension
-                            datetime: datetime // Add the date and time
-                        };
-
-                        // Store in old format for compatibility
-                        currentParticipant.results.user_choices.final_choice = {
-                            model: selectedModel,
-                            reaction_time: parseFloat(reactionTime.toFixed(2)),
-                            description: descriptionType,
-                            chosen_image: imageBaseName, // Add the chosen image filename without extension
-                            datetime: datetime // Add the date and time
-                        };
-
-                        // End the trial to move to completion
-                        jsPsych.finishTrial({
-                            final_selected_model: finalSelectedModel,
-                            rt: reactionTime,
-                            datetime: datetime
-                        });
-                    }
-                });
-            }
-        };
-
-        const finalWinnerRatingTrial = {
-            type: jsPsychHtmlKeyboardResponse,
-            stimulus: function() {
-                const winnerImagePath = getImagePath(finalSelectedModel.description, finalSelectedModel.model);
-                return `
-                    <style>
-                        .instruction-text {
-                            font-size: 1.5em;
-                            line_height: 1.2;
-                        }
-                    </style>
-                    <p class="instruction-text">
-                        Below is the image you selected as the best visualization of your Ganzflicker experience.
-                        Please rate how much this image resembles your hallucinations in terms of the following dimensions:
-                    </p>
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <img src="${winnerImagePath}" alt="Final Winner Image" style="max-width: 40%; height: auto; border: 2px solid #ccc; border-radius: 5px;">
-                    </div>
-                    
-                    <div id="custom-likert-form" style="width: 100%; max-width: 800px; margin: 0 auto;">
-                        <!-- Likert item 1 -->
-                        <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">Color similarity</p>
-                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
-                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
-                                <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5].map(num => `
-                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-1-${num}" name="likert-1" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-1-${num}" style="font-size: 12px;">${num}</label>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Likert item 2 -->
-                        <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">Shape similarity</p>
-                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
-                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
-                                <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5].map(num => `
-                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-2-${num}" name="likert-2" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-2-${num}" style="font-size: 12px;">${num}</label>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Likert item 3 -->
-                        <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">Content similarity</p>
-                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
-                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
-                                <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5].map(num => `
-                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-3-${num}" name="likert-3" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-3-${num}" style="font-size: 12px;">${num}</label>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Likert item 4 -->
-                        <div class="likert-item" style="margin-bottom: 25px;">
-                            <p style="margin-bottom: 8px; font-weight: bold;">Overall visual similarity</p>
-                            <div class="likert-scale" style="display: flex; align-items: center; width: 100%;">
-                                <span style="width: 120px; text-align: right; margin-right: 10px;">0 (Not at all)</span>
-                                <div style="display: flex; justify-content: space-between; flex: 1;">
-                                    ${[0,1,2,3,4,5].map(num => `
-                                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 5px;">
-                                            <input type="radio" id="likert-4-${num}" name="likert-4" value="${num}" style="margin-bottom: 5px;">
-                                            <label for="likert-4-${num}" style="font-size: 12px;">${num}</label>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <span style="width: 120px; text-align: left; margin-left: 10px;">10 (Almost identical)</span>
-                            </div>
-                        </div>
-
-                        <!-- Textarea for detailed feedback -->
-                        <div style="margin-top: 40px; margin-bottom: 20px;">
-                            <label for="detailed-feedback" style="display: block; margin-bottom: 10px; font-weight: bold;">
-                                Can you tell us more about how generated images differed/resembled your Ganzflicker experience? Be as detailed as possible.
-                            </label>
-                            <textarea id="detailed-feedback" rows="6" style="width: 100%; padding: 10px; box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc;"></textarea>
-                        </div>
-                        
-                        <!-- Continue button at the bottom -->
-                        <div style="margin-top: 40px; margin-bottom: 40px; text-align: center;">
-                            <button id="submit-custom-form" style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Continue</button>
-                        </div>
-                    </div>
-                `;
-            },
-            choices: [],
-            trial_duration: null,
-            on_load: function() {
-                const errorContainer = document.createElement('div');
-                errorContainer.id = 'error-container';
-                errorContainer.style.color = 'red';
-                errorContainer.style.marginTop = '10px';
-                errorContainer.style.fontWeight = 'bold';
-                errorContainer.style.textAlign = 'center';
-                const continueButton = document.getElementById('submit-custom-form');
-                continueButton.parentNode.insertBefore(errorContainer, continueButton);
-
-                document.getElementById('submit-custom-form').addEventListener('click', function() {
-                    // Collect the data
-                    const responses = {
-                        color: document.querySelector('input[name="likert-1"]:checked')?.value,
-                        shape: document.querySelector('input[name="likert-2"]:checked')?.value,
-                        content: document.querySelector('input[name="likert-3"]:checked')?.value,
-                        overall: document.querySelector('input[name="likert-4"]:checked')?.value,
-                    };
-                    
-                    const detailedFeedback = document.getElementById('detailed-feedback')?.value || '';
-                    
-                    // Clear previous error messages
-                    errorContainer.textContent = '';
-
-                    // Check if all required fields are filled
-                    if (Object.values(responses).some(value => value === undefined)) {
-                        errorContainer.textContent = 'Please complete all rating scales before continuing.';
-                        return;
-                    }
-                    // Check if the detailed feedback is empty
-                    if (detailedFeedback === '') {
-                        errorContainer.textContent = 'Please provide detailed feedback before continuing.';
-                        return;
-                    }
-                    // Save the responses and feedback
-                    currentParticipant.results.likert_responses = responses;
-                    currentParticipant.results.detailed_feedback = detailedFeedback;
-
-                    // Move to the next trial
-                    jsPsych.finishTrial();
-                });
-            }
-        };
-
-        const completionTrial = {
-            type: jsPsychHtmlButtonResponse,
-            stimulus: `
-                <h2>Study Completed</h2>
-                <p class="instruction-text">
-                    Thank you for participating in this study!
-                </p>
-                <p class="download-status">Your data is being saved...</p>
-                <div class="button-container">
-                    <button id="manual-download-button" class="download-button" style="display: none;">Download Backup Data</button>
-                </div>
-            `,
-            choices: [], // No default button choices
-            on_load: async function() {
-                const statusElement = document.querySelector('.download-status');
-                const downloadButton = document.getElementById('manual-download-button');
-
-                // Prepare the data to save
-                const imageSelectionData = {
-                    current_participant_data: {
-                        [participantId]: currentParticipant.results.trials
-                    }
-                };
-
-                const likertData = {
-                    current_participant_data: {
-                        [participantId]: {
-                            subject_id: participantId,
-                            final_image: finalSelectedModel?.chosen_image || "N/A",
-                            color: currentParticipant.results.likert_responses.color,
-                            shape: currentParticipant.results.likert_responses.shape,
-                            content: currentParticipant.results.likert_responses.content,
-                            overall: currentParticipant.results.likert_responses.overall,
-                            detailed_feedback: currentParticipant.results.detailed_feedback || ""
-                        }
-                    }
-                };
-
-                // Log the data being sent for debugging
-                console.log('Image Selection Data:', JSON.stringify(imageSelectionData, null, 2));
-                console.log('Likert Data:', JSON.stringify(likertData, null, 2));
-
-                try {
-                    // Save `image_selection.json`
-                    const imageSelectionResponse = await fetch('http://localhost:3000/save-participant-data', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(imageSelectionData),
-                    });
-
-                    if (!imageSelectionResponse.ok) {
-                        const errorText = await imageSelectionResponse.text();
-                        console.error('Error saving image selection data:', errorText);
-                        throw new Error(`Image selection save failed: ${errorText}`);
-                    }
-
-                    // Save `likert_responses.json`
-                    const likertResponse = await fetch('http://localhost:3000/save-likert-data', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(likertData),
-                    });
-
-                    if (!likertResponse.ok) {
-                        const errorText = await likertResponse.text();
-                        console.error('Error saving likert data:', errorText);
-                        throw new Error(`Likert data save failed: ${errorText}`);
-                    }
-
-                    // Update the status message
-                    statusElement.textContent = 'Your data has been saved successfully.';
-                    statusElement.style.color = 'green';
-                } catch (error) {
-                    console.error('Error saving data:', error);
-
-                    // Update the status message
-                    statusElement.textContent = 'There was an error saving your data. Please use the button below to download your data.';
-                    statusElement.style.color = 'red';
-
-                    // Show the manual download button
-                    downloadButton.style.display = 'inline-block';
-
-                    // Add click event to download the combined backup file
-                    downloadButton.addEventListener('click', function() {
-                        // Combine image selection and Likert data into one JSON object
-                        const backupData = {
-                            participant_id: participantId,
-                            image_selection: imageSelectionData.current_participant_data[participantId],
-                            likert_responses: likertData.current_participant_data[participantId]
-                        };
-
-                        // Create a downloadable JSON file
-                        const backupDataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-                        const backupDataAnchor = document.createElement('a');
-                        backupDataAnchor.setAttribute('href', backupDataStr);
-                        backupDataAnchor.setAttribute('download', `backup_download_participant_${participantId}.json`);
-                        document.body.appendChild(backupDataAnchor);
-                        backupDataAnchor.click();
-                        document.body.removeChild(backupDataAnchor);
+        const prepareRound2 = { type: jsPsychCallFunction, func: () => { firstRoundSelections_all = shuffleArray(Object.values(firstRoundChoicesByModel)); if(firstRoundSelections_all.length === 0) { const skipR1 = jsPsych.data.get().filter({trial_type:'debug_skip_logic_r1'}).last(1).values()[0]?.skippedRound1; if(skipR1) { console.error("PrepareRound2: firstRoundSelections_all is empty after skipping Round 1. Mock generation likely failed."); jsPsych.endExperiment("Error: Failed to generate mock data for testing. Please check console."); } else { console.error("PrepareRound2: No images selected in Round 1. Cannot proceed."); jsPsych.endExperiment("Error: No images were selected in the first round."); } return; } if(firstRoundSelections_all.length < 24) console.warn(`PrepareRound2: Fewer than 24 images selected/generated (${firstRoundSelections_all.length}). Round 2 screens might have fewer images.`); console.log(`PrepareRound2: Images prepared for Round 2: ${firstRoundSelections_all.length} images.`); } };
+        function createSecondRoundTrial(screenNum) {
+            return {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: () => {
+                    const perScreen = 8, startIdx = (screenNum-1)*perScreen, endIdx = startIdx+perScreen; const group = firstRoundSelections_all.slice(startIdx, Math.min(endIdx, firstRoundSelections_all.length));
+                    if(group.length === 0) { console.warn(`Round 2, Screen ${screenNum}: No images for this group. Should be skipped by conditional_function.`); return `<p>Loading next part...</p>`; } 
+                    const shuffledGroup = shuffleArray([...group]); jsPsych.data.addProperties({[`round2_screen${screenNum}_image_details`]:shuffledGroup.map(img=>({imageBaseName:img.imageBaseName,originalModel:img.originalModel}))}); 
+                    let html = shuffledGroup.map((imgData,idx) => `<div class="round-2-image-option" data-path="${imgData.path}" data-image-base-name="${imgData.imageBaseName}" data-original-model="${imgData.originalModel}" data-source-type="${imgData.sourceType}" data-position-id="row${Math.floor(idx/4)+1}_col${(idx%4)+1}"><img src="${imgData.path}" alt="Image ${idx + 1} for Round 2, Screen ${screenNum}"></div>`).join(''); 
+                    return `<p class="instruction-text">From the images you chose on previous screens, select the one that is the best visualization of what you "saw" during the Ganzflicker.</p><div class="round-2-image-grid">${html}</div><p id="error-message-round2-${screenNum}" class="error" style="display:none;">Please select an image to continue.</p><button class="next-button" id="next-button-round2-${screenNum}">Next</button>`;
+                },
+                choices: [],
+                on_load: () => {
+                    const perScreen = 8, startIdx = (screenNum-1)*perScreen; const group = firstRoundSelections_all.slice(startIdx, Math.min(startIdx+perScreen, firstRoundSelections_all.length));
+                    if(group.length === 0) { console.warn(`Round 2, Screen ${screenNum} on_load: No images. Auto-advancing.`); jsPsych.finishTrial({skipped_empty_group:true}); return; } 
+                    const startTime = performance.now(); let selectedEl = null; const nextBtn = document.getElementById(`next-button-round2-${screenNum}`), errEl = document.getElementById(`error-message-round2-${screenNum}`), allOpts = document.querySelectorAll('.round-2-image-option');
+                    allOpts.forEach(el => el.addEventListener('click', function() { allOpts.forEach(opt => opt.querySelector('img').classList.remove('selected-image')); this.querySelector('img').classList.add('selected-image'); selectedEl = this; if(nextBtn) nextBtn.style.display='block'; if(errEl) errEl.style.display='none'; }));
+                    if(nextBtn) nextBtn.addEventListener('click', () => {
+                        if(selectedEl) {
+                            const rt = performance.now() - startTime, path = selectedEl.getAttribute('data-path'), baseName = selectedEl.getAttribute('data-image-base-name'), origModel = selectedEl.getAttribute('data-original-model'), srcType = selectedEl.getAttribute('data-source-type'), choiceLoc = selectedEl.getAttribute('data-position-id');
+                            const trialData = { subject_id:participantId, trial_type:`second_round_screen_${screenNum}`, model:"na", aphantasia_image:"na", phantasia_image:"na", target:"na", choice:srcType, reaction_time:parseFloat((rt/1000).toFixed(3)), image_choice_location:choiceLoc, accuracy:(srcType==="own")?1:0, chosen_model:origModel, chosen_image:baseName, datetime:getCurrentDateTime() }; 
+                            currentParticipant.results.trials.push(trialData);
+                            secondRoundSelections.push({ path:path, imageBaseName:baseName, originalModel:origModel, sourceType:srcType, datetime_round2:trialData.datetime, rt_round2:rt });
+                            jsPsych.finishTrial(trialData);
+                        } else { if(errEl) errEl.style.display='block'; }
                     });
                 }
+            };
+        }
+        function createThirdRoundRatingTrial(imageIndex) { 
+            return {
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: () => {
+                    const arrayIdx = imageIndex - 1; const imgObj = (arrayIdx < secondRoundSelections.length) ? secondRoundSelections[arrayIdx] : null;
+                    if(!imgObj) { console.error(`Error in Round 3, stim for image index ${imageIndex}: imageObject is null or undefined.`); return "<p class='error'>Error displaying image for rating. Please contact the researcher.</p>"; } 
+                    const scaleOpts = Array.from({length:11},(_,i)=>i); const dims = ['Color','Shape','Content','Overall visual'];
+                    let formHtml = dims.map((dim,dIdx) => `<div class="likert-item"><p>${dim} similarity</p><div class="likert-scale"><span>0 (Not at all)</span><div class="likert-options-container">${scaleOpts.map(num => `<div class="likert-option"><input type="radio" id="likert-${dIdx+1}-${imageIndex}-${num}" name="likert-${dIdx+1}-${imageIndex}" value="${num}"><label for="likert-${dIdx+1}-${imageIndex}-${num}">${num}</label></div>`).join('')}</div><span>10 (Almost identical)</span></div></div>`).join('');
+                    return `<p class="instruction-text">Below is one of the images you selected as the best visualization of your Ganzflicker experience. Please rate how much this image resembles your hallucinations in terms of the following dimensions:</p><div class="round-3-image-display"><img src="${imgObj.path}" alt="Image for rating: ${imgObj.imageBaseName}"></div><div id="custom-likert-form">${formHtml}<div style="margin-top:30px; margin-bottom:20px;"><label for="detailed-feedback-${imageIndex}" class="feedback-label">Can you tell us more about how this generated image differed from or resembled your Ganzflicker experience? Be as detailed as possible.</label><textarea class="detailed-feedback-area" id="detailed-feedback-${imageIndex}" rows="5"></textarea></div><p id="error-message-round3-${imageIndex}" class="error" style="display:none;">Please complete all ratings and provide feedback to continue.</p><div class="button-container"><button id="submit-likert-form-${imageIndex}" class="submit-button">Continue</button></div></div>`;
+                },
+                choices: [],
+                on_load: () => {
+                    const arrayIdx = imageIndex - 1; const imgObj = (arrayIdx < secondRoundSelections.length) ? secondRoundSelections[arrayIdx] : null;
+                    if(!imgObj) { console.warn(`Round 3, Rating ${imageIndex} on_load: imageObject is null. Skipping setup.`); jsPsych.finishTrial({skipped_no_image_object_in_onload_r3:true}); return; } 
+                    const submitBtn = document.getElementById(`submit-likert-form-${imageIndex}`), errEl = document.getElementById(`error-message-round3-${imageIndex}`);
+                    if(submitBtn) submitBtn.style.display='block';
+                    if(submitBtn) submitBtn.addEventListener('click', () => {
+                        const responses = { color: document.querySelector(`input[name="likert-1-${imageIndex}"]:checked`)?.value, shape: document.querySelector(`input[name="likert-2-${imageIndex}"]:checked`)?.value, content: document.querySelector(`input[name="likert-3-${imageIndex}"]:checked`)?.value, overall: document.querySelector(`input[name="likert-4-${imageIndex}"]:checked`)?.value };
+                        const feedback = document.getElementById(`detailed-feedback-${imageIndex}`)?.value.trim() || '';
+                        if(Object.values(responses).some(v=>v===undefined) || feedback === '') { if(errEl) { errEl.textContent='Please complete all rating scales and provide detailed feedback before continuing.'; errEl.style.display='block';} return; } 
+                        if(errEl) errEl.style.display='none';
+                        thirdRoundDebriefData[`final_image_${imageIndex}`] = imgObj.imageBaseName; ['color','shape','content','overall'].forEach(dim => thirdRoundDebriefData[`${dim}_${imageIndex}`] = responses[dim]); thirdRoundDebriefData[`detailed_feedback_${imageIndex}`] = feedback;
+                        jsPsych.finishTrial({image_rated:imgObj.imageBaseName, ratings_collected:responses, feedback_collected:feedback}); 
+                    });
+                }
+            };
+        }
+        const fourthRoundFinalChoiceTrial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: () => {
+                if (secondRoundSelections.length === 0) { console.warn("Round 4: No images available from Round 2 for final selection. This screen might be skipped or show an error."); return "<p>No images available for final selection. Proceeding...</p>"; } 
+                const shuffled = shuffleArray([...secondRoundSelections]); jsPsych.data.addProperties({'round4_image_options_details':shuffled.map(img=>img.imageBaseName)}); 
+                return `<p class="instruction-text">From the images you chose earlier, please select the image that is the <b>best</b> visualization of what you "saw" during the Ganzflicker.</p><div class="final-selection-container">${shuffled.map((img,idx)=>`<div class="final-option" data-path="${img.path}" data-image-base-name="${img.imageBaseName}" data-original-model="${img.originalModel}" data-source-type="${img.sourceType}" data-position-index="${idx}"><img src="${img.path}" alt="Final choice option ${idx + 1}: ${img.imageBaseName}"></div>`).join('')}</div><p id="error-message-round4" class="error" style="display:none;">Please select an image to continue.</p><button class="next-button" id="next-button-round4">Submit Final Choice</button>`;
+            },
+            choices: [],
+            on_load: () => {
+                if(secondRoundSelections.length === 0) { console.warn("Round 4 on_load: No images from Round 2. Auto-advancing."); jsPsych.finishTrial({skipped_empty_round4_options:true}); return;} 
+                const startTime = performance.now(); let selectedEl = null; const nextBtn = document.getElementById('next-button-round4'), errEl = document.getElementById('error-message-round4');
+                document.querySelectorAll('.final-option').forEach(el => el.addEventListener('click', function() { document.querySelectorAll('.final-option img').forEach(img=>img.classList.remove('selected-image')); this.querySelector('img').classList.add('selected-image'); selectedEl=this; if(nextBtn) nextBtn.style.display='block'; if(errEl) errEl.style.display='none'; }));
+                if(nextBtn) nextBtn.addEventListener('click', () => {
+                    if(selectedEl) {
+                        const rt = performance.now()-startTime, baseName = selectedEl.getAttribute('data-image-base-name'), origModel = selectedEl.getAttribute('data-original-model'), srcType = selectedEl.getAttribute('data-source-type'), posIdx = parseInt(selectedEl.getAttribute('data-position-index'));
+                        const choiceLoc = ["left","middle","right"][posIdx] || `pos_${posIdx}`;
+                        const trialData = { subject_id:participantId, trial_type:"fourth_round", model:"na", aphantasia_image:"na", phantasia_image:"na", target:"na", choice:srcType, reaction_time:parseFloat((rt/1000).toFixed(3)), image_choice_location:choiceLoc, accuracy:(srcType==="own")?1:0, chosen_model:origModel, chosen_image:baseName, datetime:getCurrentDateTime() }; 
+                        currentParticipant.results.trials.push(trialData); jsPsych.finishTrial(trialData);
+                    } else { if(errEl) errEl.style.display='block';}
+                });
+            }
+        };
+        const exitFullscreenTrial = { type: jsPsychFullscreen, fullscreen_mode: false, delay_after: 0 };
+        const completionTrial = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: `<div style="max-width: 700px; margin:auto; text-align:center;"><h2>Study Completed</h2><p class="instruction-text" style="font-size:1.1em;">Thank you for participating in this study!</p><p class="download-status" style="font-size:1em; margin-top:15px;">Your data is being saved...</p><div class="button-container" style="margin-top:20px;"><button id="manual-download-button" class="download-button" style="display:none; padding:10px 15px; font-size:0.9em; background-color:#007bff; color:white;">Download Backup Data</button></div></div>`,
+            choices: [],
+            on_load: async () => {
+                const statusEl = document.querySelector('.download-status'), dlBtn = document.getElementById('manual-download-button');
+                const selDataFmt = {current_participant_data:{[participantId]:currentParticipant.results.trials}};
+                const debriefDataFmt = {current_participant_data:{[participantId]:thirdRoundDebriefData}};
+                console.log('Attempting to save Image Selection Data (image_selection.json format):', JSON.stringify(selDataFmt,null,2)); console.log('Attempting to save Image Debrief Data (image_debrief.json format):', JSON.stringify(debriefDataFmt,null,2)); 
+                let selSaveOK = false, debriefSaveOK = false;
+                try { const r = await fetch('http://localhost:3000/save-participant-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(selDataFmt)}); if(r.ok){ console.log('Image selection data saved successfully to server.'); selSaveOK=true;} else console.error('Failed to save image selection data to server:',await r.text()); } catch(e){console.error('Error during fetch to save image selection data:',e);} 
+                try { const r = await fetch('http://localhost:3000/save-likert-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(debriefDataFmt)}); if(r.ok){ console.log('Image debrief (Likert) data saved successfully to server.'); debriefSaveOK=true;} else console.error('Failed to save image debrief data to server:',await r.text()); } catch(e){console.error('Error during fetch to save image debrief data:',e);} 
+                if(statusEl) { if(selSaveOK && debriefSaveOK) { statusEl.textContent='Your data has been saved successfully.'; statusEl.style.color='green';} else { statusEl.textContent='There was an error saving some or all of your data. Please use the button below to download a backup file.'; statusEl.style.color='red'; if(dlBtn) dlBtn.style.display='inline-block';}} 
+                if(dlBtn) dlBtn.addEventListener('click', () => {
+                    const backup = {participant_id:participantId, image_selection_data:currentParticipant.results.trials, image_debrief_data:thirdRoundDebriefData, study_metadata_context:{ aphantasia_id_used:currentParticipant.results.aphantasia_id, phantasia_id_used:currentParticipant.results.phantasia_id, model_presentation_order_round1:jsPsych.data.get().filter({trial_type:'first_round'}).select('model').values, timestamp:getCurrentDateTime()}}; 
+                    const str="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(backup,null,2)), anchor=document.createElement('a');
+                    anchor.setAttribute('href',str); anchor.setAttribute('download',`ganzflicker_backup_${participantId}_${new Date().toISOString().slice(0,10).replace(/-/g,'')}.json`);
+                    document.body.appendChild(anchor); anchor.click(); document.body.removeChild(anchor);
+                });
             }
         };
 
-        // Start the experiment
+        // --- Experiment Timeline Construction ---
         async function startExperiment() {
-            const timeline = [
-                participantIdTrial,
-                welcomeTrial, // This will now handle fullscreen entry
-                preloadTrial
-            ];
+            const timeline = [participantIdTrial, welcomeTrial, preloadTrial];
+            const numModels = metadata.available_models.length, imgsPerScreenR2 = 8, numScreensR2 = 3;
 
-            // Create a copy of the available models and shuffle it
-            const shuffledModels = shuffleArray([...metadata.available_models]);
-            
-            // Store the randomized order for data analysis
-            jsPsych.data.addProperties({
-                'model_presentation_order': shuffledModels
-            });
-            
-            // Add the model trials in the shuffled order
-            shuffledModels.forEach((model, index) => {
-                timeline.push(createModelImageTrial(model, index));
-            });
-
-            timeline.push(
-                finalSelectionTrial, 
-                finalWinnerRatingTrial, // Add the new trial here
-                exitFullscreenTrial, // Exit fullscreen before showing completion
-                completionTrial
-            );
-
+            // Debug Skip R1
+            timeline.push({ type:jsPsychCallFunction, func:()=>{ let sk=false; if(DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 1){ console.warn(`DEBUG MODE: Auto-completing Round 1. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`); firstRoundSelections_all = generateMockFirstRoundSelections(numModels); firstRoundChoicesByModel={}; firstRoundSelections_all.forEach((sel,idx)=>firstRoundChoicesByModel[`${sel.originalModel}_${idx}`]=sel); sk=true;} jsPsych.data.addProperties({skippedRound1:sk});}, data:{trial_type:'debug_skip_logic_r1'}}); 
+            // Round 1
+            const r1Block = { timeline:[], conditional_function:()=>!jsPsych.data.get().last(1).values()[0]?.skippedRound1 };
+            const shuffledModels = shuffleArray([...metadata.available_models]); jsPsych.data.addProperties({'model_presentation_order_r1':shuffledModels.map(m=>m)}); 
+            shuffledModels.forEach((model,idx)=>r1Block.timeline.push(createModelImageTrial(model,idx))); timeline.push(r1Block);
+            // Prepare R2
+            timeline.push(prepareRound2);
+            // Debug Skip R2
+            timeline.push({ type:jsPsychCallFunction, func:()=>{ let sk=false; if(DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 2){ console.warn(`DEBUG MODE: Auto-completing Round 2. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`); if(firstRoundSelections_all.length===0){ console.error("DEBUG ERROR: Cannot generate mock R2 data, firstRoundSelections_all is empty."); firstRoundSelections_all=generateMockFirstRoundSelections(numModels); if(firstRoundSelections_all.length===0){jsPsych.endExperiment("Critical Debug Error: Could not generate mock data.");return;}} secondRoundSelections=generateMockSecondRoundSelections(firstRoundSelections_all,numScreensR2); sk=true;} jsPsych.data.addProperties({skippedRound2:sk});}, data:{trial_type:'debug_skip_logic_r2'}}); 
+            // Round 2
+            const r2Block = { timeline:[], conditional_function:()=>!jsPsych.data.get().last(1).values()[0]?.skippedRound2 };
+            for(let i=0; i<numScreensR2; i++) { r2Block.timeline.push({...createSecondRoundTrial(i+1), conditional_function:()=>firstRoundSelections_all && firstRoundSelections_all.length > i*imgsPerScreenR2});} timeline.push(r2Block);
+            // Prepare R3
+            timeline.push({ type:jsPsychCallFunction, func:()=>{ if((DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 2) && secondRoundSelections.length===0){ if(firstRoundSelections_all.length===0) firstRoundSelections_all=generateMockFirstRoundSelections(numModels); if(firstRoundSelections_all.length>0) secondRoundSelections=generateMockSecondRoundSelections(firstRoundSelections_all,numScreensR2); else {console.error("DEBUG ERROR: Cannot prepare R3, no data from R1 or R2."); jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R3."); return;}} secondRoundSelections=shuffleArray(secondRoundSelections); console.log(`PrepareRound3: Images prepared for Round 3 rating: ${secondRoundSelections.length} images.`); const skipR2=jsPsych.data.get().filter({trial_type:'debug_skip_logic_r2'}).last(1).values()[0]?.skippedRound2; if(secondRoundSelections.length !== numScreensR2 && !skipR2) console.warn(`Expected ${numScreensR2} images from Round 2 for rating, but found ${secondRoundSelections.length}. Rating will proceed with available images.`);}, data:{trial_type:'prepare_round_3'}}); 
+            // Debug Skip R3
+            timeline.push({ type:jsPsychCallFunction, func:()=>{ let sk=false; if(DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 3){ console.warn(`DEBUG MODE: Auto-completing Round 3. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`); if(secondRoundSelections.length===0){ console.error("DEBUG ERROR: Cannot generate mock R3 data, secondRoundSelections is empty."); if(firstRoundSelections_all.length===0)firstRoundSelections_all=generateMockFirstRoundSelections(numModels); if(firstRoundSelections_all.length>0)secondRoundSelections=generateMockSecondRoundSelections(firstRoundSelections_all,numScreensR2); else{jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R3 skip.");return;}} thirdRoundDebriefData=generateMockThirdRoundDebrief(secondRoundSelections); sk=true;} jsPsych.data.addProperties({skippedRound3:sk});}, data:{trial_type:'debug_skip_logic_r3'}}); 
+            // Round 3
+            const r3Block = { timeline:[], conditional_function:()=>!jsPsych.data.get().last(1).values()[0]?.skippedRound3 };
+            for(let i=0; i<numScreensR2; i++) { r3Block.timeline.push({...createThirdRoundRatingTrial(i+1), conditional_function:()=> i < secondRoundSelections.length});} timeline.push(r3Block);
+            // Prepare R4 (Debug)
+            timeline.push({ type:jsPsychCallFunction, func:()=>{ if(DEBUG_SKIP_TO_ROUND===4 && secondRoundSelections.length===0){ if(firstRoundSelections_all.length===0)firstRoundSelections_all=generateMockFirstRoundSelections(numModels); if(firstRoundSelections_all.length>0){secondRoundSelections=generateMockSecondRoundSelections(firstRoundSelections_all,numScreensR2); console.log("DEBUG: Populated secondRoundSelections for Round 4 skip.");} else {console.error("DEBUG ERROR: Cannot prepare R4, no data from R1."); jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R4 skip.");}}}, data:{trial_type:'prepare_round_4_debug'}}); 
+            // Round 4
+            timeline.push({...fourthRoundFinalChoiceTrial, conditional_function:()=>{ const skipR3=jsPsych.data.get().filter({trial_type:'debug_skip_logic_r3'}).last(1).values()[0]?.skippedRound3; return !skipR3 && secondRoundSelections.length > 0;}});
+            // Final
+            timeline.push(exitFullscreenTrial, completionTrial);
             jsPsych.run(timeline);
         }
-
-        // Load metadata and then start the experiment
         initializeMetadata();
     </script>
 </body>
