@@ -2,24 +2,24 @@
   "current_participant_data": {
     "001": {
       "subject_id": "001",
-      "final_image_1": "143_midjourney_1",
-      "color_1": "5",
-      "shape_1": "5",
-      "content_1": "5",
-      "overall_1": "5",
-      "detailed_feedback_1": "a",
-      "final_image_2": "143_gemini_1",
-      "color_2": "10",
-      "shape_2": "10",
-      "content_2": "10",
-      "overall_2": "10",
-      "detailed_feedback_2": "w",
-      "final_image_3": "3502_gpto_2",
-      "color_3": "10",
-      "shape_3": "10",
-      "content_3": "10",
-      "overall_3": "10",
-      "detailed_feedback_3": "m"
+      "final_image_1": "220_midjourney_2",
+      "color_1": "10",
+      "shape_1": "3",
+      "content_1": "7",
+      "overall_1": "4",
+      "detailed_feedback_1": "s",
+      "final_image_2": "154_gemini_1",
+      "color_2": "5",
+      "shape_2": "9",
+      "content_2": "2",
+      "overall_2": "6",
+      "detailed_feedback_2": "s",
+      "final_image_3": "001_dalle_2",
+      "color_3": "6",
+      "shape_3": "5",
+      "content_3": "8",
+      "overall_3": "5",
+      "detailed_feedback_3": "ss"
     }
   }
 }
