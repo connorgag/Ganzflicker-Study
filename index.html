@@ -20,18 +20,22 @@
             line-height: 1.6;
         }
 
-        /* Welcome screen specific text size overrides to revert to original size */
+        /* Welcome screen specific text size overrides to revert to original size for wrapper, then increase specific elements */
         #welcome-screen-wrapper {
-            font-size: calc(1em / 1.4); /* Counteract the body's 1.4em scaling for this section */
+            font-size: calc(1em / 1.4); /* Counteract the body's 1.4em scaling for this section's base */
         }
         #welcome-screen-wrapper h1 {
-            font-size: 2em; /* Original h1 relative size (e.g., 32px if base was 16px) */
-            /* text-align: center; is in the HTML */
+            /* Original h1 relative size was 2em (e.g., 32px if base was 16px) */
+            /* Increase by ~40%: 2em * 1.4 = 2.8em (relative to #welcome-screen-wrapper's font-size) */
+            font-size: 2.8em; 
+            text-align: center; /* Already in HTML, but good to have here */
         }
         #welcome-screen-wrapper .instruction-text {
-            font-size: 16px; /* Original explicit size from style.css for .instruction-text */
-            line-height: 1.4; /* Original line-height */
-            /* text-align: center; is in the HTML */
+            /* Original explicit size was 16px */
+            /* Increase by ~40%: 16px * 1.4 = 22.4px */
+            font-size: 22.4px; 
+            line-height: 1.6; /* Adjusted line-height if needed, original was 1.4 */
+            text-align: center; /* Already in HTML */
         }
 
 
@@ -74,19 +78,14 @@
             /* Font size will be inherited from body (1.4em) or specific parent */
         }
 
-        /* Original instruction-text style block (primarily for reference, specific overrides follow) */
-        /* This rule is less specific than the .instruction-text from "style.css" section below for general screens */
-        .instruction-text {
-            font-size: 1.8em;  /* This was an attempt to make it 1.5x of 1.2em, relative to new body. */
-                               /* For general screens, the 24px rule below will likely take precedence. */
-                               /* For welcome screen, #welcome-screen-wrapper .instruction-text takes precedence. */
+        .instruction-text { /* This is a general instruction text, overridden by more specific ones like in welcome */
+            font-size: 1.8em; /* Default size for instruction text */
             line-height: 1.6;
             margin-bottom: 15px;
             text-align: center;
             flex-shrink: 0;
         }
 
-        /* General container styles */
         .image-display-area {
             width: 100%;
             margin-left: auto;
@@ -95,23 +94,22 @@
             box-sizing: border-box;
         }
 
-        .image-container, .final-selection-container {
-            display: flex; /* This is the first definition for .final-selection-container */
+        .image-container, .final-selection-container { /* Shared styles for flex-based containers */
+            display: flex; 
             flex-wrap: nowrap;
-            justify-content: center; /* This should center flex items if display:flex is active */
+            justify-content: center; 
             align-items: center;
             gap: 15px;
-            max-width: 1200px; /* Shared max-width */
-            max-height: 65vh;
-            /* margin-left: auto; margin-right: auto; -- Added to the more specific rule for .final-selection-container (grid) */
+            max-width: 1200px; 
+            max-height: 65vh; /* Max height for the container of images */
         }
 
-        .image-option, .final-option {
+        .image-option, .final-option { /* Shared styles for individual image wrappers within flex containers */
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-width: 0;
+            min-width: 0; /* Important for flex items to shrink properly */
             border: 2px solid transparent;
             border-radius: 10px;
             padding: 5px;
@@ -123,12 +121,12 @@
         }
         .image-option:has(> img.selected-image),
         .final-option:has(> img.selected-image) {
-             border-color: transparent !important;
+             border-color: transparent !important; /* Hide border when inner image is selected */
         }
 
-        .image-option img, .final-option img {
+        .image-option img, .final-option img { /* Shared styles for images within options */
             max-width: 100%;
-            max-height: 100%;
+            max-height: 100%; /* Ensure image doesn't exceed option wrapper's height */
             height: auto;
             object-fit: contain;
             border: none;
@@ -138,15 +136,15 @@
 
         .round-2-image-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            max-width: 1300px;
-            max-height: 70vh;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns */
+            gap: 25px; /* Increased gap for better spacing */
+            max-width: 1300px; /* Max width for the grid */
+            max-height: 70vh; /* Max height for the grid container */
             margin-left: auto;
             margin-right: auto;
-            margin-bottom: 40px;
+            margin-bottom: 40px; /* Space below the grid */
         }
-        .round-2-image-option {
+        .round-2-image-option { /* Wrapper for each image in Round 2 grid */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -155,17 +153,18 @@
             padding: 5px;
             transition: border-color 0.2s ease-out;
             cursor: pointer;
+            overflow: hidden; /* Prevent content spill */
         }
          .round-2-image-option:hover {
              border-color: #ccc;
         }
         .round-2-image-option:has(> img.selected-image) {
-             border-color: transparent !important;
+             border-color: transparent !important; /* Hide border when inner image is selected */
         }
 
         .round-2-image-option img {
             max-width: 100%;
-            max-height: 40vh;
+            max-height: 40vh; /* Max height for each image itself within the grid option */
             height: auto;
             object-fit: contain;
             border: none;
@@ -180,150 +179,76 @@
             flex-shrink: 0;
         }
         .round-3-image-display img {
-            max-width: 40%; /* CHANGED from 25% back to 40% as per user request */
+            max-width: 40%; 
             height: auto;
             border: 2px solid #ccc;
             border-radius: 8px;
         }
         #custom-likert-form {
             width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 800px; /* Max width for the Likert form */
+            margin: 0 auto; /* Center the form */
             flex-shrink: 0;
         }
-        .likert-item {
-            margin-bottom: 25px;
-        }
-        .likert-item p {
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 1.1em; /* Relative to parent, which is body (1.4em) */
-        }
-        .likert-scale {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .likert-scale span {
-            width: auto;
-            padding: 0 10px;
-            text-align: center;
-            font-size: 0.9em; /* Relative to parent (body 1.4em) */
-            color: #555;
-        }
-        .likert-options-container {
-            display: flex;
-            justify-content: space-around;
-            flex: 1;
-        }
-        .likert-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0 3px;
-        }
-        .likert-option input[type="radio"] {
-            margin-bottom: 5px;
-            transform: scale(1.2);
-        }
-        .likert-option label {
-            font-size: 0.9em; /* Relative to parent (body 1.4em) */
-            color: #333;
-        }
-        .detailed-feedback-area {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1em; /* Relative to parent (body 1.4em) */
-            margin-top: 5px;
-        }
-        .feedback-label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 1.1em; /* Relative to parent (body 1.4em) */
-        }
+        .likert-item { margin-bottom: 25px; }
+        .likert-item p { margin-bottom: 10px; font-weight: bold; font-size: 1.1em; } /* Relative to parent */
+        .likert-scale { display: flex; align-items: center; width: 100%; background-color: #fff; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .likert-scale span { width: auto; padding: 0 10px; text-align: center; font-size: 0.9em; color: #555; } /* Relative to parent */
+        .likert-options-container { display: flex; justify-content: space-around; flex: 1; }
+        .likert-option { display: flex; flex-direction: column; align-items: center; margin: 0 3px; }
+        .likert-option input[type="radio"] { margin-bottom: 5px; transform: scale(1.2); }
+        .likert-option label { font-size: 0.9em; color: #333; } /* Relative to parent */
+        .detailed-feedback-area { width: 100%; padding: 12px; box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc; font-size: 1em; margin-top: 5px; } /* Relative to parent */
+        .feedback-label { display: block; margin-bottom: 10px; font-weight: bold; font-size: 1.1em; } /* Relative to parent */
 
-        .button-container {
-            text-align: center;
-            margin-top: 20px;
-            flex-shrink: 0;
-        }
-        .jspsych-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-            overflow-y: auto;
-        }
-        #jspsych-target {
-            width: 100%;
-        }
+        .button-container { text-align: center; margin-top: 20px; flex-shrink: 0; }
+        .jspsych-content { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; width: 100%; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        #jspsych-target { width: 100%; }
+        .jspsych-content { max-width: 2200px; } /* Max width for the overall content area */
 
-        /* Styles from what was originally style.css - these apply general text size increases */
-        .jspsych-content {
-            max-width: 2200px;
-        }
-
-        .image-container { /* This rule for .image-container (Round 1) uses display: grid */
+        .image-container { /* Round 1: 3 images, using grid */
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 10px; /* Gap between grid items */
             margin-bottom: 20px;
-            width: 100%; /* Takes full width of its parent */
+            width: 100%; 
             box-sizing: border-box;
             /* It also inherits max-width: 1200px and margin auto from the shared rule if parent allows centering */
         }
-
-
-        .image-option {
+        .image-option { /* Styles for individual image options in Round 1 grid */
             text-align: center;
             cursor: pointer;
             padding: 5px;
-            border: 3px solid transparent;
+            border: 3px solid transparent; /* Slightly thicker border for hover indication */
             border-radius: 5px;
             transition: all 0.3s;
             box-sizing: border-box;
+            /* Flex properties from earlier .image-option rule are overridden by grid display of parent */
         }
-
-        .image-option:hover {
-            border-color: #007bff;
-            background-color: rgba(0, 123, 255, 0.1);
+        .image-option:hover { /* Hover effect for Round 1 options */
+            border-color: #007bff; /* Blue border on hover */
+            background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
         }
-
-        .image-option img {
-            width: 100%;
+        .image-option img { /* Images within Round 1 options */
+            width: 100%; /* Make image take full width of its grid cell */
             height: auto;
             object-fit: contain;
-            margin-bottom: 10px;
+            margin-bottom: 10px; /* Space for caption if any */
         }
-
-        .image-caption {
-            font-size: 21px; /* Increased */
-            color: #555;
-        }
+        .image-caption { font-size: 21px; color: #555; } /* Increased size */
 
         /* This .instruction-text is for general screens (not welcome screen) */
-        .instruction-text {
-            font-size: 24px; /* Increased (approx 1.5 * 16px) */
-            margin-bottom: 10px;
+        /* It's distinct from #welcome-screen-wrapper .instruction-text */
+        .instruction-text { 
+            font-size: 24px; /* Increased (approx 1.5 * 16px if base was 16px) */
+            margin-bottom: 10px; 
             line-height: 1.6; /* Adjusted */
         }
 
-        .final-selection-container { /* This rule for .final-selection-container (Round 4) uses display: grid */
+        .final-selection-container { /* Round 4: 3 images, using grid */
             display: grid;
             grid-template-columns: repeat(3, 1fr); 
-            gap: 0px; 
+            gap: 0px; /* No gap, selection border will show */
             margin-bottom: 20px; 
             width: 100%; /* Takes full width of its parent, up to max-width */
             box-sizing: border-box; 
@@ -331,9 +256,7 @@
             margin-left: auto;   /* ADDED for centering the grid container */
             margin-right: auto;  /* ADDED for centering the grid container */
         }
-
-
-        .final-option {
+        .final-option { /* Styles for individual image options in Round 4 grid */
             text-align: center;
             cursor: pointer;
             padding: 5px;
@@ -341,84 +264,34 @@
             border-radius: 5px;
             transition: all 0.3s;
             box-sizing: border-box;
-            margin: 5px;
+            margin: 5px; /* Small margin around each option */
+             /* Flex properties from earlier .final-option rule are overridden by grid display of parent */
         }
-
-        .final-option:hover {
-            border-color: transparent;
-            background-color: rgba(40, 167, 69, 0.1);
+        .final-option:hover { /* Hover effect for Round 4 options */
+            border-color: transparent; /* Keep border transparent */
+            background-color: rgba(40, 167, 69, 0.1); /* Light green background on hover */
         }
-
-        .final-option img {
-            width: 100%;
+        .final-option img { /* Images within Round 4 options */
+            width: 100%; /* Make image take full width of its grid cell */
             height: auto;
             object-fit: contain;
-            margin: 0 auto;
+            margin: 0 auto; /* Center image if it's smaller than cell */
             display: block;
         }
 
         .button-container { /* Merged rule, ensure display:flex is desired over text-align:center */
-            display: flex;
+            display: flex; /* Use flex for centering buttons in a row */
             justify-content: center;
             gap: 10px;
-            margin-top: 10px; /* Overrides earlier 20px */
+            margin-top: 10px; /* Overrides earlier 20px for some cases */
         }
-
-        .model-label {
-            font-weight: bold;
-            font-size: 21px; /* Increased */
-            margin-bottom: 2px;
-        }
-
-        .loading-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            /* Text inside will be scaled by body font-size */
-        }
-
-        .loading-spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .download-status.error {
-            font-size: 30px; /* Increased */
-            font-weight: bold;
-            color: red;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .download-button {
-            display: inline-block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 24px; /* Increased */
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-
-        .download-button:hover {
-            background-color: #45a049;
-        }
+        .model-label { font-weight: bold; font-size: 21px; margin-bottom: 2px; } /* Increased size */
+        .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        .loading-spinner { border: 8px solid #f3f3f3; /* Light grey */ border-top: 8px solid #3498db; /* Blue */ border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .download-status.error { font-size: 30px; font-weight: bold; color: red; margin-top: 20px; text-align: center; } /* Increased size */
+        .download-button { display: inline-block; margin: 20px auto; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; font-size: 24px; cursor: pointer; transition: background-color 0.3s; text-align: center; } /* Increased size */
+        .download-button:hover { background-color: #45a049; }
 
     </style>
 </head>
@@ -430,106 +303,201 @@
         let DEBUG_SKIP_TO_ROUND = null; // Set to null for normal run, or 2, 3, 4 to skip
 
         // --- Global Variables ---
-        let participantId;
-        let metadata;
-        let currentParticipant = { results: { trials: [] } };
-        let aphantasiaParticipant;
-        let phantasiaParticipant;
-        let firstRoundChoicesByModel = {};
-        let firstRoundSelections_all = [];
-        let secondRoundSelections = [];
-        let thirdRoundDebriefData = {};
+        let participantId; // Will be set after ID input and validation
+        let metadata; // Will be loaded from config.json and hallucinations.csv
+        let currentParticipant = { results: { trials: [] } }; // Stores data for the current participant
+        let aphantasiaParticipant; // Randomly selected aphantasia participant object
+        let phantasiaParticipant;  // Randomly selected phantasia participant object
+        let firstRoundChoicesByModel = {}; // Stores selections from Round 1, keyed by model
+        let firstRoundSelections_all = []; // Array of all image objects selected in Round 1
+        let secondRoundSelections = [];    // Array of image objects selected in Round 2
+        let thirdRoundDebriefData = {};    // Stores Likert/feedback from Round 3
+
+        // Global flags for participant image completeness check
+        window.participantImagesComplete = false; // Default to false, set true if all images found
+        window.missingModelsForParticipant = [];  // Stores list of missing models for display
 
         // --- Utility Functions ---
         function getCurrentDateTime() { return new Date().toISOString(); }
-        async function loadJSON(file) { const r = await fetch(file); if (!r.ok) throw new Error(`Failed to load ${file}`); return await r.json(); }
-        async function loadCSV(file) { const r = await fetch(file); if (!r.ok) throw new Error(`Failed to load ${file}`); return parseCSV(await r.text()); }
+        async function loadJSON(file) { const response = await fetch(file); if (!response.ok) throw new Error(`Failed to load ${file}: ${response.statusText}`); return await response.json(); }
+        async function loadCSV(file) { const response = await fetch(file); if (!response.ok) throw new Error(`Failed to load ${file}: ${response.statusText}`); return parseCSV(await response.text()); }
         function parseCSV(csvText) {
-            const rows = []; let peintre = false; let champActuel = ''; let ligneActuelle = []; let i = 0;
-            const pushField = () => { ligneActuelle.push(champActuel); champActuel = ''; };
-            while (i < csvText.length) {
-                const char = csvText[i]; const nextChar = csvText[i + 1];
-                if (char === '"') { if (peintre && nextChar === '"') { champActuel += '"'; i++; } else { peintre = !peintre; } }
-                else if (char === ',' && !peintre) { pushField(); }
-                else if ((char === '\n' || char === '\r') && !peintre) {
-                    if (char === '\r' && nextChar === '\n') i++; pushField();
-                    if (ligneActuelle.length > 1 || ligneActuelle.some(f => f.trim() !== '') || rows.length === 0) { rows.push(ligneActuelle); }
-                    ligneActuelle = [];
-                } else { champActuel += char; }
-                i++;
+            const rows = []; let inQuotes = false; let currentField = ''; let currentRow = [];
+            function finalizeField() { currentRow.push(currentField); currentField = ''; }
+            for (let i = 0; i < csvText.length; i++) {
+                const char = csvText[i]; const nextChar = csvText[i+1];
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') { currentField += '"'; i++; } // Escaped quote
+                    else { inQuotes = !inQuotes; }
+                } else if (char === ',' && !inQuotes) { finalizeField(); }
+                else if ((char === '\n' || char === '\r') && !inQuotes) {
+                    if (char === '\r' && nextChar === '\n') i++; // Handle CRLF
+                    finalizeField();
+                    // Add row if it's not empty or if it's the header row (first row)
+                    if (currentRow.length > 1 || currentRow.some(f => f.trim() !== '') || rows.length === 0) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = [];
+                } else { currentField += char; }
             }
-            if (champActuel.length > 0 || ligneActuelle.some(f => f.trim() !== '')) { pushField(); rows.push(ligneActuelle); }
-            if (rows.length === 0 || rows[0].every(header => header.trim() === '')) return [];
-            const headers = rows[0];
-            return rows.slice(1).map(row => { const obj = {}; headers.forEach((header, idx) => { obj[header] = row[idx] ?? ''; }); return obj; });
+            // Add the last field and row if any data is pending
+            if (currentField.length > 0 || currentRow.some(f => f.trim() !== '')) { finalizeField(); rows.push(currentRow); }
+            if (rows.length === 0 || rows[0].every(header => header.trim() === '')) return []; // Handle empty or effectively empty CSV
+            const headers = rows[0].map(h => h.trim());
+            return rows.slice(1).map(row => {
+                const obj = {};
+                headers.forEach((header, idx) => { obj[header] = row[idx] !== undefined ? row[idx] : ''; }); // Ensure all headers get a key
+                return obj;
+            });
         }
-        function shuffleArray(array) { const n = [...array]; for (let i = n.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [n[i],n[j]]=[n[j],n[i]];} return n;}
+        function shuffleArray(array) { const newArray = [...array]; for (let i = newArray.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; } return newArray; }
         function getRandomItem(array) { if (!array || array.length === 0) return undefined; return array[Math.floor(Math.random() * array.length)]; }
-        function findParticipantById(id) { if (!metadata || !metadata.hallucinations_data) return undefined; return metadata.hallucinations_data.find(p => p.id.toString() === id.toString()); }
-        function getImageBaseName(sourceType, model, id) { return `${id}_${model}`; }
-        function getImagePath(sourceType, model, pId = participantId, apId = aphantasiaParticipant?.id, phId = phantasiaParticipant?.id) {
-            if (!metadata) { console.error("Metadata not initialized for getImagePath"); return "images/placeholder.jpeg"; }
-            pId = pId || participantId || "unknown_participant"; apId = apId || aphantasiaParticipant?.id || "unknown_aphant"; phId = phId || phantasiaParticipant?.id || "unknown_phant";
-            let idToUse, imagePath;
-            if (sourceType === "participant") { idToUse = pId; imagePath = `participant_data/participant_${idToUse}/participant_${idToUse}_${model}.jpeg`; }
-            else if (sourceType === "aphantasia") { idToUse = apId; if (metadata.aphantasia_images && metadata.aphantasia_images[idToUse] && metadata.aphantasia_images[idToUse][model]) imagePath = metadata.aphantasia_images[idToUse][model]; }
-            else if (sourceType === "phantasia") { idToUse = phId; if (metadata.phantasia_images && metadata.phantasia_images[idToUse] && metadata.phantasia_images[idToUse][model]) imagePath = metadata.phantasia_images[idToUse][model]; }
-            if (!imagePath) { console.error(`Could not find image path for ${sourceType}, ID: ${idToUse}, Model: ${model}. Placeholder.`); return "images/placeholder.jpeg"; }
+        function findParticipantById(id) { if (!metadata || !metadata.hallucinations_data) return undefined; return metadata.hallucinations_data.find(p => p.id && p.id.toString() === id.toString()); }
+        function getImageBaseName(sourceType, model, id) { return `${id}_${model}`; } // Example: 001_claude_1
+
+        function getImagePath(sourceType, model, pIdToUse = participantId, apIdToUse = aphantasiaParticipant?.id, phIdToUse = phantasiaParticipant?.id) {
+            if (!metadata || !metadata.image_paths) {
+                console.error("Metadata or metadata.image_paths not initialized for getImagePath. SourceType:", sourceType, "Model:", model);
+                return "images/placeholder.jpeg"; // Fallback placeholder
+            }
+
+            // Ensure IDs are strings for lookup, as they are stored as strings from Python
+            const currentPIdStr = pIdToUse ? String(pIdToUse) : null;
+            const currentApIdStr = apIdToUse ? String(apIdToUse) : null;
+            const currentPhIdStr = phIdToUse ? String(phIdToUse) : null;
+            
+            let imagePath;
+
+            if (sourceType === "participant") {
+                if (currentPIdStr && metadata.image_paths.participant_images && metadata.image_paths.participant_images[currentPIdStr] && metadata.image_paths.participant_images[currentPIdStr][model]) {
+                    imagePath = metadata.image_paths.participant_images[currentPIdStr][model];
+                } else {
+                    // This warning is generally expected if a participant is missing an image, which is checked beforehand.
+                    // console.warn(`Participant image path not found in config for P_ID: ${currentPIdStr}, Model: ${model}.`);
+                }
+            } else if (sourceType === "aphantasia") {
+                if (currentApIdStr && metadata.image_paths.aphantasia_images && metadata.image_paths.aphantasia_images[currentApIdStr] && metadata.image_paths.aphantasia_images[currentApIdStr][model]) {
+                    imagePath = metadata.image_paths.aphantasia_images[currentApIdStr][model];
+                }
+            } else if (sourceType === "phantasia") {
+                if (currentPhIdStr && metadata.image_paths.phantasia_images && metadata.image_paths.phantasia_images[currentPhIdStr] && metadata.image_paths.phantasia_images[currentPhIdStr][model]) {
+                    imagePath = metadata.image_paths.phantasia_images[currentPhIdStr][model];
+                }
+            }
+
+            if (!imagePath) {
+                // Log if an image was expected but not found.
+                // console.log(`getImagePath: Path not resolved for ${sourceType}, ID: ${sourceType === "participant" ? currentPIdStr : (sourceType === "aphantasia" ? currentApIdStr : currentPhIdStr)}, Model: ${model}. Using placeholder.`);
+                return "images/placeholder.jpeg";
+            }
             return imagePath;
         }
 
-        // --- Mock Data Generation ---
-        function generateMockFirstRoundSelections(numModels) {
-            const mockSelections = []; const models = metadata.available_models.slice(0, numModels);
-            if (!participantId || !aphantasiaParticipant || !phantasiaParticipant) { console.error("DEBUG: Cannot mock R1 data, participant details missing."); return []; }
-            for (let i = 0; i < models.length; i++) {
-                const model = models[i]; const sourceTypes = ["own", "aphantasia", "phantasia"]; const sourceType = sourceTypes[i % 3];
-                let id = (sourceType === "own") ? participantId : (sourceType === "aphantasia" ? aphantasiaParticipant.id : phantasiaParticipant.id);
-                mockSelections.push({ path: getImagePath(sourceType === "own" ? "participant" : sourceType, model), imageBaseName: `${id}_${model}`, originalModel: model, sourceType: sourceType, datetime_round1: getCurrentDateTime(), rt_round1: Math.random()*1000+500 });
+        // --- Mock Data Generation (ensure getImagePath calls are compatible if used for debugging) ---
+        function generateMockFirstRoundSelections(numModelsToMock) {
+            const mockSelections = []; 
+            const modelsToUse = metadata.available_models.slice(0, numModelsToMock);
+            if (!participantId || !aphantasiaParticipant || !phantasiaParticipant) { 
+                console.error("DEBUG: Cannot mock R1 data, participant details missing for mock generation."); 
+                return []; 
             }
-            console.log("DEBUG: Mock R1 selections:", mockSelections); return shuffleArray(mockSelections);
+            for (let i = 0; i < modelsToUse.length; i++) {
+                const model = modelsToUse[i]; 
+                const sourceTypes = ["own", "aphantasia", "phantasia"]; 
+                const sourceTypeChoice = sourceTypes[i % 3]; // Cycle through own, aphantasia, phantasia
+                
+                let idForMock = (sourceTypeChoice === "own") ? participantId : 
+                                (sourceTypeChoice === "aphantasia" ? aphantasiaParticipant.id : phantasiaParticipant.id);
+                let pathForMock = getImagePath(
+                    sourceTypeChoice === "own" ? "participant" : sourceTypeChoice, 
+                    model,
+                    participantId, // participant's ID
+                    aphantasiaParticipant.id, // aphantasia's ID
+                    phantasiaParticipant.id  // phantasia's ID
+                );
+
+                if (pathForMock === "images/placeholder.jpeg") {
+                    console.warn(`DEBUG Mock R1: Could not get valid image path for ${sourceTypeChoice}, ID ${idForMock}, model ${model}. Mock selection might use placeholder.`);
+                }
+
+                mockSelections.push({ 
+                    path: pathForMock, 
+                    imageBaseName: `${idForMock}_${model}`, 
+                    originalModel: model, 
+                    sourceType: sourceTypeChoice, 
+                    datetime_round1: getCurrentDateTime(), 
+                    rt_round1: Math.random()*1000+500 
+                });
+            }
+            console.log("DEBUG: Mock R1 selections generated:", mockSelections); 
+            return shuffleArray(mockSelections);
         }
-        function generateMockSecondRoundSelections(sourceArray, numSelections = 3) {
-            if (!sourceArray || sourceArray.length === 0) { console.error("DEBUG: Source for mock R2 empty."); return []; }
-            const selections = shuffleArray([...sourceArray]).slice(0, Math.min(numSelections, sourceArray.length)).map(img => ({ ...img, datetime_round2: getCurrentDateTime(), rt_round2: Math.random()*1500+700 }));
-            console.log("DEBUG: Mock R2 selections:", selections); return selections;
-        }
-        function generateMockThirdRoundDebrief(imagesToRate) {
-            const debrief = { subject_id: participantId }; if (!imagesToRate || imagesToRate.length === 0) { console.error("DEBUG: No images for mock R3 debrief."); return debrief; }
-            imagesToRate.forEach((img, index) => { const i = index + 1; debrief[`final_image_${i}`] = img.imageBaseName; ['color', 'shape', 'content', 'overall'].forEach(dim => debrief[`${dim}_${i}`] = Math.floor(Math.random()*11).toString()); debrief[`detailed_feedback_${i}`] = `Mock detailed feedback for image ${img.imageBaseName}. This was automatically generated for testing.`; });
-            console.log("DEBUG: Mock R3 debrief:", debrief); return debrief;
-        }
+        function generateMockSecondRoundSelections(sourceArray, numSelections = 3) { /* ... existing code ... */ }
+        function generateMockThirdRoundDebrief(imagesToRate) { /* ... existing code ... */ }
 
         // --- Initialization ---
         async function initializeMetadata() {
             try {
-                const config = await loadJSON('config.json');
+                const configData = await loadJSON('config.json');
+                const hallucinationsData = await loadCSV('hallucinations.csv');
+                
                 metadata = {
-                    available_models: shuffleArray(config.available_models || []),
-                    hallucinations_data: await loadCSV('hallucinations.csv'),
-                    aphantasia_images: config.image_paths?.aphantasia_images || {},
-                    phantasia_images: config.image_paths?.phantasia_images || {},
-                    aphantasia_ids: config.aphantasia_ids || Object.keys(config.image_paths?.aphantasia_images || {}).map(String),
-                    phantasia_ids: config.phantasia_ids || Object.keys(config.image_paths?.phantasia_images || {}).map(String),
-                    participant_ids: config.participant_ids || []
+                    available_models: shuffleArray(configData.available_models || []),
+                    hallucinations_data: hallucinationsData, 
+                    image_paths: configData.image_paths || { aphantasia_images: {}, phantasia_images: {}, participant_images: {} },
+                    aphantasia_ids: configData.aphantasia_ids || [], 
+                    phantasia_ids: configData.phantasia_ids || [], 
+                    participant_ids: configData.participant_ids || [] 
                 };
-                console.log("Metadata initialized."); await startExperiment();
-            } catch (error) { console.error("Error loading metadata:", error); document.querySelector('#jspsych-target').innerHTML = `<p class="error">Error loading study configuration files. Please check the console for details and ensure 'config.json', 'hallucinations.csv', and image paths are correct. You may need to refresh the page or contact the researcher.</p>`; }
+                console.log("Metadata initialized successfully:", metadata);
+                await startExperiment(); 
+            } catch (error) {
+                console.error("Critical Error loading study configuration:", error);
+                document.querySelector('#jspsych-target').innerHTML = 
+                    `<div style="padding: 20px; text-align: center; color: red;">
+                        <h1>Error Loading Study</h1>
+                        <p>There was a problem loading essential configuration files (e.g., 'config.json', 'hallucinations.csv').</p>
+                        <p>Details: ${error.message}</p>
+                        <p>Please ensure these files are present in the correct location and are valid. You may need to re-run 'collect_ids.py' if 'config.json' is missing or corrupted.</p>
+                        <p>Contact the researcher if the issue persists.</p>
+                    </div>`;
+            }
         }
+
+        // Called ONLY IF participant images are complete
         function initializeStudyDataForParticipant() {
-            aphantasiaParticipant = findParticipantById(getRandomItem(metadata.aphantasia_ids)) || { id: "default_aphant_id", "Please describe as much as you can remember about what you saw in the Ganzflicker:": "Aphantasia description not found."};
-            phantasiaParticipant = findParticipantById(getRandomItem(metadata.phantasia_ids)) || { id: "default_phant_id", "Please describe as much as you can remember about what you saw in the Ganzflicker:": "Phantasia description not found."};
-            const selfData = findParticipantById(participantId);
+            const validAphantasiaIds = metadata.aphantasia_ids.filter(id => metadata.image_paths.aphantasia_images && metadata.image_paths.aphantasia_images[id]);
+            const validPhantasiaIds = metadata.phantasia_ids.filter(id => metadata.image_paths.phantasia_images && metadata.image_paths.phantasia_images[id]);
+
+            if (validAphantasiaIds.length === 0) {
+                console.warn("No valid aphantasia participants with complete image sets found in config. Aphantasia images might be missing in trials.");
+                aphantasiaParticipant = { id: "default_aphant_id_no_images", "Please describe as much as you can remember about what you saw in the Ganzflicker:": "Aphantasia data unavailable (no complete image sets)." };
+            } else {
+                 aphantasiaParticipant = findParticipantById(getRandomItem(validAphantasiaIds)) || { id: "default_aphant_id_csv_missing", "Please describe as much as you can remember about what you saw in the Ganzflicker:": "Aphantasia description not found in CSV."};
+            }
+
+            if (validPhantasiaIds.length === 0) {
+                console.warn("No valid phantasia participants with complete image sets found in config. Phantasia images might be missing in trials.");
+                phantasiaParticipant = { id: "default_phant_id_no_images", "Please describe as much as you can remember about what you saw in the Ganzflicker:": "Phantasia data unavailable (no complete image sets)." };
+            } else {
+                phantasiaParticipant = findParticipantById(getRandomItem(validPhantasiaIds)) || { id: "default_phant_id_csv_missing", "Please describe as much as you can remember about what you saw in the Ganzflicker:": "Phantasia description not found in CSV."};
+            }
+            
+            const selfData = findParticipantById(participantId); 
             currentParticipant.results.subject_id = participantId;
-            currentParticipant.results.aphantasia_id = aphantasiaParticipant.id.toString();
-            currentParticipant.results.phantasia_id = phantasiaParticipant.id.toString();
+            currentParticipant.results.aphantasia_id = String(aphantasiaParticipant.id); 
+            currentParticipant.results.phantasia_id = String(phantasiaParticipant.id);   
             currentParticipant.description = selfData ? selfData["Please describe as much as you can remember about what you saw in the Ganzflicker:"] : "Participant's own description not found in hallucinations.csv.";
             thirdRoundDebriefData = { subject_id: participantId };
-            console.log(`Study initialized for P: ${participantId}, A: ${aphantasiaParticipant.id}, Ph: ${phantasiaParticipant.id}`);
+            console.log(`Study data initialized for Participant: ${participantId}, Aphantasia ID: ${aphantasiaParticipant.id}, Phantasia ID: ${phantasiaParticipant.id}`);
         }
 
         // --- jsPsych Instance ---
-        const jsPsych = initJsPsych({ on_finish: () => console.log('jsPsych.on_finish: Study timeline completed.') });
+        const jsPsych = initJsPsych({
+            on_finish: () => {
+                console.log('jsPsych.on_finish: Study timeline processing completed.');
+            }
+        });
 
         // --- Trial Definitions ---
         const participantIdTrial = {
@@ -541,42 +509,128 @@
                     <button id="start-button" style="font-size: 1.1em; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Start Study</button>
                     <p id="error-message" class="error" style="margin-top: 15px;"></p>
                     <div id="valid-ids-container" style="display: none; margin-top: 20px;">
-                        <p style="font-weight: bold;">Valid Participant IDs:</p>
+                        <p style="font-weight: bold;">Available Participant IDs (from system):</p>
                         <div id="valid-ids-list" style="margin: 10px auto; max-width: 90%; overflow-y: auto; max-height: 200px; border: 1px solid #eee; padding: 10px; background-color: #f9f9f9;"></div>
                     </div>
                 </div>`,
-            choices: 'NO_KEYS',
+            choices: 'NO_KEYS', 
             on_load: () => {
-                const startBtn = document.querySelector('#start-button'), inputEl = document.querySelector('#participant-id-input');
-                const validateAndProceed = () => { 
-                    const errEl = document.querySelector('#error-message'), validIdsCont = document.querySelector('#valid-ids-container'), validIdsList = document.querySelector('#valid-ids-list');
-                    if (!inputEl || !errEl || !validIdsCont || !validIdsList) { console.error("ID trial: DOM elements missing."); return; }
-                    const enteredId = inputEl.value.trim();
-                    if (enteredId === '') { errEl.textContent = 'Please enter a Participant ID.'; return; } 
-                    if (metadata?.participant_ids?.map(String).includes(enteredId)) {
-                        participantId = enteredId; initializeStudyDataForParticipant(); jsPsych.finishTrial();
+                const startButton = document.querySelector('#start-button');
+                const inputElement = document.querySelector('#participant-id-input');
+                const errorMessageElement = document.querySelector('#error-message');
+                const validIdsContainer = document.querySelector('#valid-ids-container');
+                const validIdsListElement = document.querySelector('#valid-ids-list');
+
+                if (!startButton || !inputElement || !errorMessageElement || !validIdsContainer || !validIdsListElement) {
+                    console.error("Participant ID trial: Critical DOM elements are missing.");
+                    if(errorMessageElement) errorMessageElement.textContent = "Error: UI elements for ID input are missing. Please contact researcher.";
+                    return;
+                }
+                
+                inputElement.focus();
+
+                const validateAndProceed = () => {
+                    const enteredId = inputElement.value.trim(); 
+                    errorMessageElement.textContent = ''; 
+
+                    if (enteredId === '') {
+                        errorMessageElement.textContent = 'Please enter a Participant ID.';
+                        return;
+                    }
+
+                    if (metadata && metadata.participant_ids && metadata.participant_ids.includes(enteredId)) {
+                        participantId = enteredId; 
+                        
+                        window.missingModelsForParticipant = []; 
+                        const participantImageSet = metadata.image_paths.participant_images ? metadata.image_paths.participant_images[participantId] : null;
+
+                        if (participantImageSet) {
+                            metadata.available_models.forEach(model => {
+                                if (!participantImageSet[model]) { 
+                                    window.missingModelsForParticipant.push(model);
+                                }
+                            });
+                        } else {
+                            console.warn(`No image data block found in config.json for participant ID: ${participantId}. Assuming all models are missing.`);
+                            window.missingModelsForParticipant = [...metadata.available_models];
+                        }
+
+                        if (window.missingModelsForParticipant.length > 0) {
+                            window.participantImagesComplete = false;
+                            console.warn(`Participant ${participantId} is missing images for models: ${window.missingModelsForParticipant.join(', ')}.`);
+                        } else {
+                            window.participantImagesComplete = true;
+                            console.log(`All required images found for participant ${participantId}.`);
+                            initializeStudyDataForParticipant(); 
+                        }
+                        jsPsych.finishTrial({ participant_id_entered: participantId, images_complete: window.participantImagesComplete }); 
+                    
                     } else {
-                        errEl.textContent = 'Invalid Participant ID. Please use one from the list below or contact the researcher if your ID is missing.'; validIdsCont.style.display = 'block'; validIdsList.innerHTML = ''; 
-                        if (metadata?.participant_ids?.length > 0) {
-                            const grid = document.createElement('div'); grid.style.display = 'grid'; const numIds = metadata.participant_ids.length;
+                        errorMessageElement.textContent = 'Invalid or unknown Participant ID. Please choose from the list or contact the researcher.';
+                        validIdsContainer.style.display = 'block';
+                        validIdsListElement.innerHTML = ''; 
+                        if (metadata && metadata.participant_ids && metadata.participant_ids.length > 0) {
+                            const grid = document.createElement('div'); 
+                            grid.style.display = 'grid'; 
+                            const numIds = metadata.participant_ids.length;
                             grid.style.gridTemplateColumns = `repeat(${numIds <= 5 ? 1 : numIds <= 20 ? 3 : numIds <= 50 ? 4 : 5}, 1fr)`;
-                            grid.style.gap = '8px'; grid.style.justifyItems = 'center';
+                            grid.style.gap = '8px'; 
+                            grid.style.justifyItems = 'center';
                             metadata.participant_ids.forEach(id => {
-                                const el = document.createElement('div'); el.textContent = id;
+                                const el = document.createElement('div'); 
+                                el.textContent = id;
                                 Object.assign(el.style, { fontSize: '1em', padding: '5px', border: '1px solid #ccc', borderRadius: '3px', backgroundColor: '#f8f8f8', minWidth: '60px', textAlign: 'center', cursor: 'pointer' });
-                                el.addEventListener('click', () => { inputEl.value = id; inputEl.focus(); });
+                                el.addEventListener('click', () => { inputElement.value = id; inputElement.focus(); });
                                 grid.appendChild(el);
-                            }); validIdsList.appendChild(grid);
-                        } else { validIdsList.innerHTML = `<div style="font-size: 1em;">No valid IDs found in configuration. Please contact the researcher.</div>`; } 
+                            });
+                            validIdsListElement.appendChild(grid);
+                        } else {
+                            validIdsListElement.innerHTML = `<div style="font-size: 1em;">No participant IDs found in system configuration. Please contact the researcher.</div>`;
+                        }
                     }
                 };
-                if (startBtn) startBtn.addEventListener('click', validateAndProceed);
-                if (inputEl) inputEl.addEventListener('keypress', e => { if (e.key === 'Enter') validateAndProceed(); });
+
+                startButton.addEventListener('click', validateAndProceed);
+                inputElement.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        validateAndProceed();
+                    }
+                });
             }
         };
+
+        const missingParticipantImagesScreen = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: () => {
+                let html = `<div style="max-width: 800px; margin: 30px auto; padding: 25px; border: 1px solid #d9534f; border-radius: 8px; text-align: left; background-color: #fdf7f7;">
+                                <h2 style="color: #d9534f; text-align: center; margin-bottom: 20px;">Study Cannot Proceed: Missing Image Files</h2>
+                                <p style="font-size: 1.1em;">Participant ID: <b>${participantId || "N/A"}</b></p>
+                                <p>We are sorry, but the study cannot continue at this time because some of your required image files could not be found. This may be due to missing files or incorrect naming in your designated folder.</p>
+                                <p>The following model images are missing or could not be verified for your ID:</p>
+                                <ul style="list-style-type: disc; margin-left: 30px; margin-top: 10px; margin-bottom: 20px; background-color: #fff; padding: 10px; border-radius: 4px; border: 1px solid #eee;">`;
+                (window.missingModelsForParticipant || []).forEach(model => {
+                    html += `<li style="margin-bottom: 5px;">${model}</li>`;
+                });
+                if ((window.missingModelsForParticipant || []).length === 0) {
+                    html += `<li>No specific missing models listed, but an issue was detected with your image set.</li>`;
+                }
+                html += `</ul>
+                            <p>Please ensure all your images are correctly uploaded to your participant folder (e.g., 'participant_data/participant_${participantId}/') and named according to the study guidelines (e.g., 'participant_${participantId}_claude_1.png', 'participant_${participantId}_dalle_2.jpeg', etc., using one of the supported extensions: .png, .jpeg, .jpg, .webp).</p>
+                            <p>After verifying your files, please refresh this page to try again. If you have confirmed your files are correct and still see this message, please contact the researcher for assistance.</p>
+                         </div>`;
+                return html;
+            },
+            choices: ["Acknowledge & Exit Study"], 
+            button_html: '<button class="jspsych-btn" style="background-color: #d9534f; color: white;">%choice%</button>',
+            on_finish: (data) => {
+                console.log("Missing images screen acknowledged. Participant chose to exit.");
+                jsPsych.endExperiment("Study terminated by user due to missing participant images. Participant ID: " + participantId);
+            }
+        };
+
         const welcomeTrial = { 
             type: jsPsychHtmlButtonResponse,
-            stimulus: function() {
+            stimulus: function() { // RESTORED STIMULUS FUNCTION
                 return `
                     <div id="welcome-screen-wrapper">
                         <div style="max-width: 900px; margin: auto; text-align: center; padding: 20px;">
@@ -597,191 +651,855 @@
                     `;
             },
             choices: ["Begin Study"],
-            on_load: () => {
-                document.querySelector('.jspsych-btn').addEventListener('click', e => {
-                    e.preventDefault(); e.stopPropagation(); const el = document.documentElement;
-                    if (el.requestFullscreen) el.requestFullscreen(); else if (el.mozRequestFullScreen) el.mozRequestFullScreen(); else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen(); else if (el.msRequestFullscreen) el.msRequestFullscreen();
-                    setTimeout(() => { const clickEv = new MouseEvent('click', {bubbles:true,cancelable:true,view:window}); document.querySelector('.jspsych-btn').dispatchEvent(clickEv);}, 500);
-                }, { once: true });
+            on_load: () => { // Logic for fullscreen on button click
+                 // Add an event listener to the button to request fullscreen
+                const button = document.querySelector('.jspsych-btn'); // jsPsych default button class
+                if (button) {
+                    button.addEventListener('click', function handler(e) {
+                        e.preventDefault(); // Prevent the normal button click from finishing the trial immediately
+                        e.stopPropagation(); // Stop propagation
+
+                        const elem = document.documentElement;
+                        if (elem.requestFullscreen) {
+                            elem.requestFullscreen().catch(err => console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`));
+                        } else if (elem.mozRequestFullScreen) { /* Firefox */
+                            elem.mozRequestFullScreen().catch(err => console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`));
+                        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                            elem.webkitRequestFullscreen().catch(err => console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`));
+                        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                            elem.msRequestFullscreen().catch(err => console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`));
+                        }
+                        
+                        // Remove this specific listener to prevent it from running multiple times
+                        // if the trial somehow reloads or button is clicked again before trial ends.
+                        button.removeEventListener('click', handler);
+
+                        // Programmatically click the button again AFTER a short delay to allow fullscreen transition
+                        // This will then use jsPsych's normal mechanism to end the trial
+                        setTimeout(() => {
+                            const clickEvent = new MouseEvent('click', {
+                                bubbles: true,
+                                cancelable: true,
+                                view: window
+                            });
+                            document.querySelector('.jspsych-btn').dispatchEvent(clickEvent);
+                        }, 500); // 500ms delay, adjust if needed
+                    }, { once: true }); // Ensure the handler runs only once
+                }
             },
-            on_finish: () => console.log("Welcome trial completed, study entering fullscreen.") 
+            on_finish: () => console.log("Welcome trial completed, study entering or attempting to enter fullscreen.") 
         };
+
         const preloadTrial = {
             type: jsPsychPreload,
             images: () => {
-                const images = new Set();
-                if (participantId && aphantasiaParticipant && phantasiaParticipant && metadata?.available_models) {
-                    metadata.available_models.forEach(model => { const apId = aphantasiaParticipant.id, phId = phantasiaParticipant.id; [ "participant", "aphantasia", "phantasia"].forEach(type => images.add(getImagePath(type, model, participantId, apId, phId))); });
-                } else { console.warn("Preload: Participant details or models not available when generating image list."); return ["images/placeholder.jpeg"]; } 
-                const valid = Array.from(images).filter(img => img !== "images/placeholder.jpeg");
-                if (valid.length === 0 && images.size > 0) console.warn("Preload: Only placeholder images were generated. Check image paths and IDs in config and CSV."); 
-                else if (valid.length < images.size) console.warn("Preload: Some images resolved to placeholder.jpeg. Check specific image paths and IDs."); 
-                return valid.length > 0 ? valid : (images.size > 0 ? ["images/placeholder.jpeg"] : []);
+                const imagesToPreload = new Set();
+                if (!window.participantImagesComplete) {
+                    console.log("Preload: Skipping image preloading as participant images are not complete or participant ID not yet processed.");
+                    return []; 
+                }
+                if (!aphantasiaParticipant || !phantasiaParticipant) {
+                     console.warn("Preload: Aphantasia or Phantasia participant data not yet initialized (likely due to missing CSV entries for selected IDs). Preloading might be incomplete for them.");
+                }
+
+                if (participantId && metadata?.available_models && metadata?.image_paths) {
+                    metadata.available_models.forEach(model => {
+                        const apIdStr = aphantasiaParticipant?.id ? String(aphantasiaParticipant.id) : null;
+                        const phIdStr = phantasiaParticipant?.id ? String(phantasiaParticipant.id) : null;
+                        const pIdStr = String(participantId); 
+
+                        const participantImgPath = getImagePath("participant", model, pIdStr);
+                        if (participantImgPath && participantImgPath !== "images/placeholder.jpeg") imagesToPreload.add(participantImgPath);
+                        
+                        if (apIdStr) {
+                            const aphantasiaImgPath = getImagePath("aphantasia", model, pIdStr, apIdStr);
+                            if (aphantasiaImgPath && aphantasiaImgPath !== "images/placeholder.jpeg") imagesToPreload.add(aphantasiaImgPath);
+                        }
+                        
+                        if (phIdStr) {
+                            // Corrected call for phantasia: pass null for apIdToUse if not relevant
+                            const phantasiaImgPath = getImagePath("phantasia", model, pIdStr, null, phIdStr); 
+                            if (phantasiaImgPath && phantasiaImgPath !== "images/placeholder.jpeg") imagesToPreload.add(phantasiaImgPath);
+                        }
+                    });
+                } else {
+                    console.warn("Preload: Conditions not fully met for preloading (e.g., participant details, models, or image_paths not available despite image check passing).");
+                    return ["images/placeholder.jpeg"]; 
+                }
+                
+                const validImages = Array.from(imagesToPreload).filter(img => img && img !== "images/placeholder.jpeg");
+                if (validImages.length === 0 && imagesToPreload.size > 0) {
+                    console.warn("Preload: Only placeholder images were generated or found. Check image paths and IDs in config and CSV, and ensure getImagePath is working correctly.");
+                } else if (validImages.length < imagesToPreload.size) {
+                    console.warn("Preload: Some images resolved to placeholder.jpeg. Check specific image paths and IDs.");
+                }
+                console.log(`Preloading ${validImages.length} images:`, validImages);
+                return validImages.length > 0 ? validImages : (imagesToPreload.size > 0 ? ["images/placeholder.jpeg"] : []);
             },
-            auto_preload: true, message: "<p>Loading study images... This may take a moment.</p>", show_progress_bar: true, continue_after_error: true, 
-            on_error: file => console.error(`Error preloading image: ${file}. The study will attempt to continue, but this image might be missing or replaced by a placeholder.`), 
+            auto_preload: true, 
+            message: "<p>Loading study images... This may take a moment.</p><div class='loading-spinner'></div>", 
+            show_progress_bar: true, 
+            continue_after_error: true, 
+            on_error: (file) => console.error(`Error preloading image: ${file}. The study will attempt to continue, but this image might be missing or replaced by a placeholder.`), 
             error_message: "<p>Some images could not be loaded. You can still continue the study, but some images might be missing. Please inform the researcher about this issue.</p>" 
         };
+        
+        // Function to create Round 1 model image trial
         function createModelImageTrial(model, modelIndex) {
             return {
-                type: jsPsychHtmlKeyboardResponse,
+                type: jsPsychHtmlKeyboardResponse, // Changed from image-button-response to allow custom HTML structure
                 stimulus: () => {
-                    const options = shuffleArray([ {type:"aphantasia", path:getImagePath("aphantasia",model, participantId, aphantasiaParticipant.id, phantasiaParticipant.id), id:aphantasiaParticipant.id}, {type:"phantasia",path:getImagePath("phantasia",model, participantId, aphantasiaParticipant.id, phantasiaParticipant.id),id:phantasiaParticipant.id}, {type:"participant",path:getImagePath("participant",model, participantId, aphantasiaParticipant.id, phantasiaParticipant.id),id:participantId} ]);
+                    // Ensure aphantasiaParticipant and phantasiaParticipant are defined
+                    // This might happen if their CSV entries are missing, leading to default objects
+                    const apId = aphantasiaParticipant?.id || "unknown_aphant";
+                    const phId = phantasiaParticipant?.id || "unknown_phant";
+
+                    const options = shuffleArray([
+                        { type: "aphantasia", path: getImagePath("aphantasia", model, participantId, apId, phId), id: apId },
+                        { type: "phantasia", path: getImagePath("phantasia", model, participantId, apId, phId), id: phId },
+                        { type: "participant", path: getImagePath("participant", model, participantId, apId, phId), id: participantId }
+                    ]);
+                    // Store the order of images for this trial for potential later analysis
                     jsPsych.data.addProperties({ [`${model}_image_positions_r1`]: options.map(o => o.type) });
-                    return `<p class="instruction-text">Click on the image that best represents what you "saw" during the ganzflicker experience.</p><div class="image-container">${options.map((opt, idx) => `<div class="image-option" data-source-type="${opt.type}" data-image-id="${opt.id}" data-model="${model}" data-path="${opt.path}" data-position-index="${idx}"><img src="${opt.path}" alt="Image option ${idx+1} for model ${model}"></div>`).join('')}</div><p id="error-message-round1-${modelIndex}" class="error" style="display:none;">Please select an image to continue.</p><button class="next-button" id="next-button-round1-${modelIndex}">Next</button>`;
+
+                    // Construct the HTML for image options
+                    let imagesHtml = options.map((opt, idx) => `
+                        <div class="image-option" 
+                             data-source-type="${opt.type}" 
+                             data-image-id="${opt.id}" 
+                             data-model="${model}" 
+                             data-path="${opt.path}" 
+                             data-position-index="${idx}">
+                            <img src="${opt.path}" alt="Image option ${idx + 1} for model ${model}">
+                        </div>`).join('');
+
+                    return `
+                        <p class="instruction-text">Click on the image that best represents what you "saw" during the ganzflicker experience.</p>
+                        <div class="image-container">${imagesHtml}</div>
+                        <p id="error-message-round1-${modelIndex}" class="error" style="display:none;">Please select an image to continue.</p>
+                        <button class="next-button" id="next-button-round1-${modelIndex}">Next</button>
+                    `;
                 },
-                choices: [], 
+                choices: [], // No keyboard choices, interaction is via click
                 on_load: () => {
-                    const startTime = performance.now(); let selectedEl = null; const nextBtn = document.getElementById(`next-button-round1-${modelIndex}`), errEl = document.getElementById(`error-message-round1-${modelIndex}`);
-                    document.querySelectorAll('.image-option').forEach(el => el.addEventListener('click', function() { document.querySelectorAll('.image-option img').forEach(img => img.classList.remove('selected-image')); this.querySelector('img').classList.add('selected-image'); selectedEl = this; if(nextBtn) nextBtn.style.display='block'; if(errEl) errEl.style.display='none'; }));
-                    if(nextBtn) nextBtn.addEventListener('click', () => {
-                        if(selectedEl) {
-                            const rt = performance.now() - startTime, srcType = selectedEl.getAttribute('data-source-type'), imgId = selectedEl.getAttribute('data-image-id'), chModel = selectedEl.getAttribute('data-model'), imgPath = selectedEl.getAttribute('data-path'), posIdx = parseInt(selectedEl.getAttribute('data-position-index'));
-                            const choiceLoc = ["left","middle","right"][posIdx] || `pos_${posIdx}`, imgBaseName = `${imgId}_${chModel}`;
-                            const choiceDesig = (srcType === "participant") ? "own" : srcType; 
-                            const trialData = { subject_id: participantId, trial_type: "first_round", model: chModel, aphantasia_image: getImageBaseName("aphantasia", chModel, aphantasiaParticipant.id), phantasia_image: getImageBaseName("phantasia", chModel, phantasiaParticipant.id), target: getImageBaseName("participant", chModel, participantId), choice: choiceDesig, reaction_time: parseFloat((rt/1000).toFixed(3)), image_choice_location: choiceLoc, accuracy: (srcType === "participant")?1:0, chosen_model: chModel, chosen_image: imgBaseName, datetime: getCurrentDateTime() };
-                            currentParticipant.results.trials.push(trialData);
-                            firstRoundChoicesByModel[chModel] = { path:imgPath, imageBaseName:imgBaseName, originalModel:chModel, sourceType:choiceDesig, datetime_round1:trialData.datetime, rt_round1:rt };
-                            jsPsych.finishTrial(trialData);
-                        } else { if(errEl) errEl.style.display='block'; }
+                    const startTime = performance.now();
+                    let selectedImageElement = null;
+                    const nextButton = document.getElementById(`next-button-round1-${modelIndex}`);
+                    const errorMessageElement = document.getElementById(`error-message-round1-${modelIndex}`);
+                    const imageOptions = document.querySelectorAll(`.image-option`);
+
+                    imageOptions.forEach(option => {
+                        option.addEventListener('click', function() {
+                            // Remove 'selected-image' class from all images within options
+                            document.querySelectorAll('.image-option img').forEach(img => img.classList.remove('selected-image'));
+                            // Add 'selected-image' class to the clicked image
+                            this.querySelector('img').classList.add('selected-image');
+                            selectedImageElement = this; // Store the div.image-option element
+                            if (nextButton) nextButton.style.display = 'block'; // Show next button
+                            if (errorMessageElement) errorMessageElement.style.display = 'none'; // Hide error
+                        });
                     });
+
+                    if (nextButton) {
+                        nextButton.addEventListener('click', () => {
+                            if (selectedImageElement) {
+                                const reactionTime = performance.now() - startTime;
+                                const sourceType = selectedImageElement.getAttribute('data-source-type');
+                                const imageId = selectedImageElement.getAttribute('data-image-id'); // ID of the person (participant, aphant, phant)
+                                const chosenModel = selectedImageElement.getAttribute('data-model'); // The model for this trial (e.g., claude_1)
+                                const imagePath = selectedImageElement.getAttribute('data-path');
+                                const positionIndex = parseInt(selectedImageElement.getAttribute('data-position-index'));
+                                
+                                const choiceLocation = ["left", "middle", "right"][positionIndex] || `pos_${positionIndex}`;
+                                const imageBaseName = `${imageId}_${chosenModel}`; // e.g., 001_claude_1 or aphantID_claude_1
+
+                                const choiceDesignation = (sourceType === "participant") ? "own" : sourceType; // "own", "aphantasia", or "phantasia"
+                                
+                                const trialData = {
+                                    subject_id: participantId,
+                                    trial_type: "first_round",
+                                    model: chosenModel, // The model being tested (e.g. "claude_1")
+                                    aphantasia_image: getImageBaseName("aphantasia", chosenModel, aphantasiaParticipant?.id || "unknown_aphant"),
+                                    phantasia_image: getImageBaseName("phantasia", chosenModel, phantasiaParticipant?.id || "unknown_phant"),
+                                    target: getImageBaseName("participant", chosenModel, participantId), // Participant's own image for this model
+                                    choice: choiceDesignation, // 'own', 'aphantasia', or 'phantasia'
+                                    reaction_time: parseFloat((reactionTime / 1000).toFixed(3)),
+                                    image_choice_location: choiceLocation,
+                                    accuracy: (sourceType === "participant") ? 1 : 0,
+                                    chosen_model: chosenModel, // Redundant with 'model' but kept for schema consistency
+                                    chosen_image: imageBaseName, // The image file base name that was chosen
+                                    datetime: getCurrentDateTime()
+                                };
+                                currentParticipant.results.trials.push(trialData);
+                                
+                                // Store for Round 2 preparation
+                                firstRoundChoicesByModel[chosenModel] = {
+                                    path: imagePath,
+                                    imageBaseName: imageBaseName,
+                                    originalModel: chosenModel,
+                                    sourceType: choiceDesignation, // 'own', 'aphantasia', 'phantasia'
+                                    datetime_round1: trialData.datetime,
+                                    rt_round1: reactionTime 
+                                };
+                                jsPsych.finishTrial(trialData);
+                            } else {
+                                if (errorMessageElement) errorMessageElement.style.display = 'block';
+                            }
+                        });
+                    }
                 }
             };
         }
-        const prepareRound2 = { type: jsPsychCallFunction, func: () => { firstRoundSelections_all = shuffleArray(Object.values(firstRoundChoicesByModel)); if(firstRoundSelections_all.length === 0) { const skipR1 = jsPsych.data.get().filter({trial_type:'debug_skip_logic_r1'}).last(1).values()[0]?.skippedRound1; if(skipR1) { console.error("PrepareRound2: firstRoundSelections_all is empty after skipping Round 1. Mock generation likely failed."); jsPsych.endExperiment("Error: Failed to generate mock data for testing. Please check console."); } else { console.error("PrepareRound2: No images selected in Round 1. Cannot proceed."); jsPsych.endExperiment("Error: No images were selected in the first round."); } return; } if(firstRoundSelections_all.length < 24) console.warn(`PrepareRound2: Fewer than 24 images selected/generated (${firstRoundSelections_all.length}). Round 2 screens might have fewer images.`); console.log(`PrepareRound2: Images prepared for Round 2: ${firstRoundSelections_all.length} images.`); } };
-        function createSecondRoundTrial(screenNum) {
+        // Function to prepare for Round 2
+        const prepareRound2 = { 
+            type: jsPsychCallFunction, 
+            func: () => { 
+                firstRoundSelections_all = shuffleArray(Object.values(firstRoundChoicesByModel)); 
+                if (firstRoundSelections_all.length === 0) { 
+                    const skippedR1 = jsPsych.data.get().filter({trial_type:'debug_skip_logic_r1'}).last(1).values()[0]?.skippedRound1;
+                    if (skippedR1) {
+                        console.error("PrepareRound2: firstRoundSelections_all is empty even after (mock) skipping Round 1. Mock generation likely failed or DEBUG_SKIP_TO_ROUND > 1 but no mock data."); 
+                        // Attempt to generate mock data again if in debug mode and R1 was skipped
+                        if (DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 1) {
+                            console.log("PrepareRound2: Attempting to re-generate mock R1 selections for debug.")
+                            firstRoundSelections_all = generateMockFirstRoundSelections(metadata.available_models.length);
+                             if (firstRoundSelections_all.length === 0) {
+                                jsPsych.endExperiment("Error: Failed to generate critical mock data for testing after R1 skip. Please check console.");
+                                return;
+                             }
+                        } else {
+                             jsPsych.endExperiment("Error: No images selected in Round 1 and not in a debug skip mode that generates data. Cannot proceed."); 
+                             return;
+                        }
+                    } else {
+                         jsPsych.endExperiment("Error: No images were selected in the first round. Cannot proceed."); 
+                         return;
+                    }
+                } 
+                if (firstRoundSelections_all.length < 24 && !(jsPsych.data.get().filter({trial_type:'debug_skip_logic_r1'}).last(1).values()[0]?.skippedRound1)) {
+                    // Only warn if not in a debug skip mode, as mock might generate fewer than 24.
+                    console.warn(`PrepareRound2: Fewer than 24 images selected/generated (${firstRoundSelections_all.length}). Round 2 screens might have fewer images.`);
+                }
+                console.log(`PrepareRound2: Images prepared for Round 2: ${firstRoundSelections_all.length} images.`); 
+            } 
+        };
+        // Function to create Round 2 trial
+        function createSecondRoundTrial(screenNum) { 
             return {
-                type: jsPsychHtmlKeyboardResponse,
+                type: jsPsychHtmlKeyboardResponse, // Using keyboard response base for custom HTML
                 stimulus: () => {
-                    const perScreen = 8, startIdx = (screenNum-1)*perScreen, endIdx = startIdx+perScreen; const group = firstRoundSelections_all.slice(startIdx, Math.min(endIdx, firstRoundSelections_all.length));
-                    if(group.length === 0) { console.warn(`Round 2, Screen ${screenNum}: No images for this group. Should be skipped by conditional_function.`); return `<p>Loading next part...</p>`; } 
-                    const shuffledGroup = shuffleArray([...group]); jsPsych.data.addProperties({[`round2_screen${screenNum}_image_details`]:shuffledGroup.map(img=>({imageBaseName:img.imageBaseName,originalModel:img.originalModel}))}); 
-                    let html = shuffledGroup.map((imgData,idx) => `<div class="round-2-image-option" data-path="${imgData.path}" data-image-base-name="${imgData.imageBaseName}" data-original-model="${imgData.originalModel}" data-source-type="${imgData.sourceType}" data-position-id="row${Math.floor(idx/4)+1}_col${(idx%4)+1}"><img src="${imgData.path}" alt="Image ${idx + 1} for Round 2, Screen ${screenNum}"></div>`).join(''); 
-                    return `<p class="instruction-text">From the images you chose on previous screens, select the one that is the best visualization of what you "saw" during the Ganzflicker.</p><div class="round-2-image-grid">${html}</div><p id="error-message-round2-${screenNum}" class="error" style="display:none;">Please select an image to continue.</p><button class="next-button" id="next-button-round2-${screenNum}">Next</button>`;
+                    const imagesPerScreen = 8;
+                    const startIndex = (screenNum - 1) * imagesPerScreen;
+                    const endIndex = startIndex + imagesPerScreen;
+                    const imageGroupForScreen = firstRoundSelections_all.slice(startIndex, Math.min(endIndex, firstRoundSelections_all.length));
+
+                    if (imageGroupForScreen.length === 0) {
+                        console.warn(`Round 2, Screen ${screenNum}: No images for this group. This screen should ideally be skipped by conditional_function if group is empty.`);
+                        return `<p>Loading next part or an issue occurred (no images for this screen).</p>`; 
+                    }
+                    
+                    const shuffledGroup = shuffleArray([...imageGroupForScreen]);
+                    jsPsych.data.addProperties({ [`round2_screen${screenNum}_image_details`]: shuffledGroup.map(img => ({ imageBaseName: img.imageBaseName, originalModel: img.originalModel })) });
+                    
+                    let imagesHtml = shuffledGroup.map((imgData, idx) => `
+                        <div class="round-2-image-option" 
+                             data-path="${imgData.path}" 
+                             data-image-base-name="${imgData.imageBaseName}" 
+                             data-original-model="${imgData.originalModel}" 
+                             data-source-type="${imgData.sourceType}" 
+                             data-position-id="row${Math.floor(idx / 4) + 1}_col${(idx % 4) + 1}">
+                            <img src="${imgData.path}" alt="Image ${idx + 1} for Round 2, Screen ${screenNum}: ${imgData.imageBaseName}">
+                        </div>`).join('');
+
+                    return `
+                        <p class="instruction-text">From the images you chose on previous screens, select the one that is the best visualization of what you "saw" during the Ganzflicker.</p>
+                        <div class="round-2-image-grid">${imagesHtml}</div>
+                        <p id="error-message-round2-${screenNum}" class="error" style="display:none;">Please select an image to continue.</p>
+                        <button class="next-button" id="next-button-round2-${screenNum}">Next</button>
+                    `;
                 },
-                choices: [],
+                choices: [], // No keyboard choices
                 on_load: () => {
-                    const perScreen = 8, startIdx = (screenNum-1)*perScreen; const group = firstRoundSelections_all.slice(startIdx, Math.min(startIdx+perScreen, firstRoundSelections_all.length));
-                    if(group.length === 0) { console.warn(`Round 2, Screen ${screenNum} on_load: No images. Auto-advancing.`); jsPsych.finishTrial({skipped_empty_group:true}); return; } 
-                    const startTime = performance.now(); let selectedEl = null; const nextBtn = document.getElementById(`next-button-round2-${screenNum}`), errEl = document.getElementById(`error-message-round2-${screenNum}`), allOpts = document.querySelectorAll('.round-2-image-option');
-                    allOpts.forEach(el => el.addEventListener('click', function() { allOpts.forEach(opt => opt.querySelector('img').classList.remove('selected-image')); this.querySelector('img').classList.add('selected-image'); selectedEl = this; if(nextBtn) nextBtn.style.display='block'; if(errEl) errEl.style.display='none'; }));
-                    if(nextBtn) nextBtn.addEventListener('click', () => {
-                        if(selectedEl) {
-                            const rt = performance.now() - startTime, path = selectedEl.getAttribute('data-path'), baseName = selectedEl.getAttribute('data-image-base-name'), origModel = selectedEl.getAttribute('data-original-model'), srcType = selectedEl.getAttribute('data-source-type'), choiceLoc = selectedEl.getAttribute('data-position-id');
-                            const trialData = { subject_id:participantId, trial_type:`second_round_screen_${screenNum}`, model:"na", aphantasia_image:"na", phantasia_image:"na", target:"na", choice:srcType, reaction_time:parseFloat((rt/1000).toFixed(3)), image_choice_location:choiceLoc, accuracy:(srcType==="own")?1:0, chosen_model:origModel, chosen_image:baseName, datetime:getCurrentDateTime() }; 
-                            currentParticipant.results.trials.push(trialData);
-                            secondRoundSelections.push({ path:path, imageBaseName:baseName, originalModel:origModel, sourceType:srcType, datetime_round2:trialData.datetime, rt_round2:rt });
-                            jsPsych.finishTrial(trialData);
-                        } else { if(errEl) errEl.style.display='block'; }
+                    const imagesPerScreen = 8;
+                    const startIndex = (screenNum - 1) * imagesPerScreen;
+                    const imageGroupForScreen = firstRoundSelections_all.slice(startIndex, Math.min(startIndex + imagesPerScreen, firstRoundSelections_all.length));
+
+                    if (imageGroupForScreen.length === 0) {
+                        console.warn(`Round 2, Screen ${screenNum} on_load: No images for this group. Auto-advancing.`);
+                        jsPsych.finishTrial({ skipped_empty_group_r2: true, screen: screenNum });
+                        return;
+                    }
+
+                    const startTime = performance.now();
+                    let selectedImageElement = null;
+                    const nextButton = document.getElementById(`next-button-round2-${screenNum}`);
+                    const errorMessageElement = document.getElementById(`error-message-round2-${screenNum}`);
+                    const allImageOptions = document.querySelectorAll('.round-2-image-option');
+
+                    allImageOptions.forEach(option => {
+                        option.addEventListener('click', function() {
+                            allImageOptions.forEach(opt => opt.querySelector('img').classList.remove('selected-image'));
+                            this.querySelector('img').classList.add('selected-image');
+                            selectedImageElement = this;
+                            if (nextButton) nextButton.style.display = 'block';
+                            if (errorMessageElement) errorMessageElement.style.display = 'none';
+                        });
                     });
+
+                    if (nextButton) {
+                        nextButton.addEventListener('click', () => {
+                            if (selectedImageElement) {
+                                const reactionTime = performance.now() - startTime;
+                                const path = selectedImageElement.getAttribute('data-path');
+                                const imageBaseName = selectedImageElement.getAttribute('data-image-base-name');
+                                const originalModel = selectedImageElement.getAttribute('data-original-model');
+                                const sourceType = selectedImageElement.getAttribute('data-source-type'); // 'own', 'aphantasia', 'phantasia'
+                                const choiceLocation = selectedImageElement.getAttribute('data-position-id'); // e.g., row1_col3
+
+                                const trialData = {
+                                    subject_id: participantId,
+                                    trial_type: `second_round_screen_${screenNum}`,
+                                    model: "na", // Not directly applicable as in Round 1
+                                    aphantasia_image: "na", // Not displaying specific aphant/phant/target triad
+                                    phantasia_image: "na",
+                                    target: "na",
+                                    choice: sourceType, // This is the source type of the *chosen* image
+                                    reaction_time: parseFloat((reactionTime / 1000).toFixed(3)),
+                                    image_choice_location: choiceLocation,
+                                    accuracy: (sourceType === "own") ? 1 : 0, // Accuracy based on whether it was their "own" original image
+                                    chosen_model: originalModel, // The model of the image they picked
+                                    chosen_image: imageBaseName, // The base name of the image they picked
+                                    datetime: getCurrentDateTime()
+                                };
+                                currentParticipant.results.trials.push(trialData);
+                                
+                                // Store for Round 3 (Likert rating)
+                                secondRoundSelections.push({
+                                    path: path,
+                                    imageBaseName: imageBaseName,
+                                    originalModel: originalModel,
+                                    sourceType: sourceType,
+                                    datetime_round2: trialData.datetime,
+                                    rt_round2: reactionTime
+                                });
+                                jsPsych.finishTrial(trialData);
+                            } else {
+                                if (errorMessageElement) errorMessageElement.style.display = 'block';
+                            }
+                        });
+                    }
                 }
             };
         }
+        // Function to create Round 3 rating trial
         function createThirdRoundRatingTrial(imageIndex) { 
+            // imageIndex is 1-based (1, 2, or 3)
             return {
-                type: jsPsychHtmlKeyboardResponse,
+                type: jsPsychHtmlKeyboardResponse, // Using keyboard response for custom HTML and button
                 stimulus: () => {
-                    const arrayIdx = imageIndex - 1; const imgObj = (arrayIdx < secondRoundSelections.length) ? secondRoundSelections[arrayIdx] : null;
-                    if(!imgObj) { console.error(`Error in Round 3, stim for image index ${imageIndex}: imageObject is null or undefined.`); return "<p class='error'>Error displaying image for rating. Please contact the researcher.</p>"; } 
-                    const scaleOpts = Array.from({length:11},(_,i)=>i); const dims = ['Color','Shape','Content','Overall visual'];
-                    let formHtml = dims.map((dim,dIdx) => `<div class="likert-item"><p>${dim} similarity</p><div class="likert-scale"><span>0 (Not at all)</span><div class="likert-options-container">${scaleOpts.map(num => `<div class="likert-option"><input type="radio" id="likert-${dIdx+1}-${imageIndex}-${num}" name="likert-${dIdx+1}-${imageIndex}" value="${num}"><label for="likert-${dIdx+1}-${imageIndex}-${num}">${num}</label></div>`).join('')}</div><span>10 (Almost identical)</span></div></div>`).join('');
-                    return `<p class="instruction-text">Below is one of the images you selected as the best visualization of your Ganzflicker experience. Please rate how much this image resembles your hallucinations in terms of the following dimensions:</p><div class="round-3-image-display"><img src="${imgObj.path}" alt="Image for rating: ${imgObj.imageBaseName}"></div><div id="custom-likert-form">${formHtml}<div style="margin-top:30px; margin-bottom:20px;"><label for="detailed-feedback-${imageIndex}" class="feedback-label">Can you tell us more about how this generated image differed from or resembled your Ganzflicker experience? Be as detailed as possible.</label><textarea class="detailed-feedback-area" id="detailed-feedback-${imageIndex}" rows="5"></textarea></div><p id="error-message-round3-${imageIndex}" class="error" style="display:none;">Please complete all ratings and provide feedback to continue.</p><div class="button-container"><button id="submit-likert-form-${imageIndex}" class="submit-button">Continue</button></div></div>`;
+                    const arrayIndex = imageIndex - 1; // Convert to 0-based for array access
+                    const imageObjectToRate = (arrayIndex < secondRoundSelections.length) ? secondRoundSelections[arrayIndex] : null;
+
+                    if (!imageObjectToRate) {
+                        console.error(`Error in Round 3, stimulus for image index ${imageIndex} (array idx ${arrayIndex}): Image object is null or undefined. secondRoundSelections length: ${secondRoundSelections.length}`);
+                        return "<p class='error'>Error: The image to be rated could not be found. This might indicate an issue with selections from the previous round. Please contact the researcher.</p><button id='error-continue-btn' class='submit-button' style='display:block;'>Continue (skip rating)</button>";
+                    }
+                    
+                    const scaleOptions = Array.from({ length: 11 }, (_, i) => i); // 0 to 10
+                    const dimensions = ['Color', 'Shape', 'Content', 'Overall visual'];
+                    
+                    let formHtml = dimensions.map((dim, dimIndex) => `
+                        <div class="likert-item">
+                            <p>${dim} similarity</p>
+                            <div class="likert-scale">
+                                <span>0 (Not at all)</span>
+                                <div class="likert-options-container">
+                                    ${scaleOptions.map(num => `
+                                        <div class="likert-option">
+                                            <input type="radio" id="likert-${dimIndex + 1}-${imageIndex}-${num}" name="likert-${dimIndex + 1}-${imageIndex}" value="${num}" required>
+                                            <label for="likert-${dimIndex + 1}-${imageIndex}-${num}">${num}</label>
+                                        </div>`).join('')}
+                                </div>
+                                <span>10 (Almost identical)</span>
+                            </div>
+                        </div>`).join('');
+
+                    return `
+                        <p class="instruction-text">Below is one of the images you selected as the best visualization of your Ganzflicker experience. Please rate how much this image resembles your hallucinations in terms of the following dimensions:</p>
+                        <div class="round-3-image-display">
+                            <img src="${imageObjectToRate.path}" alt="Image for rating: ${imageObjectToRate.imageBaseName}">
+                        </div>
+                        <div id="custom-likert-form">
+                            ${formHtml}
+                            <div style="margin-top:30px; margin-bottom:20px;">
+                                <label for="detailed-feedback-${imageIndex}" class="feedback-label">Can you tell us more about how this generated image differed from or resembled your Ganzflicker experience? Be as detailed as possible.</label>
+                                <textarea class="detailed-feedback-area" id="detailed-feedback-${imageIndex}" name="detailed_feedback_${imageIndex}" rows="5" required></textarea>
+                            </div>
+                            <p id="error-message-round3-${imageIndex}" class="error" style="display:none;">Please complete all ratings and provide feedback to continue.</p>
+                            <div class="button-container">
+                                <button id="submit-likert-form-${imageIndex}" class="submit-button" style="display:block;">Continue</button>
+                            </div>
+                        </div>
+                    `;
                 },
-                choices: [],
+                choices: [], // No direct keyboard choices, handled by button
                 on_load: () => {
-                    const arrayIdx = imageIndex - 1; const imgObj = (arrayIdx < secondRoundSelections.length) ? secondRoundSelections[arrayIdx] : null;
-                    if(!imgObj) { console.warn(`Round 3, Rating ${imageIndex} on_load: imageObject is null. Skipping setup.`); jsPsych.finishTrial({skipped_no_image_object_in_onload_r3:true}); return; } 
-                    const submitBtn = document.getElementById(`submit-likert-form-${imageIndex}`), errEl = document.getElementById(`error-message-round3-${imageIndex}`);
-                    if(submitBtn) submitBtn.style.display='block';
-                    if(submitBtn) submitBtn.addEventListener('click', () => {
-                        const responses = { color: document.querySelector(`input[name="likert-1-${imageIndex}"]:checked`)?.value, shape: document.querySelector(`input[name="likert-2-${imageIndex}"]:checked`)?.value, content: document.querySelector(`input[name="likert-3-${imageIndex}"]:checked`)?.value, overall: document.querySelector(`input[name="likert-4-${imageIndex}"]:checked`)?.value };
-                        const feedback = document.getElementById(`detailed-feedback-${imageIndex}`)?.value.trim() || '';
-                        if(Object.values(responses).some(v=>v===undefined) || feedback === '') { if(errEl) { errEl.textContent='Please complete all rating scales and provide detailed feedback before continuing.'; errEl.style.display='block';} return; } 
-                        if(errEl) errEl.style.display='none';
-                        thirdRoundDebriefData[`final_image_${imageIndex}`] = imgObj.imageBaseName; ['color','shape','content','overall'].forEach(dim => thirdRoundDebriefData[`${dim}_${imageIndex}`] = responses[dim]); thirdRoundDebriefData[`detailed_feedback_${imageIndex}`] = feedback;
-                        jsPsych.finishTrial({image_rated:imgObj.imageBaseName, ratings_collected:responses, feedback_collected:feedback}); 
-                    });
+                    const arrayIndex = imageIndex - 1;
+                    const imageObjectToRate = (arrayIndex < secondRoundSelections.length) ? secondRoundSelections[arrayIndex] : null;
+                    
+                    if (!imageObjectToRate) {
+                        // Handle error case where image object isn't found, possibly skip trial
+                        console.warn(`Round 3, Rating ${imageIndex} on_load: imageObject is null. Setting up minimal skip.`);
+                        const errorContinueBtn = document.getElementById('error-continue-btn');
+                        if (errorContinueBtn) {
+                            errorContinueBtn.addEventListener('click', () => {
+                                jsPsych.finishTrial({ skipped_r3_rating_due_to_missing_image_object: true, image_index: imageIndex });
+                            });
+                        } else { // Failsafe if button somehow not there
+                             jsPsych.finishTrial({ skipped_r3_rating_due_to_missing_image_object: true, image_index: imageIndex, error_button_missing: true });
+                        }
+                        return; 
+                    }
+
+                    const submitButton = document.getElementById(`submit-likert-form-${imageIndex}`);
+                    const errorMessageElement = document.getElementById(`error-message-round3-${imageIndex}`);
+                    const feedbackTextarea = document.getElementById(`detailed-feedback-${imageIndex}`);
+
+                    if (submitButton) {
+                        submitButton.addEventListener('click', () => {
+                            const responses = {
+                                color: document.querySelector(`input[name="likert-1-${imageIndex}"]:checked`)?.value,
+                                shape: document.querySelector(`input[name="likert-2-${imageIndex}"]:checked`)?.value,
+                                content: document.querySelector(`input[name="likert-3-${imageIndex}"]:checked`)?.value,
+                                overall: document.querySelector(`input[name="likert-4-${imageIndex}"]:checked`)?.value
+                            };
+                            const detailedFeedback = feedbackTextarea?.value.trim() || '';
+
+                            // Validation
+                            if (Object.values(responses).some(v => v === undefined) || detailedFeedback === '') {
+                                if (errorMessageElement) {
+                                    errorMessageElement.textContent = 'Please complete all rating scales and provide detailed feedback before continuing.';
+                                    errorMessageElement.style.display = 'block';
+                                }
+                                return;
+                            }
+                            
+                            if (errorMessageElement) errorMessageElement.style.display = 'none';
+
+                            // Store data in the global thirdRoundDebriefData object
+                            thirdRoundDebriefData[`final_image_${imageIndex}`] = imageObjectToRate.imageBaseName;
+                            ['color', 'shape', 'content', 'overall'].forEach((dim, idx) => {
+                                thirdRoundDebriefData[`${dim}_${imageIndex}`] = responses[dim.toLowerCase()]; // Use lowercase keys from responses
+                            });
+                            thirdRoundDebriefData[`detailed_feedback_${imageIndex}`] = detailedFeedback;
+                            
+                            jsPsych.finishTrial({
+                                image_rated: imageObjectToRate.imageBaseName,
+                                ratings_collected: responses,
+                                feedback_collected: detailedFeedback,
+                                image_index_rated: imageIndex
+                            });
+                        });
+                    }
                 }
             };
         }
-        const fourthRoundFinalChoiceTrial = {
-            type: jsPsychHtmlKeyboardResponse,
+        // Round 4 final choice trial
+        const fourthRoundFinalChoiceTrial = { 
+            type: jsPsychHtmlKeyboardResponse, // Using keyboard response base for custom HTML
             stimulus: () => {
-                if (secondRoundSelections.length === 0) { console.warn("Round 4: No images available from Round 2 for final selection. This screen might be skipped or show an error."); return "<p>No images available for final selection. Proceeding...</p>"; } 
-                const shuffled = shuffleArray([...secondRoundSelections]); jsPsych.data.addProperties({'round4_image_options_details':shuffled.map(img=>img.imageBaseName)}); 
-                return `<p class="instruction-text">From the images you chose earlier, please select the image that is the <b>best</b> visualization of what you "saw" during the Ganzflicker.</p><div class="final-selection-container">${shuffled.map((img,idx)=>`<div class="final-option" data-path="${img.path}" data-image-base-name="${img.imageBaseName}" data-original-model="${img.originalModel}" data-source-type="${img.sourceType}" data-position-index="${idx}"><img src="${img.path}" alt="Final choice option ${idx + 1}: ${img.imageBaseName}"></div>`).join('')}</div><p id="error-message-round4" class="error" style="display:none;">Please select an image to continue.</p><button class="next-button" id="next-button-round4">Submit Final Choice</button>`;
+                if (secondRoundSelections.length === 0) {
+                    console.warn("Round 4: No images available from Round 2 for final selection. This screen might be skipped or show an error message if reached.");
+                    return "<p>No images available for final selection. Proceeding...</p>"; // Fallback message
+                }
+                // The three images chosen in Round 2 are in secondRoundSelections.
+                // These should be shuffled for display.
+                const shuffledFinalists = shuffleArray([...secondRoundSelections]); 
+                jsPsych.data.addProperties({ 'round4_image_options_details': shuffledFinalists.map(img => img.imageBaseName) });
+                
+                let imagesHtml = shuffledFinalists.map((imgData, idx) => `
+                    <div class="final-option" 
+                         data-path="${imgData.path}" 
+                         data-image-base-name="${imgData.imageBaseName}" 
+                         data-original-model="${imgData.originalModel}" 
+                         data-source-type="${imgData.sourceType}" 
+                         data-position-index="${idx}">
+                        <img src="${imgData.path}" alt="Final choice option ${idx + 1}: ${imgData.imageBaseName}">
+                    </div>`).join('');
+
+                return `
+                    <p class="instruction-text">From the images you chose earlier, please select the image that is the <b>best</b> visualization of what you "saw" during the Ganzflicker.</p>
+                    <div class="final-selection-container">${imagesHtml}</div>
+                    <p id="error-message-round4" class="error" style="display:none;">Please select an image to continue.</p>
+                    <button class="next-button" id="next-button-round4">Submit Final Choice</button>
+                `;
             },
-            choices: [],
+            choices: [], // No keyboard choices
             on_load: () => {
-                if(secondRoundSelections.length === 0) { console.warn("Round 4 on_load: No images from Round 2. Auto-advancing."); jsPsych.finishTrial({skipped_empty_round4_options:true}); return;} 
-                const startTime = performance.now(); let selectedEl = null; const nextBtn = document.getElementById('next-button-round4'), errEl = document.getElementById('error-message-round4');
-                document.querySelectorAll('.final-option').forEach(el => el.addEventListener('click', function() { document.querySelectorAll('.final-option img').forEach(img=>img.classList.remove('selected-image')); this.querySelector('img').classList.add('selected-image'); selectedEl=this; if(nextBtn) nextBtn.style.display='block'; if(errEl) errEl.style.display='none'; }));
-                if(nextBtn) nextBtn.addEventListener('click', () => {
-                    if(selectedEl) {
-                        const rt = performance.now()-startTime, baseName = selectedEl.getAttribute('data-image-base-name'), origModel = selectedEl.getAttribute('data-original-model'), srcType = selectedEl.getAttribute('data-source-type'), posIdx = parseInt(selectedEl.getAttribute('data-position-index'));
-                        const choiceLoc = ["left","middle","right"][posIdx] || `pos_${posIdx}`;
-                        const trialData = { subject_id:participantId, trial_type:"fourth_round", model:"na", aphantasia_image:"na", phantasia_image:"na", target:"na", choice:srcType, reaction_time:parseFloat((rt/1000).toFixed(3)), image_choice_location:choiceLoc, accuracy:(srcType==="own")?1:0, chosen_model:origModel, chosen_image:baseName, datetime:getCurrentDateTime() }; 
-                        currentParticipant.results.trials.push(trialData); jsPsych.finishTrial(trialData);
-                    } else { if(errEl) errEl.style.display='block';}
+                if (secondRoundSelections.length === 0) {
+                    console.warn("Round 4 on_load: No images from Round 2. Auto-advancing if this trial runs.");
+                    jsPsych.finishTrial({ skipped_empty_round4_options: true });
+                    return;
+                }
+
+                const startTime = performance.now();
+                let selectedImageElement = null;
+                const nextButton = document.getElementById('next-button-round4');
+                const errorMessageElement = document.getElementById('error-message-round4');
+                const finalOptions = document.querySelectorAll('.final-option');
+
+                finalOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        finalOptions.forEach(opt => opt.querySelector('img').classList.remove('selected-image'));
+                        this.querySelector('img').classList.add('selected-image');
+                        selectedImageElement = this;
+                        if (nextButton) nextButton.style.display = 'block';
+                        if (errorMessageElement) errorMessageElement.style.display = 'none';
+                    });
                 });
+
+                if (nextButton) {
+                    nextButton.addEventListener('click', () => {
+                        if (selectedImageElement) {
+                            const reactionTime = performance.now() - startTime;
+                            const imageBaseName = selectedImageElement.getAttribute('data-image-base-name');
+                            const originalModel = selectedImageElement.getAttribute('data-original-model');
+                            const sourceType = selectedImageElement.getAttribute('data-source-type'); // 'own', 'aphantasia', 'phantasia'
+                            const positionIndex = parseInt(selectedImageElement.getAttribute('data-position-index'));
+                            
+                            // Determine location based on 3 images in a row
+                            const choiceLocation = ["left", "middle", "right"][positionIndex] || `pos_${positionIndex}`;
+
+                            const trialData = {
+                                subject_id: participantId,
+                                trial_type: "fourth_round",
+                                model: "na", // Not applicable as in Round 1
+                                aphantasia_image: "na", 
+                                phantasia_image: "na",
+                                target: "na",
+                                choice: sourceType, // Source type of the chosen image
+                                reaction_time: parseFloat((reactionTime / 1000).toFixed(3)),
+                                image_choice_location: choiceLocation,
+                                accuracy: (sourceType === "own") ? 1 : 0,
+                                chosen_model: originalModel, // Model of the chosen image
+                                chosen_image: imageBaseName, // Base name of the chosen image
+                                datetime: getCurrentDateTime()
+                            };
+                            currentParticipant.results.trials.push(trialData);
+                            jsPsych.finishTrial(trialData);
+                        } else {
+                            if (errorMessageElement) errorMessageElement.style.display = 'block';
+                        }
+                    });
+                }
             }
         };
+        // Exit fullscreen trial
         const exitFullscreenTrial = { type: jsPsychFullscreen, fullscreen_mode: false, delay_after: 0 };
-        const completionTrial = {
+        // Completion trial (data saving)
+        const completionTrial = { 
             type: jsPsychHtmlButtonResponse,
-            stimulus: `<div style="max-width: 700px; margin:auto; text-align:center;"><h2>Study Completed</h2><p class="instruction-text" style="font-size:1.1em;">Thank you for participating in this study!</p><p class="download-status" style="font-size:1em; margin-top:15px;">Your data is being saved...</p><div class="button-container" style="margin-top:20px;"><button id="manual-download-button" class="download-button" style="display:none; padding:10px 15px; font-size:0.9em; background-color:#007bff; color:white;">Download Backup Data</button></div></div>`,
-            choices: [],
+            stimulus: `<div style="max-width: 700px; margin:auto; text-align:center;">
+                        <h2>Study Completed</h2>
+                        <p class="instruction-text" style="font-size:1.1em;">Thank you for participating in this study!</p>
+                        <p class="download-status" style="font-size:1em; margin-top:15px;">Your data is being saved...</p>
+                        <div class="loading-spinner" id="completion-spinner" style="display: block; margin: 15px auto;"></div>
+                        <div class="button-container" style="margin-top:20px;">
+                           <button id="manual-download-button" class="download-button" style="display:none; padding:10px 15px; font-size:0.9em; background-color:#007bff; color:white;">Download Backup Data</button>
+                        </div>
+                       </div>`,
+            choices: [], // No choices, auto-proceeds or shows download button
             on_load: async () => {
-                const statusEl = document.querySelector('.download-status'), dlBtn = document.getElementById('manual-download-button');
-                const selDataFmt = {current_participant_data:{[participantId]:currentParticipant.results.trials}};
-                const debriefDataFmt = {current_participant_data:{[participantId]:thirdRoundDebriefData}};
-                console.log('Attempting to save Image Selection Data (image_selection.json format):', JSON.stringify(selDataFmt,null,2)); console.log('Attempting to save Image Debrief Data (image_debrief.json format):', JSON.stringify(debriefDataFmt,null,2)); 
-                let selSaveOK = false, debriefSaveOK = false;
-                try { const r = await fetch('http://localhost:3000/save-participant-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(selDataFmt)}); if(r.ok){ console.log('Image selection data saved successfully to server.'); selSaveOK=true;} else console.error('Failed to save image selection data to server:',await r.text()); } catch(e){console.error('Error during fetch to save image selection data:',e);} 
-                try { const r = await fetch('http://localhost:3000/save-likert-data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(debriefDataFmt)}); if(r.ok){ console.log('Image debrief (Likert) data saved successfully to server.'); debriefSaveOK=true;} else console.error('Failed to save image debrief data to server:',await r.text()); } catch(e){console.error('Error during fetch to save image debrief data:',e);} 
-                if(statusEl) { if(selSaveOK && debriefSaveOK) { statusEl.textContent='Your data has been saved successfully.'; statusEl.style.color='green';} else { statusEl.textContent='There was an error saving some or all of your data. Please use the button below to download a backup file.'; statusEl.style.color='red'; if(dlBtn) dlBtn.style.display='inline-block';}} 
-                if(dlBtn) dlBtn.addEventListener('click', () => {
-                    const backup = {participant_id:participantId, image_selection_data:currentParticipant.results.trials, image_debrief_data:thirdRoundDebriefData, study_metadata_context:{ aphantasia_id_used:currentParticipant.results.aphantasia_id, phantasia_id_used:currentParticipant.results.phantasia_id, model_presentation_order_round1:jsPsych.data.get().filter({trial_type:'first_round'}).select('model').values, timestamp:getCurrentDateTime()}}; 
-                    const str="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(backup,null,2)), anchor=document.createElement('a');
-                    anchor.setAttribute('href',str); anchor.setAttribute('download',`ganzflicker_backup_${participantId}_${new Date().toISOString().slice(0,10).replace(/-/g,'')}.json`);
-                    document.body.appendChild(anchor); anchor.click(); document.body.removeChild(anchor);
+                const statusElement = document.querySelector('.download-status');
+                const downloadButton = document.getElementById('manual-download-button');
+                const spinner = document.getElementById('completion-spinner');
+
+                if (!statusElement || !downloadButton || !spinner) {
+                    console.error("Completion trial: Critical DOM elements missing.");
+                    if(statusElement) statusElement.textContent = "Error: UI elements for completion screen missing.";
+                    return;
+                }
+                
+                // Prepare data for saving
+                // image_selection.json format: an array of trial objects
+                // Here, currentParticipant.results.trials is already an array of trial objects.
+                // The server expects { current_participant_data: { [participantId]: trials_array } }
+                // This seems overly nested if the server just appends to a list of all trials.
+                // For now, sticking to the described structure for saving.
+                const imageSelectionPayload = {
+                    current_participant_data: {
+                        [participantId]: currentParticipant.results.trials 
+                    }
+                };
+
+                // image_debrief.json format: { [participantId]: { subject_id: ..., final_image_1: ... } }
+                // thirdRoundDebriefData is already in the format { subject_id: ..., final_image_1: ... }
+                // The server expects { current_participant_data: { [participantId]: debrief_object } }
+                const imageDebriefPayload = {
+                    current_participant_data: {
+                        [participantId]: thirdRoundDebriefData
+                    }
+                };
+
+                console.log('Attempting to save Image Selection Data (image_selection.json format):', JSON.stringify(imageSelectionPayload, null, 2));
+                console.log('Attempting to save Image Debrief Data (image_debrief.json format):', JSON.stringify(imageDebriefPayload, null, 2));
+                
+                let selectionSaveOK = false;
+                let debriefSaveOK = false;
+
+                try {
+                    const response = await fetch('http://localhost:3000/save-participant-data', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(imageSelectionPayload)
+                    });
+                    if (response.ok) {
+                        console.log('Image selection data saved successfully to server.');
+                        selectionSaveOK = true;
+                    } else {
+                        console.error('Failed to save image selection data to server. Status:', response.status, 'Response:', await response.text());
+                    }
+                } catch (e) {
+                    console.error('Error during fetch to save image selection data:', e);
+                }
+
+                try {
+                    const response = await fetch('http://localhost:3000/save-likert-data', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(imageDebriefPayload)
+                    });
+                    if (response.ok) {
+                        console.log('Image debrief (Likert) data saved successfully to server.');
+                        debriefSaveOK = true;
+                    } else {
+                        console.error('Failed to save image debrief data to server. Status:', response.status, 'Response:', await response.text());
+                    }
+                } catch (e) {
+                    console.error('Error during fetch to save image debrief data:', e);
+                }
+                
+                spinner.style.display = 'none'; // Hide spinner after attempts
+
+                if (selectionSaveOK && debriefSaveOK) {
+                    statusElement.textContent = 'Your data has been saved successfully.';
+                    statusElement.style.color = 'green';
+                } else {
+                    statusElement.innerHTML = 'There was an error saving some or all of your data to the server. <br>Please use the button below to download a backup file and contact the researcher.';
+                    statusElement.style.color = 'red';
+                    statusElement.classList.add('error'); // Ensure error styling
+                    downloadButton.style.display = 'inline-block'; // Show download button
+                }
+
+                downloadButton.addEventListener('click', () => {
+                    const backupData = {
+                        participant_id: participantId,
+                        image_selection_data_trials: currentParticipant.results.trials, // The array of trials
+                        image_debrief_data: thirdRoundDebriefData, // The single object for this participant
+                        study_metadata_context: {
+                            aphantasia_id_used: currentParticipant.results.aphantasia_id,
+                            phantasia_id_used: currentParticipant.results.phantasia_id,
+                            model_presentation_order_round1: jsPsych.data.get().filter({ trial_type: 'first_round' }).select('model').values, // Example of extra context
+                            timestamp: getCurrentDateTime()
+                        }
+                    };
+                    const jsonDataString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+                    const anchorElement = document.createElement('a');
+                    anchorElement.setAttribute('href', jsonDataString);
+                    anchorElement.setAttribute('download', `ganzflicker_backup_${participantId}_${new Date().toISOString().slice(0, 10).replace(/-/g, '')}.json`);
+                    document.body.appendChild(anchorElement); // Required for Firefox
+                    anchorElement.click();
+                    document.body.removeChild(anchorElement);
                 });
             }
         };
+
 
         // --- Experiment Timeline Construction ---
         async function startExperiment() {
-            const timeline = [participantIdTrial, welcomeTrial, preloadTrial];
-            const numModels = metadata.available_models.length, imgsPerScreenR2 = 8, numScreensR2 = 3;
+            const timeline = [];
+
+            // 1. Participant ID Input
+            timeline.push(participantIdTrial);
+
+            // 2. Conditional: Show Missing Images Screen OR Proceed with Study
+            const missingImagesNode = {
+                timeline: [missingParticipantImagesScreen],
+                conditional_function: () => {
+                    return !window.participantImagesComplete;
+                }
+            };
+            timeline.push(missingImagesNode);
+
+            // Main part of the study, only runs if images are complete
+            const mainStudyTimeline = [];
+            mainStudyTimeline.push(welcomeTrial);
+            mainStudyTimeline.push(preloadTrial);
 
             // Debug Skip R1
-            timeline.push({ type:jsPsychCallFunction, func:()=>{ let sk=false; if(DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 1){ console.warn(`DEBUG MODE: Auto-completing Round 1. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`); firstRoundSelections_all = generateMockFirstRoundSelections(numModels); firstRoundChoicesByModel={}; firstRoundSelections_all.forEach((sel,idx)=>firstRoundChoicesByModel[`${sel.originalModel}_${idx}`]=sel); sk=true;} jsPsych.data.addProperties({skippedRound1:sk});}, data:{trial_type:'debug_skip_logic_r1'}}); 
+            mainStudyTimeline.push({ 
+                type: jsPsychCallFunction, 
+                func: () => { 
+                    let sk = false; 
+                    if (DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 1) { 
+                        console.warn(`DEBUG MODE: Auto-completing Round 1. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`); 
+                        firstRoundSelections_all = generateMockFirstRoundSelections(metadata.available_models.length); 
+                        firstRoundChoicesByModel = {}; 
+                        firstRoundSelections_all.forEach((sel, idx) => firstRoundChoicesByModel[`${sel.originalModel}_mock_${idx}`] = sel); 
+                        sk = true;
+                    } 
+                    jsPsych.data.addProperties({ skippedRound1: sk });
+                }, 
+                data: { trial_type: 'debug_skip_logic_r1' }
+            });
+            
             // Round 1
-            const r1Block = { timeline:[], conditional_function:()=>!jsPsych.data.get().last(1).values()[0]?.skippedRound1 };
-            const shuffledModels = shuffleArray([...metadata.available_models]); jsPsych.data.addProperties({'model_presentation_order_r1':shuffledModels.map(m=>m)}); 
-            shuffledModels.forEach((model,idx)=>r1Block.timeline.push(createModelImageTrial(model,idx))); timeline.push(r1Block);
-            // Prepare R2
-            timeline.push(prepareRound2);
-            // Debug Skip R2
-            timeline.push({ type:jsPsychCallFunction, func:()=>{ let sk=false; if(DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 2){ console.warn(`DEBUG MODE: Auto-completing Round 2. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`); if(firstRoundSelections_all.length===0){ console.error("DEBUG ERROR: Cannot generate mock R2 data, firstRoundSelections_all is empty."); firstRoundSelections_all=generateMockFirstRoundSelections(numModels); if(firstRoundSelections_all.length===0){jsPsych.endExperiment("Critical Debug Error: Could not generate mock data.");return;}} secondRoundSelections=generateMockSecondRoundSelections(firstRoundSelections_all,numScreensR2); sk=true;} jsPsych.data.addProperties({skippedRound2:sk});}, data:{trial_type:'debug_skip_logic_r2'}}); 
-            // Round 2
-            const r2Block = { timeline:[], conditional_function:()=>!jsPsych.data.get().last(1).values()[0]?.skippedRound2 };
-            for(let i=0; i<numScreensR2; i++) { r2Block.timeline.push({...createSecondRoundTrial(i+1), conditional_function:()=>firstRoundSelections_all && firstRoundSelections_all.length > i*imgsPerScreenR2});} timeline.push(r2Block);
-            // Prepare R3
-            timeline.push({ type:jsPsychCallFunction, func:()=>{ if((DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 2) && secondRoundSelections.length===0){ if(firstRoundSelections_all.length===0) firstRoundSelections_all=generateMockFirstRoundSelections(numModels); if(firstRoundSelections_all.length>0) secondRoundSelections=generateMockSecondRoundSelections(firstRoundSelections_all,numScreensR2); else {console.error("DEBUG ERROR: Cannot prepare R3, no data from R1 or R2."); jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R3."); return;}} secondRoundSelections=shuffleArray(secondRoundSelections); console.log(`PrepareRound3: Images prepared for Round 3 rating: ${secondRoundSelections.length} images.`); const skipR2=jsPsych.data.get().filter({trial_type:'debug_skip_logic_r2'}).last(1).values()[0]?.skippedRound2; if(secondRoundSelections.length !== numScreensR2 && !skipR2) console.warn(`Expected ${numScreensR2} images from Round 2 for rating, but found ${secondRoundSelections.length}. Rating will proceed with available images.`);}, data:{trial_type:'prepare_round_3'}}); 
-            // Debug Skip R3
-            timeline.push({ type:jsPsychCallFunction, func:()=>{ let sk=false; if(DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 3){ console.warn(`DEBUG MODE: Auto-completing Round 3. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`); if(secondRoundSelections.length===0){ console.error("DEBUG ERROR: Cannot generate mock R3 data, secondRoundSelections is empty."); if(firstRoundSelections_all.length===0)firstRoundSelections_all=generateMockFirstRoundSelections(numModels); if(firstRoundSelections_all.length>0)secondRoundSelections=generateMockSecondRoundSelections(firstRoundSelections_all,numScreensR2); else{jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R3 skip.");return;}} thirdRoundDebriefData=generateMockThirdRoundDebrief(secondRoundSelections); sk=true;} jsPsych.data.addProperties({skippedRound3:sk});}, data:{trial_type:'debug_skip_logic_r3'}}); 
-            // Round 3
-            const r3Block = { timeline:[], conditional_function:()=>!jsPsych.data.get().last(1).values()[0]?.skippedRound3 };
-            for(let i=0; i<numScreensR2; i++) { r3Block.timeline.push({...createThirdRoundRatingTrial(i+1), conditional_function:()=> i < secondRoundSelections.length});} timeline.push(r3Block);
-            // Prepare R4 (Debug)
-            timeline.push({ type:jsPsychCallFunction, func:()=>{ if(DEBUG_SKIP_TO_ROUND===4 && secondRoundSelections.length===0){ if(firstRoundSelections_all.length===0)firstRoundSelections_all=generateMockFirstRoundSelections(numModels); if(firstRoundSelections_all.length>0){secondRoundSelections=generateMockSecondRoundSelections(firstRoundSelections_all,numScreensR2); console.log("DEBUG: Populated secondRoundSelections for Round 4 skip.");} else {console.error("DEBUG ERROR: Cannot prepare R4, no data from R1."); jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R4 skip.");}}}, data:{trial_type:'prepare_round_4_debug'}}); 
-            // Round 4
-            timeline.push({...fourthRoundFinalChoiceTrial, conditional_function:()=>{ const skipR3=jsPsych.data.get().filter({trial_type:'debug_skip_logic_r3'}).last(1).values()[0]?.skippedRound3; return !skipR3 && secondRoundSelections.length > 0;}});
-            // Final
-            timeline.push(exitFullscreenTrial, completionTrial);
+            const round1Block = {
+                timeline: [],
+                conditional_function: () => !jsPsych.data.get().filter({trial_type:'debug_skip_logic_r1'}).last(1).values()[0]?.skippedRound1
+            };
+            jsPsych.data.addProperties({'model_presentation_order_r1': metadata.available_models.map(m => m)}); 
+            metadata.available_models.forEach((model, idx) => {
+                round1Block.timeline.push(createModelImageTrial(model, idx));
+            });
+            mainStudyTimeline.push(round1Block);
+            
+            mainStudyTimeline.push(prepareRound2);
+            
+            mainStudyTimeline.push({ 
+                type: jsPsychCallFunction, 
+                func: () => { 
+                    let skR2 = false;
+                    if (DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 2) {
+                        console.warn(`DEBUG MODE: Auto-completing Round 2. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`);
+                        if (firstRoundSelections_all.length === 0) {
+                            console.error("DEBUG ERROR: Cannot generate mock R2 data, firstRoundSelections_all is empty. Attempting to regenerate R1 mock.");
+                            firstRoundSelections_all = generateMockFirstRoundSelections(metadata.available_models.length);
+                            if (firstRoundSelections_all.length === 0) {
+                                jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R1 to support R2 skip.");
+                                return;
+                            }
+                        }
+                        secondRoundSelections = generateMockSecondRoundSelections(firstRoundSelections_all, 3); // 3 selections for R2
+                        skR2 = true;
+                    }
+                    jsPsych.data.addProperties({ skippedRound2: skR2 });
+                 }, 
+                data: { trial_type: 'debug_skip_logic_r2' }
+            });
+            
+            const round2Block = {
+                timeline: [],
+                conditional_function: () => !jsPsych.data.get().filter({trial_type:'debug_skip_logic_r2'}).last(1).values()[0]?.skippedRound2
+            };
+            const numScreensR2 = 3; 
+            const imagesPerScreenR2 = 8; 
+            for (let i = 0; i < numScreensR2; i++) {
+                round2Block.timeline.push({
+                    ...createSecondRoundTrial(i + 1),
+                    conditional_function: () => firstRoundSelections_all && firstRoundSelections_all.length > i * imagesPerScreenR2
+                });
+            }
+            mainStudyTimeline.push(round2Block);
+
+            mainStudyTimeline.push({ 
+                type: jsPsychCallFunction, 
+                func: () => { 
+                    if ((DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 2) && secondRoundSelections.length === 0) {
+                        if (firstRoundSelections_all.length === 0) firstRoundSelections_all = generateMockFirstRoundSelections(metadata.available_models.length);
+                        if (firstRoundSelections_all.length > 0) secondRoundSelections = generateMockSecondRoundSelections(firstRoundSelections_all, numScreensR2);
+                        else {
+                            console.error("DEBUG ERROR: Cannot prepare R3, no data from R1 or R2 for mock generation.");
+                            jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R3.");
+                            return;
+                        }
+                    }
+                    secondRoundSelections = shuffleArray(secondRoundSelections); // Shuffle before rating
+                    console.log(`PrepareRound3: Images prepared for Round 3 rating: ${secondRoundSelections.length} images.`);
+                    const skippedR2 = jsPsych.data.get().filter({trial_type:'debug_skip_logic_r2'}).last(1).values()[0]?.skippedRound2;
+                    if (secondRoundSelections.length !== numScreensR2 && !skippedR2 && !(DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 2)) {
+                        // Warn only if not in a debug skip mode that might produce variable numbers
+                        console.warn(`Expected ${numScreensR2} images from Round 2 for rating, but found ${secondRoundSelections.length}. Rating will proceed with available images.`);
+                    }
+                }, 
+                data: { trial_type: 'prepare_round_3' }
+            });
+
+            mainStudyTimeline.push({ 
+                type: jsPsychCallFunction, 
+                func: () => { 
+                    let skR3 = false;
+                    if (DEBUG_SKIP_TO_ROUND && DEBUG_SKIP_TO_ROUND > 3) {
+                        console.warn(`DEBUG MODE: Auto-completing Round 3. Skipping to Round ${DEBUG_SKIP_TO_ROUND}.`);
+                        if (secondRoundSelections.length === 0) {
+                            console.error("DEBUG ERROR: Cannot generate mock R3 data, secondRoundSelections is empty.");
+                            if (firstRoundSelections_all.length === 0) firstRoundSelections_all = generateMockFirstRoundSelections(metadata.available_models.length);
+                            if (firstRoundSelections_all.length > 0) secondRoundSelections = generateMockSecondRoundSelections(firstRoundSelections_all, numScreensR2);
+                            else {
+                                jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R3 skip.");
+                                return;
+                            }
+                        }
+                        thirdRoundDebriefData = generateMockThirdRoundDebrief(secondRoundSelections);
+                        skR3 = true;
+                    }
+                    jsPsych.data.addProperties({ skippedRound3: skR3 });
+                }, 
+                data: { trial_type: 'debug_skip_logic_r3' }
+            });
+
+            const round3Block = {
+                timeline: [],
+                conditional_function: () => !jsPsych.data.get().filter({trial_type:'debug_skip_logic_r3'}).last(1).values()[0]?.skippedRound3
+            };
+            for (let i = 0; i < numScreensR2; i++) { // Should be 3 images from R2
+                round3Block.timeline.push({
+                    ...createThirdRoundRatingTrial(i + 1), 
+                    conditional_function: () => i < secondRoundSelections.length 
+                });
+            }
+            mainStudyTimeline.push(round3Block);
+
+            mainStudyTimeline.push({ 
+                type: jsPsychCallFunction, 
+                func: () => { 
+                    if (DEBUG_SKIP_TO_ROUND === 4 && secondRoundSelections.length === 0) {
+                        if (firstRoundSelections_all.length === 0) firstRoundSelections_all = generateMockFirstRoundSelections(metadata.available_models.length);
+                        if (firstRoundSelections_all.length > 0) {
+                            secondRoundSelections = generateMockSecondRoundSelections(firstRoundSelections_all, numScreensR2);
+                            console.log("DEBUG: Populated secondRoundSelections for Round 4 skip.");
+                        } else {
+                            console.error("DEBUG ERROR: Cannot prepare R4, no data from R1 for mock generation.");
+                            jsPsych.endExperiment("Critical Debug Error: Could not generate mock data for R4 skip.");
+                        }
+                    }
+                 }, 
+                data: { trial_type: 'prepare_round_4_debug' }
+            });
+
+            mainStudyTimeline.push({
+                ...fourthRoundFinalChoiceTrial,
+                conditional_function: () => {
+                    const skippedR3 = jsPsych.data.get().filter({trial_type:'debug_skip_logic_r3'}).last(1).values()[0]?.skippedRound3;
+                    return (!skippedR3 || (skippedR3 && secondRoundSelections.length > 0)) && secondRoundSelections.length > 0;
+                }
+            });
+            
+            mainStudyTimeline.push(exitFullscreenTrial);
+            mainStudyTimeline.push(completionTrial);
+
+            const mainStudyNode = {
+                timeline: mainStudyTimeline,
+                conditional_function: () => {
+                    return window.participantImagesComplete;
+                }
+            };
+            timeline.push(mainStudyNode);
+
+            console.log("Starting jsPsych timeline with structure:", timeline);
             jsPsych.run(timeline);
         }
+
         initializeMetadata();
     </script>
 </body>
