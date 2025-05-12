@@ -2,24 +2,24 @@
   "current_participant_data": {
     "001": {
       "subject_id": "001",
-      "final_image_1": "143_midjourney_1",
-      "color_1": "5",
-      "shape_1": "5",
-      "content_1": "5",
-      "overall_1": "5",
-      "detailed_feedback_1": "a",
-      "final_image_2": "143_gemini_1",
-      "color_2": "10",
-      "shape_2": "10",
-      "content_2": "10",
-      "overall_2": "10",
-      "detailed_feedback_2": "w",
-      "final_image_3": "3502_gpto_2",
+      "final_image_1": "2786_claude_4",
+      "color_1": "10",
+      "shape_1": "10",
+      "content_1": "10",
+      "overall_1": "10",
+      "detailed_feedback_1": "d",
+      "final_image_2": "2786_claude_2",
+      "color_2": "7",
+      "shape_2": "7",
+      "content_2": "7",
+      "overall_2": "7",
+      "detailed_feedback_2": "f",
+      "final_image_3": "2786_gpto_2",
       "color_3": "10",
       "shape_3": "10",
       "content_3": "10",
       "overall_3": "10",
-      "detailed_feedback_3": "m"
+      "detailed_feedback_3": "v"
     }
   }
 }
