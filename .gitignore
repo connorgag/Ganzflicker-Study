@@ -1,7 +1,17 @@
+# macOS system files
 .DS_Store
-.vscode/settings.json
+
+# VS Code settings
+.vscode/
+
+# Local private folders (both visible and hidden)
 private_folder/
+.private_folder/
+
+# R session history inside private_folder
 private_folder/.Rhistory
+
+# Node modules
 node_modules/
 results/image_debrief.json
 results/image_selection.json
